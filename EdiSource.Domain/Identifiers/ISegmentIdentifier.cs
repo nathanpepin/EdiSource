@@ -1,0 +1,23 @@
+using EdiSource.Domain.Segments;
+
+namespace EdiSource.Domain.Identifiers;
+
+public interface ISegmentIdentifier<T>
+    where T : ISegmentIdentifier<T>
+{
+    static abstract (string Primary, string? Secondary) EdiId { get; }
+
+    public static bool Matches(ISegment segment)
+    {
+        return segment.GetDataElement(0) == T.EdiId.Primary &&
+            T.EdiId.Secondary is null || T.EdiId.Secondary == segment.GetCompositeElementOrNull(0, 0);
+    }
+
+    public static bool Matches(Queue<ISegment> segments)
+    {
+        return segments.Count > 0 &&
+               segments.Peek().GetDataElement(0) == T.EdiId.Primary &&
+               (T.EdiId.Secondary is null
+                || T.EdiId.Secondary == segments.Peek().GetCompositeElementOrNull(0, 0));
+    }
+}

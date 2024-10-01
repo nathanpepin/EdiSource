@@ -1,0 +1,1 @@
+global using static EdiSource.Domain.Helper.GeneralExtensions;
