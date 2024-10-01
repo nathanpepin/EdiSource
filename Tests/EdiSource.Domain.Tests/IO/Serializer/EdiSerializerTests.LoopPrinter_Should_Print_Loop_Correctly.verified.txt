@@ -1,0 +1,15 @@
+﻿InterchangeEnvelope
+    ISA*00*          *00*          *ZZ*SENDER         *ZZ*RECEIVER       *200901*1319*^*00501*000000905*0*P*:~
+    FunctionalGroup
+        GS*09*343*343*333*343*3*3*3*34~
+        GenericTransactionSet
+            ST*834*ABCD~
+            REF*A~
+            REF*B~
+            DTP*1*D8*2024e0106~
+            INS*A~
+            NM1*1~
+            NM1*2~
+            SE*8*ABCD~
+        GE*1*3~
+    IEA*1*000000905~

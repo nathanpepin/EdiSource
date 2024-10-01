@@ -1,0 +1,5 @@
+﻿ValidationSeverity,Message,Subject,LoopLine,SegmentLine,Loop,Segment,DataElement,CompositeElement
+Critical,Critical,Loop,,,InterchangeEnvelope,,,
+Error,Error,Loop,,,InterchangeEnvelope,,,
+Warning,Warning,Loop,,,InterchangeEnvelope,,,
+Info,Info,Loop,,,InterchangeEnvelope,,,
