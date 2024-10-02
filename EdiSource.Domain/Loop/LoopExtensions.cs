@@ -1,4 +1,5 @@
 using System.Text;
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Seperator;
 
@@ -6,39 +7,6 @@ namespace EdiSource.Domain.Loop;
 
 public static class LoopExtensions
 {
-    public static IEnumerable<ISegment> RecursiveYieldSegments(this ILoop? loop)
-    {
-        if (loop is null) yield break;
-
-        foreach (var segment in loop.YieldChildSegments())
-        {
-            yield return segment;
-        }
-
-        foreach (var childLoop in loop.YieldChildLoops())
-        {
-            foreach (var subSegment in childLoop.RecursiveYieldSegments())
-            {
-                yield return subSegment;
-            }
-        }
-    }
-
-    public static IEnumerable<ILoop> RecursiveYieldLoops(this ILoop? loop)
-    {
-        if (loop is null) yield break;
-
-        foreach (var childLoop in loop.YieldChildLoops())
-        {
-            yield return childLoop;
-
-            foreach (var subLoop in childLoop.RecursiveYieldLoops())
-            {
-                yield return subLoop;
-            }
-        }
-    }
-
     public static IEnumerable<T> FindChildLoops<T>(this ILoop loop) where T : ILoop
     {
         var foundLocation = false;
@@ -60,13 +28,14 @@ public static class LoopExtensions
         }
     }
 
-    public static StringBuilder WriteToStringBuilder<T>(this T loop, StringBuilder? stringBuilder = null, Separators? separators = null, bool includeNewLine = true)
+    public static StringBuilder WriteToStringBuilder<T>(this T loop, StringBuilder? stringBuilder = null,
+        Separators? separators = null, bool includeNewLine = true)
         where T : ILoop
     {
         separators ??= Separators.DefaultSeparators;
         stringBuilder ??= new StringBuilder();
 
-        foreach (var segment in loop.RecursiveYieldSegments())
+        foreach (var segment in loop.YieldChildSegments())
         {
             segment.WriteToStringBuilder(stringBuilder, separators.Value);
 
@@ -77,3 +46,9 @@ public static class LoopExtensions
         return stringBuilder;
     }
 }
+
+public sealed class SegmentList<T> : List<T>, IEdi
+where T: ISegment;
+    
+public sealed class LoopList<T> : List<T>, IEdi
+ where T: ILoop;

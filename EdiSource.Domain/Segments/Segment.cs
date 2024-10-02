@@ -12,22 +12,25 @@ public abstract class TypedSegment<T> : Segment where T : ILoop
 
 public class Segment : ISegment
 {
-    public Segment(ISegment segment)
+    public Segment(ISegment segment, ILoop? parent = null)
     {
         Elements = segment.Elements;
         SegmentSeparators = segment.SegmentSeparators;
+        Parent = parent;
     }
 
-    public Segment(IEnumerable<Element>? elements = null, Separators separators = default)
+    public Segment(IEnumerable<Element>? elements = null, Separators separators = default, ILoop? parent = null)
     {
         Elements = elements?.ToList() ?? [];
         SegmentSeparators = separators;
+        Parent = parent;
     }
 
-    public Segment(string segmentText, Separators separators = default)
+    public Segment(string segmentText, Separators separators = default, ILoop? parent = null)
     {
         Elements = ReadElements(segmentText, separators).ToList();
         SegmentSeparators = separators;
+        Parent = parent;
     }
 
     public static IEnumerable<Segment> ReadMultipleSegment(string segmentText, Separators separators = default)
@@ -110,6 +113,8 @@ public class Segment : ISegment
     }
 
     public Separators SegmentSeparators { get; }
+    
+    public ILoop? Parent { get; set; }
 
     public override string ToString()
     {

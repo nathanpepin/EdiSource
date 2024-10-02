@@ -2,14 +2,17 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>EdiSource</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EdiSource.Domain\EdiSource.Domain.csproj" />
+        <ProjectReference Include="..\EdiSource.Domain\EdiSource.Domain.csproj"/>
+        <ProjectReference Include="..\EdiSource.Generator\EdiSource.Generator\EdiSource.Generator.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
 </Project>

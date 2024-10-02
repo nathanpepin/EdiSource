@@ -7,12 +7,14 @@ using EdiSource.Segments;
 namespace EdiSource.Loops;
 
 [LoopGenerator]
-public class Loop2000 : ILoop<TransactionSet>, ISegmentIdentifier<Loop2000_INS>, ISegmentIdentifier<Loop2000>
+public partial class Loop2000 : ILoop<TransactionSet>, ISegmentIdentifier<Loop2000_INS>, ISegmentIdentifier<Loop2000>
 {
-    public Loop2000(Queue<ISegment> segments)
+    public Loop2000(Queue<ISegment> segments, TransactionSet? parent = null)
     {
+        Parent = parent;
+        
         //Header
-        INS = SegmentFactory<Loop2000_INS>.Create(segments);
+        INS = SegmentLoopFactory<Loop2000_INS, Loop2000>.Create(segments, this);
     }
 
     [SegmentHeader] public Loop2000_INS INS { get; set; }

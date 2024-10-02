@@ -1,12 +1,13 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 using EdiSource.Domain.Elements;
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Seperator;
 
 namespace EdiSource.Domain.Segments;
 
-public interface ISegment
+public interface ISegment : IEdi
 {
     IList<Element> Elements { get; set; }
     Element GetElement(int elementIndex);
@@ -28,5 +29,5 @@ public interface ISegment<out TLoop>
     : ISegment
     where TLoop : ILoop
 {
-    TLoop? Parent { get; }
+    new TLoop? Parent { get; }
 }

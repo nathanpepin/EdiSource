@@ -26,6 +26,7 @@ var segments = new EdiReader()
 var ts = new TransactionSet(new Queue<ISegment>(segments));
 ;
 
+ var a = ts.ST.Parent;
 
 Console.WriteLine(ts.WriteToStringBuilder().ToString());
 

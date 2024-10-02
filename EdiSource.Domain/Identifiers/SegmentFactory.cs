@@ -1,33 +1,73 @@
+using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.Identifiers;
 
-public static class SegmentFactory<T>
-    where T : Segment, ISegmentIdentifier<T>, new()
+public static class SegmentLoopFactory<T, TLoop>
+    where T : Segment, ISegment<TLoop>, ISegmentIdentifier<T>, new()
+    where TLoop : class, ILoop
 {
-    public static T Create(Queue<ISegment> segments)
+    public static T Create(Queue<ISegment> segments, TLoop? parent = null)
     {
-        if (!ISegmentIdentifier<T>.Matches(segments.Peek())) throw new ArgumentException($"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segments}");
+        if (!ISegmentIdentifier<T>.Matches(segments.Peek()))
+            throw new ArgumentException(
+                $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segments}");
 
-        return new T { Elements = segments.Dequeue().Elements };
+        return new T { Elements = segments.Dequeue().Elements, Parent = parent };
     }
 
-    public static T Create(ISegment segment)
+    public static T Create(ISegment segment, TLoop? parent = null)
     {
-        if (!ISegmentIdentifier<T>.Matches(segment)) throw new ArgumentException($"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segment}");
+        if (!ISegmentIdentifier<T>.Matches(segment))
+            throw new ArgumentException(
+                $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segment}");
 
-        return new T { Elements = segment.Elements };
+        return new T { Elements = segment.Elements, Parent = parent };
     }
 
-    public static T? CreateIfMatches(Queue<ISegment> segments)
+    public static T? CreateIfMatches(Queue<ISegment> segments, TLoop? parent = null)
     {
         return !ISegmentIdentifier<T>.Matches(segments.Peek())
             ? null
-            : new T { Elements = segments.Dequeue().Elements };
+            : new T { Elements = segments.Dequeue().Elements, Parent = parent };
     }
 
-    public static T? CreateIfMatches(ISegment segment)
+    public static T? CreateIfMatches(ISegment segment, TLoop? parent = null)
     {
-        return ISegmentIdentifier<T>.Matches(segment) ? null : new T { Elements = segment.Elements };
+        return ISegmentIdentifier<T>.Matches(segment) ? null : new T { Elements = segment.Elements, Parent = parent };
+    }
+}
+
+public static class SegmentFactory<T>
+    where T : Segment, ISegmentIdentifier<T>, new()
+{
+    public static T Create(Queue<ISegment> segments, ILoop? parent = null)
+    {
+        if (!ISegmentIdentifier<T>.Matches(segments.Peek()))
+            throw new ArgumentException(
+                $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segments}");
+
+        return new T { Elements = segments.Dequeue().Elements, Parent = parent };
+    }
+
+    public static T Create(ISegment segment, ILoop? parent = null)
+    {
+        if (!ISegmentIdentifier<T>.Matches(segment))
+            throw new ArgumentException(
+                $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segment}");
+
+        return new T { Elements = segment.Elements, Parent = parent };
+    }
+
+    public static T? CreateIfMatches(Queue<ISegment> segments, ILoop? parent = null)
+    {
+        return !ISegmentIdentifier<T>.Matches(segments.Peek())
+            ? null
+            : new T { Elements = segments.Dequeue().Elements, Parent = parent };
+    }
+
+    public static T? CreateIfMatches(ISegment segment, ILoop? parent = null)
+    {
+        return ISegmentIdentifier<T>.Matches(segment) ? null : new T { Elements = segment.Elements, Parent = parent };
     }
 }
