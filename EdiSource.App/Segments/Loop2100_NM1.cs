@@ -4,7 +4,7 @@ using EdiSource.Loops;
 
 namespace EdiSource.Segments;
 
-public class Loop2100_NM1 : Segment, ISegment<Loop2100>, ISegmentIdentifier<Loop2100_NM1>
+public class Loop2100_NM1 : Segment, ISegment<Loop2100>, ISegmentIdentifier<Loop2100_NM1>, IEdiId
 {
     public Loop2100? Parent { get; }
 

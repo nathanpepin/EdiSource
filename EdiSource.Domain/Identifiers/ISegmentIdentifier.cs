@@ -2,11 +2,14 @@ using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.Identifiers;
 
-public interface ISegmentIdentifier<T>
-    where T : ISegmentIdentifier<T>
+public interface ISegmentIdentifier
 {
     static abstract (string Primary, string? Secondary) EdiId { get; }
+}
 
+public interface ISegmentIdentifier<T> : ISegmentIdentifier
+    where T : ISegmentIdentifier<T>
+{
     public static bool Matches(ISegment segment)
     {
         return segment.GetDataElement(0) == T.EdiId.Primary &&
@@ -21,3 +24,7 @@ public interface ISegmentIdentifier<T>
                 || T.EdiId.Secondary == segments.Peek().GetCompositeElementOrNull(0, 0));
     }
 }
+
+public interface ISegmentId  : ISegment, ISegmentIdentifier;
+
+public interface IEdiId  : IEdi, ISegmentIdentifier;

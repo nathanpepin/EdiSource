@@ -12,6 +12,14 @@ namespace EdiSource.Generator
     [Generator]
     public class EdiLoopConstructorGenerator : IIncrementalGenerator
     {
+        private const string LoopGeneratorAttribute = "LoopGeneratorAttribute";
+        private const string SegmentHeaderAttribute = "SegmentHeaderAttribute";
+        private const string SegmentFooterAttribute = "SegmentFooterAttribute";
+        private const string SegmentAttribute = "SegmentAttribute";
+        private const string SegmentListAttribute = "SegmentListAttribute";
+        private const string LoopAttribute = "LoopAttribute";
+        private const string LoopListAttribute = "LoopListAttribute";
+
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
             IncrementalValuesProvider<ClassDeclarationSyntax> classDeclarations = context.SyntaxProvider
@@ -35,7 +43,7 @@ namespace EdiSource.Generator
             var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
 
             return classDeclarationSyntax;
-            
+
             foreach (var attributeList in classDeclarationSyntax.AttributeLists)
             {
                 foreach (var attribute in attributeList.Attributes)
@@ -45,7 +53,7 @@ namespace EdiSource.Generator
                         INamedTypeSymbol attributeContainingTypeSymbol = attributeSymbol.ContainingType;
                         string fullName = attributeContainingTypeSymbol.ToDisplayString();
 
-                        if (fullName == "LoopGeneratorAttribute")
+                        if (fullName == LoopGeneratorAttribute)
                         {
                             return classDeclarationSyntax;
                         }
@@ -63,6 +71,7 @@ namespace EdiSource.Generator
             {
                 return;
             }
+
 
             var distinctClasses = classes.Distinct();
 
@@ -106,8 +115,8 @@ namespace EdiSource.Generator
         {
             return attributeName switch
             {
-                "SegmentHeaderAttribute" or "SegmentAttribute" or "SegmentListAttribute" or
-                    "LoopAttribute" or "LoopListAttribute" or "SegmentFooterAttribute" => true,
+                SegmentHeaderAttribute or SegmentAttribute or SegmentListAttribute or
+                    LoopAttribute or LoopListAttribute or SegmentFooterAttribute => true,
                 _ => false
             };
         }
@@ -117,12 +126,12 @@ namespace EdiSource.Generator
         {
             return ediItems.OrderBy(item => item.Attribute switch
             {
-                "SegmentHeaderAttribute" => 0,
-                "SegmentAttribute" => 1,
-                "SegmentListAttribute" => 2,
-                "LoopAttribute" => 3,
-                "LoopListAttribute" => 4,
-                "SegmentFooterAttribute" => 5,
+                SegmentHeaderAttribute => 0,
+                SegmentAttribute => 1,
+                SegmentListAttribute => 2,
+                LoopAttribute => 3,
+                LoopListAttribute => 4,
+                SegmentFooterAttribute => 5,
                 _ => 6
             }).ToList();
         }
@@ -132,6 +141,10 @@ namespace EdiSource.Generator
         {
             var sb = new StringBuilder();
 
+            var cw = new CodeWriter();
+            cw.AddUsing("SyntaxTreestem;");
+          SyntaxTree
+            
             sb.AppendLine("using System;");
             sb.AppendLine("using System.Collections.Generic;");
             sb.AppendLine("using EdiSource.Domain.Segments;");
@@ -145,40 +158,75 @@ namespace EdiSource.Generator
             sb.AppendLine($"        public {className}(Queue<ISegment> segments)");
             sb.AppendLine("        {");
 
-            foreach (var (name, attribute, property) in orderedEdiItems)
+            var header = orderedEdiItems.Where(x => x.Attribute == "SegmentHeaderAttribute")
+                .ToArray();
+            foreach (var item in header)
+            {
+                sb.AppendLine(
+                    $"            {item.Name} = SegmentLoopFactory<{item.Property.Type}, {className}>.Create(segments, this);");
+                sb.AppendLine();
+            }
+
+            sb.AppendLine("            while (segments.Count > 0)");
+            sb.AppendLine("            {");
+
+            var bodyItems = orderedEdiItems
+                .Where(x => x.Attribute is SegmentAttribute or SegmentListAttribute or LoopAttribute
+                    or LoopListAttribute)
+                .ToArray();
+            foreach (var (name, attribute, property) in bodyItems)
             {
                 switch (attribute)
                 {
-                    case "SegmentHeaderAttribute":
-                    case "SegmentAttribute":
-                    case "SegmentFooterAttribute":
-                        sb.AppendLine(
-                            $"            {name} = SegmentLoopFactory<{property.Type}, {className}>.Create(segments, this);");
+                    case SegmentAttribute:
+                        sb.AppendLine($$"""
+                                                        if (ISegmentIdentifier<{{property.Type}}>.Matches(segments))"
+                                                        {
+                                                            {{name}} = SegmentLoopFactory<{{((INamedTypeSymbol)property.Type).TypeArguments[0]}}, {{className}}>.Create(segments, this));
+                                                        }
+                                        """);
                         break;
-                    case "SegmentListAttribute":
-                        sb.AppendLine($"            {name} = [];");
-                        sb.AppendLine(
-                            $"            while (ISegmentIdentifier<{((INamedTypeSymbol)property.Type).TypeArguments[0]}>.Matches(segments))");
-                        sb.AppendLine("            {");
-                        sb.AppendLine(
-                            $"                {name}.Add(SegmentLoopFactory<{((INamedTypeSymbol)property.Type).TypeArguments[0]}, {className}>.Create(segments, this));");
-                        sb.AppendLine("            }");
+                    case SegmentListAttribute:
+                        sb.AppendLine($$"""
+                                                        if (ISegmentIdentifier<{{property.Type}}>.Matches(segments))"
+                                                        {
+                                                            {{name}}.Add(SegmentLoopFactory<{{((INamedTypeSymbol)property.Type).TypeArguments[0]}}, {{className}}>.Create(segments, this));"
+                                                        }
+                                        """);
                         break;
-                    case "LoopAttribute":
-                        sb.AppendLine($"            if (ISegmentIdentifier<{property.Type}>.Matches(segments))");
-                        sb.AppendLine("            {");
-                        sb.AppendLine($"                {name} = new {property.Type}(segments, this);");
-                        sb.AppendLine("            }");
+                    case LoopAttribute:
+                        sb.AppendLine($$"""
+                                                        if (ISegmentIdentifier<{{property.Type}}>.Matches(segments))"
+                                                        {
+                                                            {{name}} = new {{property.Type}}(segments, this);
+                                                        }
+                                        """);
                         break;
-                    case "LoopListAttribute":
-                        sb.AppendLine($"            {name} = [];");
-                        sb.AppendLine(
-                            $"            while (ISegmentIdentifier<{((INamedTypeSymbol)property.Type).TypeArguments[0]}>.Matches(segments))");
-                        sb.AppendLine("            {");
-                        sb.AppendLine(
-                            $"                {name}.Add(new {((INamedTypeSymbol)property.Type).TypeArguments[0]}(segments, this));");
-                        sb.AppendLine("            }");
+                    case LoopListAttribute:
+                        sb.AppendLine($$"""
+                                                        if (ISegmentIdentifier<{{property.Type}}>.Matches(segments))"
+                                                        {
+                                                            {{name}}.Add(new {{((INamedTypeSymbol)property.Type).TypeArguments[0]}}(segments, this));
+                                                        }
+                                        """);
                         break;
+                }
+            }
+
+            sb.AppendLine("            }");
+
+
+            var footer = orderedEdiItems
+                .Where(x => x.Attribute == "SegmentFooterAttribute")
+                .ToArray();
+
+            if (footer.Length > 0)
+            {
+                foreach (var item in footer)
+                {
+                    sb.AppendLine(
+                        $"            {item.Name} = SegmentLoopFactory<{item.Property.Type}, {className}>.Create(segments, this);");
+                    sb.AppendLine();
                 }
             }
 
@@ -188,5 +236,86 @@ namespace EdiSource.Generator
 
             return sb.ToString();
         }
+    }
+}
+
+public class CodeWriter
+{
+    private readonly StringBuilder _builder = new();
+    private int _indentLevel;
+
+    private const string Indent = "                                                                                                                                ";
+    
+    public void AppendLine(string line = "")
+    {
+        if (!string.IsNullOrEmpty(line))
+        {
+            _builder.Append(Indent.Substring(0, _indentLevel * 4));
+            _builder.AppendLine(line);
+        }
+        else
+        {
+            _builder.AppendLine();
+        }
+    }
+
+    public void OpenBrace()
+    {
+        AppendLine("{");
+        _indentLevel++;
+    }
+
+    public void CloseBrace()
+    {
+        _indentLevel--;
+        AppendLine("}");
+    }
+
+    public void StartNamespace(string namespaceName)
+    {
+        AppendLine($"namespace {namespaceName}");
+        OpenBrace();
+    }
+
+    public void AddUsing(string usingName)
+    {
+        AppendLine($"using {usingName};");
+    }
+
+    public void EndNamespace()
+    {
+        CloseBrace();
+    }
+
+    public void StartClass(string className, string modifier = "public")
+    {
+        AppendLine($"{modifier} class {className}");
+        OpenBrace();
+    }
+
+    public void EndClass()
+    {
+        CloseBrace();
+    }
+
+    public void StartMethod(string methodName, string returnType = "void", string modifier = "public")
+    {
+        AppendLine($"{modifier} {returnType} {methodName}()");
+        OpenBrace();
+    }
+
+    public void EndMethod()
+    {
+        CloseBrace();
+    }
+
+    public void AddProperty(string propertyName, string propertyType, string modifier = "public")
+    {
+        AppendLine($"{modifier} {propertyType} {propertyName} {{ get; set; }}");
+    }
+
+    public override string ToString()
+    {
+        return _builder.ToString();
     }
 }

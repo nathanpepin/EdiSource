@@ -4,7 +4,7 @@ using EdiSource.Loops;
 
 namespace EdiSource.Segments;
 
-public class TS_ST : Segment, ISegment<TransactionSet>, ISegmentIdentifier<TS_ST>
+public class TS_ST : Segment, ISegment<TransactionSet>, ISegmentIdentifier<TS_ST>, IEdiId
 {
     public TransactionSet? Parent { get; }
 

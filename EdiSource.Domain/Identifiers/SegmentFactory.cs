@@ -37,37 +37,3 @@ public static class SegmentLoopFactory<T, TLoop>
         return ISegmentIdentifier<T>.Matches(segment) ? null : new T { Elements = segment.Elements, Parent = parent };
     }
 }
-
-public static class SegmentFactory<T>
-    where T : Segment, ISegmentIdentifier<T>, new()
-{
-    public static T Create(Queue<ISegment> segments, ILoop? parent = null)
-    {
-        if (!ISegmentIdentifier<T>.Matches(segments.Peek()))
-            throw new ArgumentException(
-                $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segments}");
-
-        return new T { Elements = segments.Dequeue().Elements, Parent = parent };
-    }
-
-    public static T Create(ISegment segment, ILoop? parent = null)
-    {
-        if (!ISegmentIdentifier<T>.Matches(segment))
-            throw new ArgumentException(
-                $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segment}");
-
-        return new T { Elements = segment.Elements, Parent = parent };
-    }
-
-    public static T? CreateIfMatches(Queue<ISegment> segments, ILoop? parent = null)
-    {
-        return !ISegmentIdentifier<T>.Matches(segments.Peek())
-            ? null
-            : new T { Elements = segments.Dequeue().Elements, Parent = parent };
-    }
-
-    public static T? CreateIfMatches(ISegment segment, ILoop? parent = null)
-    {
-        return ISegmentIdentifier<T>.Matches(segment) ? null : new T { Elements = segment.Elements, Parent = parent };
-    }
-}

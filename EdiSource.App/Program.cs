@@ -22,12 +22,12 @@ var input =
 var segments = new EdiReader()
     .ReadEdiSegments(input, Separators.DefaultSeparators)
     .ToArray();
-
-var ts = new TransactionSet(new Queue<ISegment>(segments));
-;
-
- var a = ts.ST.Parent;
-
-Console.WriteLine(ts.WriteToStringBuilder().ToString());
+//
+// var ts = new TransactionSet(new Queue<ISegment>(segments));
+// // ;
+//
+//  var a = ts.ST.Parent;
+//
+// Console.WriteLine(ts.WriteToStringBuilder().ToString());
 
 return;
