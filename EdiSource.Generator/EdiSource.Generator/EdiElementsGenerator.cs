@@ -76,14 +76,14 @@ public class EdiItemsIncrementalGenerator : IIncrementalGenerator
             var className = classSymbol.Name;
             var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
 
-            var ediItems = new List<(string Name, string Attribute)>();
+            var ediItems = new List<(string Name, string Attribute, IPropertySymbol PropertySymbol)>();
 
             foreach (var property in properties)
             {
                 var attribute = GetEdiAttribute(property);
                 if (!string.IsNullOrEmpty(attribute))
                 {
-                    ediItems.Add((property.Name, attribute));
+                    ediItems.Add((property.Name, attribute, property));
                 }
             }
 
@@ -94,62 +94,23 @@ public class EdiItemsIncrementalGenerator : IIncrementalGenerator
         }
     }
 
-    private static string GetEdiAttribute(IPropertySymbol property)
-    {
-        var attributes = property.GetAttributes();
-        var ediAttribute = attributes.FirstOrDefault(a => IsEdiAttribute(a.AttributeClass?.Name));
-        return ediAttribute?.AttributeClass?.Name ?? string.Empty;
-    }
-
-    private static bool IsEdiAttribute(string? attributeName)
-    {
-        return attributeName switch
-        {
-            "SegmentHeaderAttribute" or "SegmentAttribute" or "SegmentListAttribute" or
-                "LoopAttribute" or "LoopListAttribute" or "SegmentFooterAttribute" => true,
-            _ => false
-        };
-    }
-
-    private static List<(string Name, string Attribute)> OrderEdiItems(
-        List<(string Name, string Attribute)> ediItems)
-    {
-        return ediItems.OrderBy(item => item.Attribute switch
-        {
-            "SegmentHeaderAttribute" => 0,
-            "SegmentAttribute" => 1,
-            "SegmentListAttribute" => 2,
-            "LoopAttribute" => 3,
-            "LoopListAttribute" => 4,
-            "SegmentFooterAttribute" => 5,
-            _ => 6
-        }).ToList();
-    }
-
     private static string GenerateSourceCode(string className, string namespaceName,
-        List<(string Name, string Attribute)> orderedEdiItems)
+        List<(string Name, string Attribute, IPropertySymbol PropertySymbol)> orderedEdiItems)
     {
-        var sb = new StringBuilder();
+        var cw = new CodeWriter();
 
-        sb.AppendLine("using System.Collections.Generic;");
-        sb.AppendLine("using EdiSource.Domain.Identifiers;");
-        sb.AppendLine();
-        sb.AppendLine($"namespace {namespaceName}");
-        sb.AppendLine("{");
-        sb.AppendLine($"    public partial class {className}");
-        sb.AppendLine("    {");
-        sb.AppendLine("        public List<IEdi?> EdiItems => new List<IEdi?>");
-        sb.AppendLine("        {");
-
-        foreach (var (name, _) in orderedEdiItems)
+        cw.AddUsing("System.Collections.Generic");
+        cw.AddUsing("EdiSource.Domain.Identifiers");
+        cw.AppendLine();
+        using (var ns = cw.StartNamespace(namespaceName))
         {
-            sb.AppendLine($"            {name},");
+            using (var cl = cw.StartClass(className))
+            {
+                var names = orderedEdiItems.Select(x => x.Name).ToArray();
+                cw.AddCalcProperty("EdiItems", "List<IEdi?>", $$"""new List<IEdi?> { {{string.Join(", ", names)}} }""");
+            }
         }
 
-        sb.AppendLine("        };");
-        sb.AppendLine("    }");
-        sb.AppendLine("}");
-
-        return sb.ToString();
+        return cw.ToString();
     }
 }
