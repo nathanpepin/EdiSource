@@ -7,6 +7,7 @@ using EdiSource.Segments;
 namespace EdiSource.Loops;
 
 [LoopGenerator]
+[LoopGenerator<TransactionSet, TS_ST>]
 public partial class TransactionSet : ILoop<TransactionSet>, ISegmentIdentifier<TS_ST>,
     ISegmentIdentifier<TransactionSet>
 {

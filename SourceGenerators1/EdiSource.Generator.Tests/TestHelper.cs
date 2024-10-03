@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using EdiSource.Domain.Identifiers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using VerifyXunit;
@@ -15,7 +16,10 @@ public static class TestHelper
 
         var compilation = CSharpCompilation.Create(nameof(LoopConstructorGeneratorTests),
             [CSharpSyntaxTree.ParseText(source)],
-            [MetadataReference.CreateFromFile(typeof(object).Assembly.Location)]);
+            [
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(IEdi).Assembly.Location)
+            ]);
 
         driver = driver.RunGenerators(compilation);
 

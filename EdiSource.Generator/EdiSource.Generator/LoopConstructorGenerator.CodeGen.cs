@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -8,7 +9,7 @@ namespace EdiSource.Generator;
 public partial class LoopConstructorGenerator
 {
     private static string GenerateSourceCode(string className, string namespaceName,
-        List<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems)
+        ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems)
     {
         var cw = new CodeWriter();
 
@@ -22,19 +23,31 @@ public partial class LoopConstructorGenerator
         {
             using (var cs = cw.StartClass(className))
             {
-                using (var con = cw.StartConstructor(className, arguments: "Queue<ISegment> segments"))
+                using (var con = cw.StartConstructor(className, arguments: ["Queue<ISegment> segments", $"TransactionSet? parent = null"]))
                 {
-                    GenerateHeaderOrFooter(className, orderedEdiItems, cw, SegmentHeaderAttribute, SegmentHeader);
-                    cw.AppendLine();
+                    var headerItems = orderedEdiItems
+                        .Where(x => LoopAggregation.Header.Contains(x.Attribute))
+                        .ToImmutableArray();
+                    GenerateHeaderOrFooter(className, headerItems, cw);
 
-                    using (var whi = cw.AddWhile("segments.Count > 0"))
+                    var bodyItems = orderedEdiItems
+                        .Where(x => LoopAggregation.Body.Contains(x.Attribute))
+                        .ToImmutableArray();
+                    if (bodyItems.Length > 0)
                     {
-                        GenerateBody(className, orderedEdiItems, cw);
+                        cw.AppendLine();
+                        GenerateBody(className, bodyItems, cw);
                     }
 
-                    cw.AppendLine();
+                    var footerItems = orderedEdiItems
+                        .Where(x => LoopAggregation.Footer.Contains(x.Attribute))
+                        .ToImmutableArray();
 
-                    GenerateHeaderOrFooter(className, orderedEdiItems, cw, SegmentFooterAttribute, SegmentFooter);
+                    if (footerItems.Length > 0)
+                    {
+                        cw.AppendLine();
+                        GenerateHeaderOrFooter(className, footerItems, cw);
+                    }
                 }
             }
         }
@@ -42,16 +55,8 @@ public partial class LoopConstructorGenerator
         return cw.ToString();
     }
 
-    private static void GenerateHeaderOrFooter(string className, List<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems, CodeWriter cw,
-        string attribute,
-        string attribute2)
+    private static void GenerateHeaderOrFooter(string className, ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
     {
-        var items = orderedEdiItems.Where(x => x.Attribute == attribute || x.Attribute == attribute2)
-            .ToArray();
-
-        if (items.Length == 0)
-            return;
-
         foreach (var item in items)
         {
             cw.AppendLine(
@@ -59,35 +64,36 @@ public partial class LoopConstructorGenerator
         }
     }
 
-    private static void GenerateBody(string className, List<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems, CodeWriter cw)
+    private static void GenerateBody(string className, ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
     {
-        var bodyItems = orderedEdiItems
-            .Where(x => x.Attribute is SegmentAttribute or SegmentListAttribute or LoopAttribute
-                or LoopListAttribute or Segment or SegmentList or Loop
-                or LoopList)
-            .ToArray();
-
-        if (bodyItems.Length == 0)
-            return;
-
-        foreach (var (name, attribute, property) in bodyItems)
+        using (_ = cw.AddWhile("segments.Count > 0"))
         {
-            var typeName = ((INamedTypeSymbol)property.Type).TypeArguments is { Length: > 0 } named
-                ? named[0]
-                : property.Type;
-
-            using var i = cw.AddIf($"ISegmentIdentifier<{typeName}>.Matches(segments)");
-
-            cw.AppendLine(attribute switch
+            foreach (var (name, attribute, property) in items)
             {
-                SegmentAttribute or Segment => $"{name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);",
-                SegmentListAttribute or SegmentList => $"{name}.Add(SegmentLoopFactory<{typeName}, {className}>.Create(segments, this));",
-                LoopAttribute or Loop => $"{name} = new {property.Type}(segments, this);",
-                LoopListAttribute or LoopList => $"{name}.Add(new {typeName}(segments, this));",
-                _ => string.Empty
-            });
+                var typeName = ((INamedTypeSymbol)property.Type).TypeArguments is { Length: > 0 } named
+                    ? named[0]
+                    : property.Type;
 
-            cw.AppendLine("continue;");
+                using var i = cw.AddIf($"ISegmentIdentifier<{typeName}>.Matches(segments)");
+
+                cw.AppendLine(attribute switch
+                {
+                    SegmentAttribute or Segment => $"{name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);",
+                    SegmentListAttribute or SegmentList => $"{name}.Add(SegmentLoopFactory<{typeName}, {className}>.Create(segments, this));",
+                    LoopAttribute or Loop => $"{name} = new {property.Type}(segments, this);",
+                    LoopListAttribute or LoopList => $"{name}.Add(new {typeName}(segments, this));",
+                    OptionalSegmentFooter or OptionalSegmentFooterAttribute =>
+                        $"""
+                         {name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);
+                         break;
+                         """,
+                    _ => string.Empty
+                });
+
+                cw.AppendLine("continue;");
+            }
+
+            cw.AppendLine("break;");
         }
     }
 }
