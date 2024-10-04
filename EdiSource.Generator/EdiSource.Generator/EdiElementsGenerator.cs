@@ -13,20 +13,20 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        IncrementalValuesProvider<ClassDeclarationSyntax> classDeclarations = context.SyntaxProvider
+        var classDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: static (s, _) => IsSyntaxTargetForGeneration(s),
                 transform: static (ctx, _) => PredicateOnClassAttributes(ctx, LoopAggregation.LoopGeneratorNames))
             .Where(static m => m is not null)!;
 
-        IncrementalValueProvider<(Compilation, ImmutableArray<ClassDeclarationSyntax>)> compilationAndClasses
+        var compilationAndClasses
             = context.CompilationProvider.Combine(classDeclarations.Collect());
 
         context.RegisterSourceOutput(compilationAndClasses,
-            static (spc, source) => Execute(source.Item1, source.Item2, spc));
+            static (spc, source) => Execute(source.Item1, source.Right, spc));
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classes,
+    private static void Execute(Compilation compilation, ImmutableArray<GeneratorItem?> classes,
         SourceProductionContext context)
     {
         if (classes.IsDefaultOrEmpty)
@@ -34,9 +34,11 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
             return;
         }
 
-        var distinctClasses = classes.Distinct();
+        var distinctClasses = classes
+            .Distinct()
+            .OfType<GeneratorItem>();
 
-        foreach (var classDeclaration in distinctClasses)
+        foreach (var (classDeclaration, parent, id) in distinctClasses)
         {
             var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
             var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol;
@@ -46,9 +48,6 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
             var className = classSymbol.Name;
             var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
-
-            var parentName = classSymbol.TypeArguments[0].Name;
-            var idName = classSymbol.TypeArguments[1].Name;
             
             var ediItems = properties
                 .Select(property => new { property, attribute = GetEdiAttribute(property) })
@@ -57,9 +56,17 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
                 .ToArray();
 
             var orderedEdiItems = OrderEdiItems(ediItems);
-            var sourceCode = GenerateSourceCode(className, namespaceName, orderedEdiItems);
+            
+            var ediElementSourceCode = ImplementationSourceCode(className, namespaceName, parent, id);
+            context.AddSource($"{className}.EdiElement.g.cs", SourceText.From(ediElementSourceCode, Encoding.UTF8));
+            
+            var implementationCode = EdiElementSourceCode(className, namespaceName, orderedEdiItems);
+            context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
 
-            context.AddSource($"{className}.g.cs", SourceText.From(sourceCode, Encoding.UTF8));
+            var loopConstructorSourceCode = LoopConstructorGenerator.GenerateSourceCode(className, namespaceName, orderedEdiItems);
+            context.AddSource($"{className}.Constructor.g.cs", SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
         }
     }
 }
+
+public record struct GeneratorItem(ClassDeclarationSyntax ClassDeclarationSyntax, string Parent, string Id);

@@ -49,7 +49,7 @@ public static class Helper
         return ediAttribute?.AttributeClass?.Name ?? string.Empty;
     }
 
-    public static ClassDeclarationSyntax? PredicateOnClassAttributes(GeneratorSyntaxContext context, ImmutableArray<string> items)
+    public static GeneratorItem? PredicateOnClassAttributes(GeneratorSyntaxContext context, ImmutableArray<string> items)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
 
@@ -59,17 +59,25 @@ public static class Helper
             .ToArray();
         foreach (var attribute in attributes)
         {
-            var canidates = context
+            var candidate = context
                 .SemanticModel
                 .GetSymbolInfo(attribute)
                 .CandidateSymbols
-                .Select(x => x.ContainingType.Name)
-                .ToArray();
+                .FirstOrDefault(x => items.Contains(x.ContainingType.Name));
 
-            var containsName = items.Any(x => canidates.Contains(x));
-            if (!containsName) continue;
+            if (candidate is null) continue;
+
+            var typeArguments = attribute
+                .DescendantNodes()
+                .OfType<TypeArgumentListSyntax>()
+                .SelectMany(x => x
+                    .DescendantNodes()
+                    .OfType<IdentifierNameSyntax>())
+                .Select(x => x.Identifier.Text)
+                .ToArray();
             
-            return classDeclarationSyntax;
+            
+            return new GeneratorItem(classDeclarationSyntax, typeArguments[0], typeArguments[1]);
         }
 
         return null;

@@ -10,7 +10,8 @@ public sealed class CodeWriter
     private int _indentLevel;
     private readonly Stack<string> _disposeStack = new(0);
 
-    private const string Indent = "                                                                                                                                ";
+    private const string Indent =
+        "                                                                                                                                ";
 
     public void AppendLine(string line = "")
     {
@@ -70,16 +71,27 @@ public sealed class CodeWriter
         AppendLine($"using {usingName};");
     }
 
-    public IDisposable StartClass(string className, string modifier = "public", bool partial = true)
+    public IDisposable StartClass(string className, string modifier = "public", bool partial = true,
+        string[]? implementations = null)
     {
+        if (implementations is null)
+        {
+            AppendLine(partial
+                ? $"{modifier} partial class {className}"
+                : $"{modifier} class {className}");
+            AppendLine("{");
+            return new IndentationBlock(this);
+        }
+
         AppendLine(partial
-            ? $"{modifier} partial class {className}"
-            : $"{modifier} class {className}");
+            ? $"{modifier} partial class {className} : {string.Join(", ", implementations)}"
+            : $"{modifier} class {className}: {string.Join(", ", implementations)}");
         AppendLine("{");
         return new IndentationBlock(this);
     }
 
-    public IDisposable StartMethod(string methodName, string returnType = "void", string modifier = "public", string[]? arguments = null)
+    public IDisposable StartMethod(string methodName, string returnType = "void", string modifier = "public",
+        string[]? arguments = null)
     {
         AppendLine($"{modifier} {returnType} {methodName}({string.Join(", ", arguments ?? [])})");
         AppendLine("{");
@@ -93,9 +105,13 @@ public sealed class CodeWriter
         return new IndentationBlock(this);
     }
 
-    public void AddAutoProperty(string propertyName, string propertyType, string modifier = "public")
+    public void AddAutoProperty(string propertyName, string propertyType, string modifier = "public",
+        string? value = null)
     {
-        AppendLine($"{modifier} {propertyType} {propertyName} {{ get; set; }}");
+        if (value is not null)
+            AppendLine($"{modifier} {propertyType} {propertyName} {{ get; set; }}");
+
+        AppendLine($"{modifier} {propertyType} {propertyName} {{ get; set; }} = {value};");
     }
 
     public void AddCalcProperty(string propertyName, string propertyType, string calc, string modifier = "public")

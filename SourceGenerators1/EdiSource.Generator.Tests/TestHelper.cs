@@ -14,7 +14,7 @@ public static class TestHelper
 
         GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
-        var compilation = CSharpCompilation.Create(nameof(LoopConstructorGeneratorTests),
+        var compilation = CSharpCompilation.Create(nameof(T),
             [CSharpSyntaxTree.ParseText(source)],
             [
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),

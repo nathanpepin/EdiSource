@@ -8,7 +8,7 @@ namespace EdiSource.Generator;
 
 public partial class LoopConstructorGenerator
 {
-    private static string GenerateSourceCode(string className, string namespaceName,
+    public static string GenerateSourceCode(string className, string namespaceName,
         ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems)
     {
         var cw = new CodeWriter();
