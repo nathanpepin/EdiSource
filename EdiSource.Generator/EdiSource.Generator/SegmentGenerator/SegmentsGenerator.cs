@@ -38,9 +38,7 @@ public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerato
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
             var className = classSymbol.Name;
             var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
-
-            context.AddSource($"Running_{className}.g.cs", SourceText.From("//Running", Encoding.UTF8));
-
+            
             var usings = GetUsingStatements(classDeclaration)
                 .Select(x => x.Name?.ToString())
                 .OfType<string>()

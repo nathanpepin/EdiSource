@@ -6,7 +6,7 @@ using EdiSource.Segments;
 
 namespace EdiSource.Loops;
 
-[LoopGenerator<TransactionSet, TS_ST, TransactionSet>]
+[LoopGenerator<TransactionSet, TransactionSet, TS_ST>]
 public partial class TransactionSet
 {
     [SegmentHeader] public TS_ST ST { get; set; } = default!;

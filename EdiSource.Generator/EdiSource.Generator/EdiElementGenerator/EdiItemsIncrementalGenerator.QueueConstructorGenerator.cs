@@ -37,8 +37,11 @@ public partial class EdiItemsIncrementalGenerator
                     
                     using (var con = cw.StartConstructor(className, arguments: ["Queue<ISegment> segments", $"{parent}? parent = null"]))
                     {
-                        cw.AppendLine("Parent = parent;"); 
-                        cw.AppendLine();
+                        if (className != parent)
+                        {
+                            cw.AppendLine("Parent = parent;"); 
+                            cw.AppendLine();
+                        }
                         
                         var headerItems = orderedEdiItems
                             .Where(x => LoopAggregation.Header.Contains(x.Attribute))

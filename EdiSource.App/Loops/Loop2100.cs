@@ -7,14 +7,11 @@ using EdiSource.Segments;
 
 namespace EdiSource.Loops;
 
-[LoopGenerator<TransactionSet, Loop2100_NM1, Loop2100>]
+[LoopGenerator<TransactionSet, Loop2100, Loop2100_NM1>]
 public partial class Loop2100
 {
     [SegmentHeader] public Loop2100_NM1 NM1 { get; set; }
-    public static Task<Loop2100> InitializeAsync(ChannelReader<ISegment> segmentReader, Loop2100? parent)
-    {
-        throw new NotImplementedException();
-    }
+
 }
 
 /*

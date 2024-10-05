@@ -44,10 +44,9 @@ public sealed class CodeWriter
 
     public IDisposable AppendBlock(string line = "", string blockChar = "{", string blockEndChar = "}")
     {
-        _builder.Append(Indent.Substring(0, _indentLevel * 4));
-        _builder.AppendLine(line);
+        AppendLine(line);
 
-        _builder.AppendLine(blockChar);
+        AppendLine(blockChar);
 
         _disposeStack.Push(blockEndChar);
 

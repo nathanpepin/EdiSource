@@ -15,21 +15,21 @@ public class Segment : ISegment
     public Segment(ISegment segment, ILoop? parent = null)
     {
         Elements = segment.Elements;
-        SegmentSeparators = segment.SegmentSeparators;
+        Separators = segment.Separators;
         Parent = parent;
     }
 
     public Segment(IEnumerable<Element>? elements = null, Separators separators = default, ILoop? parent = null)
     {
         Elements = elements?.ToList() ?? [];
-        SegmentSeparators = separators;
+        Separators = separators;
         Parent = parent;
     }
 
     public Segment(string segmentText, Separators separators = default, ILoop? parent = null)
     {
         Elements = ReadElements(segmentText, separators).ToList();
-        SegmentSeparators = separators;
+        Separators = separators;
         Parent = parent;
     }
 
@@ -112,13 +112,13 @@ public class Segment : ISegment
             compositeElementIndex >= Elements[dataElementIndex].Count || compositeElementIndex < 0;
     }
 
-    public Separators SegmentSeparators { get; }
-    
+    public Separators Separators { get; set; }
+
     public ILoop? Parent { get; set; }
 
     public override string ToString()
     {
-        return this.WriteToStringBuilder(separators: SegmentSeparators).ToString();
+        return this.WriteToStringBuilder(separators: Separators).ToString();
     }
 
     public string ToString(Separators separators)

@@ -9,20 +9,7 @@ namespace EdiSource.Domain.Loop;
 public interface ILoop : IEdi
 {
     ILoop? Parent { get; }
-    // IEnumerable<ISegment> YieldChildSegments();
-    // IEnumerable<ILoop> YieldChildLoops();
-    // public IEnumerable<ILoop> YieldSubLoops()
-    // {
-    //     yield return this;
-    //     
-    //     foreach (var subLoop in YieldChildLoops())
-    //     {
-    //         foreach (var subSubLoop in subLoop.YieldSubLoops())
-    //         {
-    //             yield return subSubLoop;
-    //         }
-    //     }
-    // }
+    List<IEdi?> EdiItems { get; }
 }
 
 public interface ILoop<out TParent> : ILoop where TParent : ILoop
@@ -30,8 +17,15 @@ public interface ILoop<out TParent> : ILoop where TParent : ILoop
     new TParent? Parent { get; }
 }
 
-
 public interface ILoopInitialize<TSelf> : ILoop where TSelf : ILoop
 {
-    static abstract Task<TSelf> InitializeAsync(ChannelReader<ISegment> segmentReader, TSelf? parent);
+    static abstract Task<TSelf> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent);
+}
+
+public interface ILoopInitialize<in TParent, TSelf>
+    : ILoopInitialize<TSelf>
+    where TParent : ILoop
+    where TSelf : ILoop
+{
+        static abstract Task<TSelf> InitializeAsync(ChannelReader<ISegment> segmentReader, TParent? parent);
 }

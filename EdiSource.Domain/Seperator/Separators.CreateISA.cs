@@ -1,6 +1,6 @@
 namespace EdiSource.Domain.Seperator;
 
-public partial struct Separators
+public partial class Separators
 {
     public static Task<Separators> CreateFromISA(StreamReader streamReader)
     {

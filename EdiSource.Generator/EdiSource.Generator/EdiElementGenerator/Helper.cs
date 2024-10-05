@@ -59,9 +59,10 @@ public static class Helper
             .DescendantNodes().OfType<TypeArgumentListSyntax>().ToList();
 
         var parent = typeArgumentListSyntaxes[0].Arguments[0].ToString();
-        var id = typeArgumentListSyntaxes[0].Arguments[1].ToString();
+        var self = typeArgumentListSyntaxes[0].Arguments[1].ToString();
+        var id = typeArgumentListSyntaxes[0].Arguments[2].ToString();
 
-        return new GeneratorItem(classDeclarationSyntax, parent, id);
+        return new GeneratorItem(classDeclarationSyntax, parent, self, id);
     }
 
     public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId) PredicateOnClassAttributesClassParent(GeneratorSyntaxContext context, ImmutableArray<string> items)

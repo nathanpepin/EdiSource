@@ -38,6 +38,10 @@ var input =
 
 var ts = await new EdiParser<TransactionSet>().ParseEdi(input);
 
+var j = ts.FindEdiElement<Loop2000>().ToArray();
+
+Console.WriteLine(ts.PrettyPrintToStringBuilder());
+
 ;
 
 return;

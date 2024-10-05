@@ -16,7 +16,7 @@ public class StreamEdiWriter(Stream stream) : IEdiWriter
         return this;
     }
 
-    public async Task<IEdiWriter> WriteAsync(string value, CancellationToken cancellationToken)
+    public async Task<IEdiWriter> WriteText(string value, CancellationToken cancellationToken = default)
     {
         await _output.WriteAsync(value.ToCharArray());
         return this;

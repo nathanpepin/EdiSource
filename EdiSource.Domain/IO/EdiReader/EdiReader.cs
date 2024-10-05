@@ -89,7 +89,7 @@ public class EdiReader : IEdiReader
                 {
                     if (buffer[i] is '\r' or '\n' or '\0') continue;
 
-                    if (buffer[i] == separators.Value.SegmentSeparator)
+                    if (buffer[i] == separators.SegmentSeparator)
                     {
                         segmentBuffer
                             .Elements
@@ -99,9 +99,12 @@ public class EdiReader : IEdiReader
                         stringBuffer.Clear();
 
                         await channelWriter.WriteAsync(segmentBuffer, cancellationToken);
-                        segmentBuffer = new Segment([]);
+                        segmentBuffer = new Segment([])
+                        {
+                            Separators = separators
+                        };
                     }
-                    else if (buffer[i] == separators.Value.DataElementSeparator)
+                    else if (buffer[i] == separators.DataElementSeparator)
                     {
                         segmentBuffer
                             .Elements
@@ -112,7 +115,7 @@ public class EdiReader : IEdiReader
 
                         segmentBuffer.Elements.Add([]);
                     }
-                    else if (buffer[i] == separators.Value.CompositeElementSeparator)
+                    else if (buffer[i] == separators.CompositeElementSeparator)
                     {
                         segmentBuffer
                             .Elements

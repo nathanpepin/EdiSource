@@ -12,7 +12,7 @@ public partial class EdiItemsIncrementalGenerator
         public static string Generate(string className, string namespaceName,
             ImmutableArray<string> usings,
             ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems,
-            string parent)
+            GeneratorItem generatorItem)
         {
             var cw = new CodeWriter();
 
@@ -34,10 +34,14 @@ public partial class EdiItemsIncrementalGenerator
                     using (var con = cw.StartConstructor(className))
                     {
                     }
+
                     cw.AppendLine();
-                    
+
                     using (var con = cw.StartConstructor(className,
-                               arguments: ["ChannelReader<ISegment> segmentReader", $"{parent}? parent = null"]))
+                               arguments:
+                               [
+                                   "ChannelReader<ISegment> segmentReader", $"{generatorItem.Parent}? parent = null"
+                               ]))
                     {
                         cw.AppendLine("var loop = InitializeAsync(segmentReader, parent).GetAwaiter().GetResult();");
                         foreach (var item in orderedEdiItems)
@@ -47,14 +51,38 @@ public partial class EdiItemsIncrementalGenerator
                     }
 
                     cw.AppendLine();
-                    
+
                     using (var con = cw.AppendBlock(
-                               $"public static async Task<{className}> InitializeAsync(ChannelReader<ISegment> segmentReader, {parent}? parent)"))
+                               $"public static Task<{className}> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)"))
+                    {
+                        using (var _ = cw.AddIf("parent is null"))
+                        {
+                            cw.AppendLine($"return InitializeAsync(segmentReader, ({generatorItem.Parent}?) null);");
+                        }
+                        cw.AppendLine();
+
+                        using (var _ = cw.AddIf($"parent is not {generatorItem.Parent} typedParent"))
+                        {
+                            cw.AppendLine(
+                                $"""throw new ArgumentException($"Parent must be of type {generatorItem.Parent}");""");
+                        }
+                        cw.AppendLine();
+
+                        cw.AppendLine("return InitializeAsync(segmentReader, typedParent);");
+                    }
+
+                    cw.AppendLine();
+                    using (var con = cw.AppendBlock(
+                               $"public static async Task<{className}> InitializeAsync(ChannelReader<ISegment> segmentReader, {generatorItem.Parent}? parent)"))
                     {
                         cw.AppendLine($"var loop = new {className}();");
-
-                        cw.AppendLine("loop.Parent = parent;");
                         cw.AppendLine();
+
+                        if (className != generatorItem.Parent)
+                        {
+                            cw.AppendLine("loop.Parent = parent;");
+                            cw.AppendLine();
+                        }
 
                         var headerItems = orderedEdiItems
                             .Where(x => LoopAggregation.Header.Contains(x.Attribute))
@@ -79,7 +107,7 @@ public partial class EdiItemsIncrementalGenerator
                             cw.AppendLine();
                             GenerateHeaderOrFooter(className, footerItems, cw);
                         }
-                        
+
                         cw.AppendLine();
                         cw.AppendLine("return loop;");
                     }
@@ -118,7 +146,8 @@ public partial class EdiItemsIncrementalGenerator
                             $"loop.{name} = await SegmentLoopFactory<{typeName}, {className}>.CreateAsync(segmentReader, loop);",
                         SegmentListAttribute or SegmentList =>
                             $"loop.{name}.Add(await SegmentLoopFactory<{typeName}, {className}>.CreateAsync(segmentReader, loop));",
-                        LoopAttribute or Loop => $"loop.{name} = await {typeName}.InitializeAsync(segmentReader, loop);",
+                        LoopAttribute or Loop =>
+                            $"loop.{name} = await {typeName}.InitializeAsync(segmentReader, loop);",
                         LoopListAttribute or LoopList =>
                             $"loop.{name}.Add(await {typeName}.InitializeAsync(segmentReader, loop));",
                         OptionalSegmentFooter or OptionalSegmentFooterAttribute =>

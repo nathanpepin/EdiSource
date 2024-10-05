@@ -33,9 +33,10 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
                 || T.EdiId.Secondary == segments.Peek().GetCompositeElementOrNull(0, 0));
     }
 
-    public static ValueTask<bool> MatchesAsync(ChannelReader<ISegment> segmentReader)
+    public static async ValueTask<bool> MatchesAsync(ChannelReader<ISegment> segmentReader)
     {
-        return ValueTask.FromResult(segmentReader.TryPeek(out var segment) && Matches(segment));
+        await segmentReader.WaitToReadAsync();
+        return segmentReader.TryPeek(out var segment) && Matches(segment);
     }
 }
 

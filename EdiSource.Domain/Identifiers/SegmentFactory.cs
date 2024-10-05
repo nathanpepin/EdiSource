@@ -1,6 +1,7 @@
 using System.Threading.Channels;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
+using EdiSource.Domain.Seperator;
 
 namespace EdiSource.Domain.Identifiers;
 
@@ -14,7 +15,8 @@ public static class SegmentLoopFactory<T, TLoop>
             throw new ArgumentException(
                 $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segments}");
 
-        return new T { Elements = segments.Dequeue().Elements, Parent = parent };
+        var segment = segments.Dequeue();
+        return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 
     public static T Create(ISegment segment, TLoop? parent = null)
@@ -23,19 +25,22 @@ public static class SegmentLoopFactory<T, TLoop>
             throw new ArgumentException(
                 $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segment}");
 
-        return new T { Elements = segment.Elements, Parent = parent };
+        return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 
     public static T? CreateIfMatches(Queue<ISegment> segments, TLoop? parent = null)
     {
-        return !ISegmentIdentifier<T>.Matches(segments.Peek())
-            ? null
-            : new T { Elements = segments.Dequeue().Elements, Parent = parent };
+        if (!ISegmentIdentifier<T>.Matches(segments.Peek())) return null;
+
+        var segment = segments.Dequeue();
+        return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 
     public static T? CreateIfMatches(ISegment segment, TLoop? parent = null)
     {
-        return ISegmentIdentifier<T>.Matches(segment) ? null : new T { Elements = segment.Elements, Parent = parent };
+        return !ISegmentIdentifier<T>.Matches(segment)
+            ? null
+            : new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 
     public static async Task<T> CreateAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
@@ -45,7 +50,7 @@ public static class SegmentLoopFactory<T, TLoop>
                 $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {await segmentReader.ReadAsync()}");
 
         var segment = await segmentReader.ReadAsync();
-        return new T { Elements = segment.Elements, Parent = parent };
+        return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 
     public static async Task<T?> CreateIfMatchesAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
@@ -54,6 +59,6 @@ public static class SegmentLoopFactory<T, TLoop>
             return null;
 
         var segment = await segmentReader.ReadAsync();
-        return new T { Elements = segment.Elements, Parent = parent };
+        return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 }

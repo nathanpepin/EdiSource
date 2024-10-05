@@ -22,7 +22,7 @@ public interface ISegment : IEdi
     bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value);
     bool ElementExists(int elementIndex);
     bool CompositeElementExists(int dataElementIndex, int compositeElementIndex);
-    Separators SegmentSeparators { get; }
+    Separators Separators { get; }
 }
 
 public interface ISegment<out TLoop>

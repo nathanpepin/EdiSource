@@ -7,12 +7,13 @@ public partial class EdiItemsIncrementalGenerator
 {
     public static class ImplementationGenerator
     {
-        public static string Generate(string className, string namespaceName, ImmutableArray<string> usings, string parent, string id)
+        public static string Generate(string className, string namespaceName, ImmutableArray<string> usings,
+            string parent, string id)
         {
             var cw = new CodeWriter();
 
             cw.AppendLine("#nullable enable");
-            
+
             cw.AddUsing("System.Collections.Generic");
             foreach (var @using in usings)
             {
@@ -23,11 +24,18 @@ public partial class EdiItemsIncrementalGenerator
             using (var ns = cw.StartNamespace(namespaceName))
             {
                 string[] implementations =
-                    [$"ILoop<{parent}>", $"ISegmentIdentifier<{className}>", $"ISegmentIdentifier<{id}>", $"ILoopInitialize<{className}>"];
+                [
+                    $"ILoop<{parent}>", $"ISegmentIdentifier<{className}>", $"ISegmentIdentifier<{id}>",
+                    $"ILoopInitialize<{parent}, {className}>"
+                ];
                 using (var cl = cw.StartClass(className, implementations: implementations))
                 {
                     cw.AppendLine("ILoop? ILoop.Parent => Parent;");
-                    cw.AppendLine($"public {parent}? Parent {{ get; set; }} = null;");
+
+                    cw.AppendLine(className == parent
+                        ? $$"""public {{parent}}? Parent { get => null; set {} }"""
+                        : $$"""public {{parent}}? Parent { get; set; }""");
+
                     cw.AppendLine($"public static (string Primary, string? Secondary) EdiId => {id}.EdiId;");
                 }
             }

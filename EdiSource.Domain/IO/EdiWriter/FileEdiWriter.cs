@@ -20,9 +20,9 @@ public class FileEdiWriter(string filePath) : IEdiWriter
         return this;
     }
 
-    public async Task<IEdiWriter> WriteAsync(string value, CancellationToken cancellationToken = default)
+    public async Task<IEdiWriter> WriteText(string value, CancellationToken cancellationToken = default)
     {
-        await _streamEdiWriter.WriteAsync(value, cancellationToken);
+        await _streamEdiWriter.WriteText(value, cancellationToken);
         return this;
     }
 

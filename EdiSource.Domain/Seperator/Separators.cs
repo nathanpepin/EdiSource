@@ -1,10 +1,21 @@
 namespace EdiSource.Domain.Seperator;
 
-public partial struct Separators(char segmentSeparator, char dataElementSeparator, char compositeElementSeparator)
+public partial class Separators
 {
     public static readonly Separators DefaultSeparators = new('~', '*', ':');
 
-    public char SegmentSeparator { get; set; } = segmentSeparator;
-    public char DataElementSeparator { get; set; } = dataElementSeparator;
-    public char CompositeElementSeparator { get; set; } = compositeElementSeparator;
+    public Separators(char segmentSeparator, char dataElementSeparator, char compositeElementSeparator)
+    {
+        SegmentSeparator = segmentSeparator;
+        DataElementSeparator = dataElementSeparator;
+        CompositeElementSeparator = compositeElementSeparator;
+    }
+
+    public Separators()
+    {
+    }
+
+    public char SegmentSeparator { get; set; } = '~';
+    public char DataElementSeparator { get; set; } = '*';
+    public char CompositeElementSeparator { get; set; } = ':';
 }

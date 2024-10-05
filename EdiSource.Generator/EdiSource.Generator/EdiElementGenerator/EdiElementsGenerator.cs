@@ -11,8 +11,6 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterPostInitializationOutput(x => x.AddSource("Hello.g.cs", "//Hello world"));
-
         var classDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: static (s, _) => IsSyntaxTargetForGeneration(s, LoopAggregation.LoopGeneratorNames),
@@ -23,17 +21,15 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
 
         context.RegisterSourceOutput(compilationAndClasses,
             static (spc, source) => Execute(source.Item1, source.Right, spc));
-
-        context.RegisterPostInitializationOutput(x => x.AddSource("Goodbye.g.cs", "//Good bye"));
     }
 
     private static void Execute(Compilation compilation, ImmutableArray<GeneratorItem> classes,
         SourceProductionContext context)
     {
-        context.AddSource("Running.g.cs", SourceText.From("//Running", Encoding.UTF8));
-
-        foreach (var (classDeclaration, parent, id) in classes)
+        foreach (var generatorItem in classes)
         {
+            var (classDeclaration, parent, self, id) = generatorItem;
+
             var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
 
             if (semanticModel.GetDeclaredSymbol(classDeclaration) is not INamedTypeSymbol classSymbol) continue;
@@ -41,14 +37,12 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
             var className = classSymbol.Name;
             var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
-
-            context.AddSource($"Running_{className}.g.cs", SourceText.From("//Running", Encoding.UTF8));
-
+            
             var usings = GetUsingStatements(classDeclaration)
                 .Select(x => x.Name?.ToString())
                 .OfType<string>()
                 .ToImmutableArray();
-            
+
             var ediItems = properties
                 .Select(property => new { property, attribute = GetEdiAttribute(property) })
                 .Where(t => !string.IsNullOrEmpty(t.attribute))
@@ -56,18 +50,22 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
                 .ToArray();
 
             var orderedEdiItems = OrderEdiItems(ediItems);
-            
+
             var ediElementSourceCode = EdiElementGenerator.Generate(className, namespaceName, usings, orderedEdiItems);
             context.AddSource($"{className}.EdiElement.g.cs", SourceText.From(ediElementSourceCode, Encoding.UTF8));
 
             var implementationCode = ImplementationGenerator.Generate(className, namespaceName, usings, parent, id);
             context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
 
-            var loopConstructorSourceCode = QueueConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
-            context.AddSource($"{className}.QueueConstructor.g.cs", SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
-            
-            var channelConstructorSourceCode = ChannelConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
-            context.AddSource($"{className}.ChannelConstructor.g.cs", SourceText.From(channelConstructorSourceCode, Encoding.UTF8));
+            var loopConstructorSourceCode =
+                QueueConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
+            context.AddSource($"{className}.QueueConstructor.g.cs",
+                SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
+
+            var channelConstructorSourceCode =
+                ChannelConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, generatorItem);
+            context.AddSource($"{className}.ChannelConstructor.g.cs",
+                SourceText.From(channelConstructorSourceCode, Encoding.UTF8));
         }
     }
 }

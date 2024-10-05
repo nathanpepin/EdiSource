@@ -18,7 +18,7 @@ public class StringBuilderEdiWriter(StringBuilder? stringBuilder = null) : IEdiW
         return this;
     }
 
-    public Task<IEdiWriter> WriteAsync(string value, CancellationToken cancellationToken = default)
+    public Task<IEdiWriter> WriteText(string value, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(Write(value));
     }
