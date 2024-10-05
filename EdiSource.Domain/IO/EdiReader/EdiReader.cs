@@ -98,7 +98,6 @@ public class EdiReader : IEdiReader
 
                         stringBuffer.Clear();
 
-                        await channelWriter.WaitToWriteAsync(cancellationToken);
                         await channelWriter.WriteAsync(segmentBuffer, cancellationToken);
                         segmentBuffer = new Segment([]);
                     }

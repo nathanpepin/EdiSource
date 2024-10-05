@@ -13,8 +13,16 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
 {
     public static bool Matches(ISegment segment)
     {
-        return segment.GetDataElement(0) == T.EdiId.Primary &&
-            T.EdiId.Secondary is null || T.EdiId.Secondary == segment.GetCompositeElementOrNull(0, 0);
+        var (primary, secondary) = T.EdiId;
+
+        return (primary, secondary) switch
+        {
+            (not null, null) => segment.GetDataElement(0) == primary,
+            (not null, not null) =>
+                segment.GetDataElement(0) == primary &&
+                segment.GetCompositeElementOrNull(1, 0) == secondary,
+            _ => false,
+        };
     }
 
     public static bool Matches(Queue<ISegment> segments)
@@ -25,14 +33,9 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
                 || T.EdiId.Secondary == segments.Peek().GetCompositeElementOrNull(0, 0));
     }
 
-    public static async ValueTask<bool> MatchesAsync(ChannelReader<ISegment> segmentReader)
+    public static ValueTask<bool> MatchesAsync(ChannelReader<ISegment> segmentReader)
     {
-        if (!segmentReader.TryPeek(out var segment))
-        {
-            return await segmentReader.WaitToReadAsync() && await MatchesAsync(segmentReader);
-        }
-
-        return Matches(segment);
+        return ValueTask.FromResult(segmentReader.TryPeek(out var segment) && Matches(segment));
     }
 }
 

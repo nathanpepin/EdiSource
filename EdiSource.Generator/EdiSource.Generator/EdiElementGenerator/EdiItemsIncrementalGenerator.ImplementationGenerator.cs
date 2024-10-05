@@ -23,7 +23,7 @@ public partial class EdiItemsIncrementalGenerator
             using (var ns = cw.StartNamespace(namespaceName))
             {
                 string[] implementations =
-                    [$"ILoop<{parent}>", $"ISegmentIdentifier<{className}>", $"ISegmentIdentifier<{id}>"];
+                    [$"ILoop<{parent}>", $"ISegmentIdentifier<{className}>", $"ISegmentIdentifier<{id}>", $"ILoopInitialize<{className}>"];
                 using (var cl = cw.StartClass(className, implementations: implementations))
                 {
                     cw.AppendLine("ILoop? ILoop.Parent => Parent;");

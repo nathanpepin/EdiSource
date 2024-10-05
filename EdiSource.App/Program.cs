@@ -1,4 +1,5 @@
-﻿using System.Threading.Channels;
+﻿using System.Text;
+using System.Threading.Channels;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.IO.EdiReader;
 using EdiSource.Domain.IO.EdiWriter;
@@ -19,26 +20,23 @@ var input =
     SE*123~
     """;
 
+//
+// var segments = new EdiReader()
+//     .ReadEdiSegments(input, Separators.DefaultSeparators)
+//     .ToArray();
 
-var segments = new EdiReader()
-    .ReadEdiSegments(input, Separators.DefaultSeparators)
-    .ToArray();
+// using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(input));
+// using var streamReader = new StreamReader(memoryStream);
+//
+// var channel = Channel.CreateUnbounded<ISegment>();
+//
+// await Task.WhenAll(
+//     new EdiReader().ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer),
+//     TransactionSet.InitializeAsync(channel.Reader, null));
 
-using var stream = new MemoryStream();
-input.CopyTo(input.ToCharArray().AsSpan());
-var strem = new StreamReader(stream);
+// var ts = new TransactionSet(new Queue<ISegment>(segments));
 
-var channel = Channel.CreateUnbounded<ISegment>(new UnboundedChannelOptions
-{
-    SingleReader = true,
-    SingleWriter = true
-});
-
-await Task.WhenAll(
-    TransactionSet.InitializeAsync(channel.Reader, null),
-    new EdiReader().ReadEdiSegmentsIntoChannelAsync(strem, channel.Writer));
-
-var ts = new TransactionSet(new Queue<ISegment>(segments));
+var ts = await new EdiParser<TransactionSet>().ParseEdi(input);
 
 ;
 
