@@ -1,34 +1,34 @@
 namespace EdiSource.Domain.IO.EdiWriter;
 
-public class FileEdiWriter(string filePath) : IEdiWriter
+public sealed class FileEdiWriter(string filePath) : IEdiWriter
 {
-    private readonly IEdiWriter _streamEdiWriter = new StreamEdiWriter(new FileStream(filePath, FileMode.Create));
+    private readonly StreamEdiWriter _streamEdiWriter = new (new FileStream(filePath, FileMode.Create));
 
     public FileEdiWriter(FileSystemInfo fileSystemInfo) : this(fileSystemInfo.FullName)
     {
     }
 
-    public IEdiWriter Write(string value)
+    public IEdiWriter WriteText(string value)
     {
-        _streamEdiWriter.Write(value);
+        _streamEdiWriter.WriteText(value);
         return this;
     }
 
-    public IEdiWriter Write(char value)
+    public IEdiWriter WriteChar(char value)
     {
-        _streamEdiWriter.Write(value);
+        _streamEdiWriter.WriteChar(value);
         return this;
     }
 
-    public async Task<IEdiWriter> WriteText(string value, CancellationToken cancellationToken = default)
+    public async Task<IEdiWriter> WriteTextAsync(string value, CancellationToken cancellationToken = default)
     {
-        await _streamEdiWriter.WriteText(value, cancellationToken);
+        await _streamEdiWriter.WriteTextAsync(value, cancellationToken);
         return this;
     }
 
-    public async Task<IEdiWriter> WriteAsync(char value, CancellationToken cancellationToken = default)
+    public async Task<IEdiWriter> WriteCharAsync(char value, CancellationToken cancellationToken = default)
     {
-        await _streamEdiWriter.WriteAsync(value, cancellationToken);
+        await _streamEdiWriter.WriteCharAsync(value, cancellationToken);
         return this;
     }
 

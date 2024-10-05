@@ -1,4 +1,6 @@
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.IO.EdiWriter;
 using EdiSource.Domain.Segments;
@@ -174,10 +176,10 @@ public static class LoopExtensions
         foreach (var segment in loop.YieldChildSegments())
         {
             var text = segment.WriteToStringBuilder(separators: separators).ToString();
-            await writer.WriteText(text, cancellationToken);
+            await writer.WriteTextAsync(text, cancellationToken);
 
             if (includeNewLine)
-                await writer.WriteText(Environment.NewLine, cancellationToken);
+                await writer.WriteTextAsync(Environment.NewLine, cancellationToken);
         }
     }
 
@@ -225,6 +227,59 @@ public static class LoopExtensions
         loopHeader?.Dispose();
 
         return loopPrinter;
+    }
+
+    public static EdiTree ToTree<T>(this T loop, EdiTree? node = null,
+        Separators? separators = null, bool firstIteration = true)
+        where T : ILoop
+    {
+        separators ??= Separators.DefaultSeparators;
+        node ??= new EdiTree();
+
+        if (firstIteration)
+        {
+            node.Name = typeof(T).Name;
+        }
+
+        EdiAction(loop,
+            segmentAction: x =>
+            {
+                var text = x.WriteToStringBuilder(separators: separators).ToString();
+                node.Children.Add(text);
+            },
+            segmentListAction: segmentList =>
+            {
+                foreach (var text in segmentList
+                             .Select(segment => segment.WriteToStringBuilder(separators: separators).ToString()))
+                {
+                    node.Children.Add(text);
+                }
+            },
+            loopAction: loopL =>
+            {
+                var loopNode = new EdiTree
+                {
+                    Name = loopL.GetType().Name,
+                };
+
+                loopL.ToTree(loopNode, separators, firstIteration: false);
+                node.ChildrenTrees.Add(loopNode);
+            },
+            loopListAction: loopList =>
+            {
+                foreach (var loopL in loopList)
+                {
+                    var loopNode = new EdiTree
+                    {
+                        Name = loopL.GetType().Name,
+                    };
+
+                    loopL.ToTree(loopNode, separators, firstIteration: false);
+                    node.ChildrenTrees.Add(loopNode);
+                }
+            });
+
+        return node;
     }
 
     public static ILoop GetRoot(this ILoop loop, bool avoidCircularReferences = true)
@@ -324,4 +379,11 @@ public sealed class LoopPrinter
     {
         return _builder.ToString();
     }
+}
+
+public sealed class EdiTree
+{
+    public string Name { get; set; } = string.Empty;
+    public List<string> Children { get; set; } = [];
+    public List<EdiTree> ChildrenTrees { get; set; } = [];
 }

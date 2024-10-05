@@ -4,25 +4,25 @@ public class StreamEdiWriter(Stream stream) : IEdiWriter
 {
     private readonly StreamWriter _output = new(stream);
 
-    public IEdiWriter Write(string value)
+    public IEdiWriter WriteText(string value)
     {
         _output.Write(value);
         return this;
     }
 
-    public IEdiWriter Write(char value)
+    public IEdiWriter WriteChar(char value)
     {
         _output.Write(value);
         return this;
     }
 
-    public async Task<IEdiWriter> WriteText(string value, CancellationToken cancellationToken = default)
+    public async Task<IEdiWriter> WriteTextAsync(string value, CancellationToken cancellationToken = default)
     {
         await _output.WriteAsync(value.ToCharArray());
         return this;
     }
 
-    public async Task<IEdiWriter> WriteAsync(char value, CancellationToken cancellationToken = default)
+    public async Task<IEdiWriter> WriteCharAsync(char value, CancellationToken cancellationToken = default)
     {
         await _output.WriteAsync(new[] { value });
         return this;

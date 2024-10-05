@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 using System.Threading.Channels;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.IO.EdiReader;
@@ -40,7 +41,11 @@ var ts = await new EdiParser<TransactionSet>().ParseEdi(input);
 
 var j = ts.FindEdiElement<Loop2000>().ToArray();
 
-Console.WriteLine(ts.PrettyPrintToStringBuilder());
+
+
+var t = ts.ToTree();
+
+Console.WriteLine(JsonSerializer.Serialize(t, options: new JsonSerializerOptions { WriteIndented = true}));
 
 ;
 

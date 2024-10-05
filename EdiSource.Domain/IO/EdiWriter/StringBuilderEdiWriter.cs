@@ -2,30 +2,30 @@ using System.Text;
 
 namespace EdiSource.Domain.IO.EdiWriter;
 
-public class StringBuilderEdiWriter(StringBuilder? stringBuilder = null) : IEdiWriter
+public sealed class StringBuilderEdiWriter(StringBuilder? stringBuilder = null) : IEdiWriter
 {
     public StringBuilder Output { get; } = stringBuilder ?? new StringBuilder();
 
-    public IEdiWriter Write(string value)
+    public IEdiWriter WriteText(string value)
     {
         Output.Append(value);
         return this;
     }
 
-    public IEdiWriter Write(char value)
+    public IEdiWriter WriteChar(char value)
     {
         Output.Append(value);
         return this;
     }
 
-    public Task<IEdiWriter> WriteText(string value, CancellationToken cancellationToken = default)
+    public Task<IEdiWriter> WriteTextAsync(string value, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(Write(value));
+        return Task.FromResult(WriteText(value));
     }
 
-    public Task<IEdiWriter> WriteAsync(char value, CancellationToken cancellationToken = default)
+    public Task<IEdiWriter> WriteCharAsync(char value, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(Write(value));
+        return Task.FromResult(WriteChar(value));
     }
 
     public void Close()
