@@ -1,9 +1,12 @@
 using System.Linq;
+using EdiSource.Generator.EdiElementGenerator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
 namespace EdiSource.Generator.Tests;
+
+[Generator]
 
 public class EdiItemsIncrementalGeneratorTests
 {
@@ -14,9 +17,9 @@ public class EdiItemsIncrementalGeneratorTests
         using EdiSource.Domain.Segments;
         using EdiSource.Domain.SourceGeneration;
         using EdiSource.Segments;
-        
+
         namespace EdiSource.Loops;
-        
+
         [LoopGenerator<TransactionSet, TS_ST>]
         public partial class TransactionSet : ILoop<TransactionSet>, ISegmentIdentifier<TS_ST>,
             ISegmentIdentifier<TransactionSet>
@@ -41,7 +44,7 @@ public class EdiItemsIncrementalGeneratorTests
         """;
 
     [Fact]
-    public void Test()
+    public void TestA()
     {
         TestHelper.Verify<EdiItemsIncrementalGenerator>(Source);
     }

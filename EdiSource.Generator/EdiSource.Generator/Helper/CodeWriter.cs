@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EdiSource.Generator;
+namespace EdiSource.Generator.Helper;
 
 public sealed class CodeWriter
 {

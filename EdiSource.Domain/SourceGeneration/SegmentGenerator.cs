@@ -5,6 +5,5 @@ using EdiSource.Domain.Segments;
 namespace EdiSource.Domain.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class LoopGeneratorAttribute<TParent, TId> : Attribute
-    where TParent : ILoop
-    where TId : ISegment, ISegment<TParent>, ISegmentIdentifier<TId>, IEdi;
+public sealed class SegmentGenerator<TParent>(string primaryId, string? secondaryId) : Attribute
+    where TParent : ILoop;

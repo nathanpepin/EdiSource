@@ -1,53 +1,53 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace EdiSource.Generator;
+namespace EdiSource.Generator.EdiElementGenerator;
 
 [Generator]
 public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+        context.RegisterPostInitializationOutput(x => x.AddSource("Hello.g.cs", "//Hello world"));
+
         var classDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(
-                predicate: static (s, _) => IsSyntaxTargetForGeneration(s),
-                transform: static (ctx, _) => PredicateOnClassAttributes(ctx, LoopAggregation.LoopGeneratorNames))
-            .Where(static m => m is not null)!;
+                predicate: static (s, _) => IsSyntaxTargetForGeneration(s, LoopAggregation.LoopGeneratorNames),
+                transform: static (ctx, _) => PredicateOnClassAttributes(ctx, LoopAggregation.LoopGeneratorNames));
 
         var compilationAndClasses
             = context.CompilationProvider.Combine(classDeclarations.Collect());
 
         context.RegisterSourceOutput(compilationAndClasses,
             static (spc, source) => Execute(source.Item1, source.Right, spc));
+
+        context.RegisterPostInitializationOutput(x => x.AddSource("Goodbye.g.cs", "//Good bye"));
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<GeneratorItem?> classes,
+    private static void Execute(Compilation compilation, ImmutableArray<GeneratorItem> classes,
         SourceProductionContext context)
     {
-        if (classes.IsDefaultOrEmpty)
-        {
-            return;
-        }
+        context.AddSource("Running.g.cs", SourceText.From("//Running", Encoding.UTF8));
 
-        var distinctClasses = classes
-            .Distinct()
-            .OfType<GeneratorItem>();
-
-        foreach (var (classDeclaration, parent, id) in distinctClasses)
+        foreach (var (classDeclaration, parent, id) in classes)
         {
             var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
-            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol;
 
-            if (classSymbol == null) continue;
+            if (semanticModel.GetDeclaredSymbol(classDeclaration) is not INamedTypeSymbol classSymbol) continue;
 
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
             var className = classSymbol.Name;
             var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
+
+            context.AddSource($"Running_{className}.g.cs", SourceText.From("//Running", Encoding.UTF8));
+
+            var usings = GetUsingStatements(classDeclaration)
+                .Select(x => x.Name?.ToString())
+                .OfType<string>()
+                .ToImmutableArray();
             
             var ediItems = properties
                 .Select(property => new { property, attribute = GetEdiAttribute(property) })
@@ -57,16 +57,14 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
 
             var orderedEdiItems = OrderEdiItems(ediItems);
             
-            var ediElementSourceCode = ImplementationSourceCode(className, namespaceName, parent, id);
+            var ediElementSourceCode = EdiElementGenerator.Generate(className, namespaceName, usings, orderedEdiItems);
             context.AddSource($"{className}.EdiElement.g.cs", SourceText.From(ediElementSourceCode, Encoding.UTF8));
-            
-            var implementationCode = EdiElementSourceCode(className, namespaceName, orderedEdiItems);
+
+            var implementationCode = ImplementationGenerator.Generate(className, namespaceName, usings, parent, id);
             context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
 
-            var loopConstructorSourceCode = LoopConstructorGenerator.GenerateSourceCode(className, namespaceName, orderedEdiItems);
+            var loopConstructorSourceCode = QueueConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
             context.AddSource($"{className}.Constructor.g.cs", SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
         }
     }
 }
-
-public record struct GeneratorItem(ClassDeclarationSyntax ClassDeclarationSyntax, string Parent, string Id);

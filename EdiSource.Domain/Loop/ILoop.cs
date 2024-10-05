@@ -8,20 +8,20 @@ namespace EdiSource.Domain.Loop;
 public interface ILoop : IEdi
 {
     ILoop? Parent { get; }
-    IEnumerable<ISegment> YieldChildSegments();
-    IEnumerable<ILoop> YieldChildLoops();
-    public IEnumerable<ILoop> YieldSubLoops()
-    {
-        yield return this;
-        
-        foreach (var subLoop in YieldChildLoops())
-        {
-            foreach (var subSubLoop in subLoop.YieldSubLoops())
-            {
-                yield return subSubLoop;
-            }
-        }
-    }
+    // IEnumerable<ISegment> YieldChildSegments();
+    // IEnumerable<ILoop> YieldChildLoops();
+    // public IEnumerable<ILoop> YieldSubLoops()
+    // {
+    //     yield return this;
+    //     
+    //     foreach (var subLoop in YieldChildLoops())
+    //     {
+    //         foreach (var subSubLoop in subLoop.YieldSubLoops())
+    //         {
+    //             yield return subSubLoop;
+    //         }
+    //     }
+    // }
 }
 
 public interface ILoop<out TParent> : ILoop where TParent : ILoop

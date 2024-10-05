@@ -1,4 +1,6 @@
 using System.Runtime.CompilerServices;
+using DiffEngine;
+using Microsoft;
 using VerifyTests;
 
 namespace EdiSource.Generator.Tests;

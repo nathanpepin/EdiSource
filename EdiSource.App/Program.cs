@@ -4,8 +4,6 @@ using EdiSource.Domain.IO.EdiWriter;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Seperator;
-using EdiSource.Loops;
-using EdiSource.Segments;
 
 var input =
     """
