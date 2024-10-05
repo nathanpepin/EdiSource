@@ -31,16 +31,24 @@ public static class Constants
         public static readonly ImmutableArray<string> LoopGeneratorNames = [LoopGenerator, LoopGeneratorAttribute];
         public static readonly ImmutableArray<string> SegmentHeaderNames = [SegmentHeader, SegmentHeaderAttribute];
         public static readonly ImmutableArray<string> SegmentFooterNames = [SegmentFooter, SegmentFooterAttribute];
-        public static readonly ImmutableArray<string> OptionalSegmentFooterNames = [OptionalSegmentFooter, OptionalSegmentFooterAttribute];
+
+        public static readonly ImmutableArray<string> OptionalSegmentFooterNames =
+            [OptionalSegmentFooter, OptionalSegmentFooterAttribute];
+
         public static readonly ImmutableArray<string> SegmentNames = [Segment, SegmentAttribute];
         public static readonly ImmutableArray<string> SegmentListNames = [SegmentList, SegmentListAttribute];
         public static readonly ImmutableArray<string> LoopNames = [Loop, LoopAttribute];
         public static readonly ImmutableArray<string> LoopListNames = [LoopList, LoopListAttribute];
-        public static readonly ImmutableArray<string> SegmentGeneratorNames = [SegmentGenerator, SegmentGeneratorAttribute];
+
+        public static readonly ImmutableArray<string> SegmentGeneratorNames =
+            [SegmentGenerator, SegmentGeneratorAttribute];
 
 
         public static readonly ImmutableArray<string> Header = SegmentHeaderNames;
-        public static readonly ImmutableArray<string> Body = [..SegmentNames, ..SegmentListNames, ..LoopNames, ..LoopListNames, ..OptionalSegmentFooterNames];
+
+        public static readonly ImmutableArray<string> Body =
+            [..SegmentNames, ..SegmentListNames, ..LoopNames, ..LoopListNames, ..OptionalSegmentFooterNames];
+
         public static readonly ImmutableArray<string> Footer = SegmentFooterNames;
     }
 }

@@ -21,7 +21,7 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
             (not null, not null) =>
                 segment.GetDataElement(0) == primary &&
                 segment.GetCompositeElementOrNull(1, 0) == secondary,
-            _ => false,
+            _ => false
         };
     }
 
@@ -39,7 +39,3 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
         return segmentReader.TryPeek(out var segment) && Matches(segment);
     }
 }
-
-public interface ISegmentId : ISegment, ISegmentIdentifier;
-
-public interface IEdiId : IEdi, ISegmentIdentifier;

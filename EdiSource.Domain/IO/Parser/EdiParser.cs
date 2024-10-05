@@ -2,9 +2,9 @@ using System.Text;
 using System.Threading.Channels;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
-using EdiSource.Domain.Seperator;
+using EdiSource.Domain.Separator;
 
-namespace EdiSource.Domain.IO.EdiReader;
+namespace EdiSource.Domain.IO.Parser;
 
 public sealed class EdiParser<T> : IEdiParser<T> where T : class, ILoopInitialize<T>, new()
 {
@@ -15,7 +15,7 @@ public sealed class EdiParser<T> : IEdiParser<T> where T : class, ILoopInitializ
         var loopInitializer = T.InitializeAsync(channel.Reader, null);
 
         await Task.WhenAll(
-            new EdiReader().ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer, separators),
+            new EdiReader.EdiReader().ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer, separators),
             loopInitializer);
 
         return loopInitializer.Result;

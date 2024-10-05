@@ -1,8 +1,7 @@
-using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
-using EdiSource.Domain.Seperator;
+using EdiSource.Domain.Separator;
 
-namespace EdiSource.Domain.IO.EdiReader;
+namespace EdiSource.Domain.IO.Parser;
 
 public interface IEdiParser<T> where T : class, ILoopInitialize<T>, new()
 {

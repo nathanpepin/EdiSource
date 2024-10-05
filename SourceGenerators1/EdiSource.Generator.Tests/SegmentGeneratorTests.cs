@@ -1,4 +1,3 @@
-using EdiSource.Domain.SourceGeneration;
 using EdiSource.Generator.SegmentGenerator;
 using Xunit;
 

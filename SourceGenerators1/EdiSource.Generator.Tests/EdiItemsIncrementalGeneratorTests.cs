@@ -1,13 +1,10 @@
-using System.Linq;
 using EdiSource.Generator.EdiElementGenerator;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
 namespace EdiSource.Generator.Tests;
 
 [Generator]
-
 public class EdiItemsIncrementalGeneratorTests
 {
     private const string Source =

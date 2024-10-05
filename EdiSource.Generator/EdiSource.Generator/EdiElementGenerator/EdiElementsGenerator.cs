@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,8 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
     {
         var classDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(
-                predicate: static (s, _) => IsSyntaxTargetForGeneration(s, LoopAggregation.LoopGeneratorNames),
-                transform: static (ctx, _) => PredicateOnClassAttributes(ctx, LoopAggregation.LoopGeneratorNames));
+                static (s, _) => IsSyntaxTargetForGeneration(s, LoopAggregation.LoopGeneratorNames),
+                static (ctx, _) => PredicateOnClassAttributes(ctx, LoopAggregation.LoopGeneratorNames));
 
         var compilationAndClasses
             = context.CompilationProvider.Combine(classDeclarations.Collect());
@@ -37,11 +38,24 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
             var className = classSymbol.Name;
             var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
-            
-            var usings = GetUsingStatements(classDeclaration)
+
+            var classUsings = GetUsingStatements(classDeclaration)
                 .Select(x => x.Name?.ToString())
                 .OfType<string>()
-                .ToImmutableArray();
+                .ToImmutableHashSet();
+
+            var usings = new HashSet<string>(classUsings)
+            {
+                "EdiSource.Domain.Separator",
+                "EdiSource.Domain.Segments",
+                "EdiSource.Domain.Identifiers",
+                "EdiSource.Domain.SourceGeneration",
+                "EdiSource.Domain.Loop",
+                "EdiSource.Loops",
+                "System.Linq",
+                "System.Collections.Generic",
+                "System"
+            };
 
             var ediItems = properties
                 .Select(property => new { property, attribute = GetEdiAttribute(property) })

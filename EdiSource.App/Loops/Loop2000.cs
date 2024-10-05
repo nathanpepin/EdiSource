@@ -1,6 +1,4 @@
-using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
 using EdiSource.Domain.SourceGeneration;
 using EdiSource.Segments;
 

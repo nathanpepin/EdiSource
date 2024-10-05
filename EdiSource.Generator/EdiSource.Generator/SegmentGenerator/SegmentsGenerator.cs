@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
-using EdiSource.Generator.EdiElementGenerator;
 using EdiSource.Generator.Helper;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,14 +10,14 @@ using Microsoft.CodeAnalysis.Text;
 namespace EdiSource.Generator.SegmentGenerator;
 
 [Generator]
-public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerator
+public class SegmentGeneratorIncrementalGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(
-                predicate: static (s, _) => IsSyntaxTargetForGeneration(s, LoopAggregation.SegmentGeneratorNames),
-                transform: static (ctx, _) => PredicateOnClassAttributesClassParent(ctx, LoopAggregation.SegmentGeneratorNames));
+                static (s, _) => IsSyntaxTargetForGeneration(s, LoopAggregation.SegmentGeneratorNames),
+                static (ctx, _) => PredicateOnClassAttributesClassParent(ctx, LoopAggregation.SegmentGeneratorNames));
 
         var compilationAndClasses
             = context.CompilationProvider.Combine(classDeclarations.Collect());
@@ -26,7 +26,8 @@ public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerato
             static (spc, source) => Execute(source.Item1, source.Right, spc));
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<(ClassDeclarationSyntax, string loop, string primaryId, string secondaryId)> classes,
+    private static void Execute(Compilation compilation,
+        ImmutableArray<(ClassDeclarationSyntax, string loop, string primaryId, string secondaryId)> classes,
         SourceProductionContext context)
     {
         foreach (var (classDeclaration, parent, primaryId, secondaryId) in classes)
@@ -38,11 +39,24 @@ public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerato
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
             var className = classSymbol.Name;
             var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
-            
-            var usings = GetUsingStatements(classDeclaration)
+
+            var classUsings = GetUsingStatements(classDeclaration)
                 .Select(x => x.Name?.ToString())
                 .OfType<string>()
                 .ToImmutableArray();
+            
+            var usings = new HashSet<string>(classUsings)
+            {
+                "EdiSource.Domain.Separator",
+                "EdiSource.Domain.Segments",
+                "EdiSource.Domain.Identifiers",
+                "EdiSource.Domain.SourceGeneration",
+                "EdiSource.Domain.Loop",
+                "EdiSource.Loops",
+                "System.Linq",
+                "System.Collections.Generic",
+                "System"
+            };
 
             var ediItems = properties
                 .Select(property => new { property, attribute = GetEdiAttribute(property) })
@@ -55,7 +69,7 @@ public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerato
         }
     }
 
-    private static string Generate(string className, string namespaceName, ImmutableArray<string> usings, string parent,
+    private static string Generate(string className, string namespaceName, HashSet<string> usings, string parent,
         string primaryId, string secondaryId)
     {
         var cw = new CodeWriter();
@@ -63,10 +77,9 @@ public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerato
         cw.AppendLine("#nullable enable");
 
         cw.AddUsing("System.Collections.Generic");
-        foreach (var @using in usings)
-        {
-            cw.AddUsing(@using);
-        }
+        cw.AddUsing("EdiSource.Domain.Segments");
+        cw.AddUsing("EdiSource.Domain.Identifiers");
+        foreach (var @using in usings) cw.AddUsing(@using);
 
         cw.AppendLine();
         using (var ns = cw.StartNamespace(namespaceName))
@@ -76,7 +89,8 @@ public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerato
             using (var cl = cw.StartClass(className, implementations: implementations))
             {
                 cw.AppendLine($"new public {parent}? Parent {{ get; set; }}");
-                cw.AppendLine($"public static (string Primary, string? Secondary) EdiId => ({primaryId}, {secondaryId});");
+                cw.AppendLine(
+                    $"public static (string Primary, string? Secondary) EdiId => ({primaryId}, {secondaryId});");
             }
         }
 

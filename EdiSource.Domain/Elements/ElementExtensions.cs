@@ -43,7 +43,8 @@ public static class ElementExtensions
                 : null;
     }
 
-    public static bool? GetBool(this Element it, string trueValue, int compositeElement = 0, bool implicitFalse = true, string falseValue = "N")
+    public static bool? GetBool(this Element it, string trueValue, int compositeElement = 0, bool implicitFalse = true,
+        string falseValue = "N")
     {
         var element = it.Count > compositeElement
             ? it[compositeElement]
@@ -59,7 +60,8 @@ public static class ElementExtensions
                         : null;
     }
 
-    public static TEnum GetEnum<TEnum>(this Element it, int compositeElement = 0, bool tryAddUnderscore = true) where TEnum : struct, Enum
+    public static TEnum GetEnum<TEnum>(this Element it, int compositeElement = 0, bool tryAddUnderscore = true)
+        where TEnum : struct, Enum
     {
         var element = it.Count > compositeElement
             ? it[compositeElement]
@@ -70,7 +72,7 @@ public static class ElementExtensions
             : Enum.TryParse<TEnum>(element, out var value)
                 ? value
                 : tryAddUnderscore
-                    ? Enum.TryParse<TEnum>($"_{element}", out value)
+                    ? Enum.TryParse($"_{element}", out value)
                         ? value
                         : default
                     : default;

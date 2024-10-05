@@ -1,12 +1,6 @@
-﻿using System.Text;
-using System.Text.Json;
-using System.Threading.Channels;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.IO.EdiReader;
-using EdiSource.Domain.IO.EdiWriter;
+﻿using EdiSource.Domain.IO.Parser;
+using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Seperator;
 using EdiSource.Loops;
 
 var input =
@@ -39,14 +33,5 @@ var input =
 
 var ts = await new EdiParser<TransactionSet>().ParseEdi(input);
 
-var j = ts.FindEdiElement<Loop2000>().ToArray();
-
-
-
-var t = ts.ToTree();
-
-Console.WriteLine(JsonSerializer.Serialize(t, options: new JsonSerializerOptions { WriteIndented = true}));
-
-;
-
-return;
+Console.WriteLine(
+new EdiSerializer().WriteToPrettyString(ts));

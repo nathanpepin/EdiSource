@@ -2,12 +2,12 @@ using System.Buffers;
 using System.Text;
 using System.Threading.Channels;
 using EdiSource.Domain.Segments;
-using EdiSource.Domain.Seperator;
+using EdiSource.Domain.Separator;
 using EdiSource.Domain.Structure;
 
 namespace EdiSource.Domain.IO.EdiReader;
 
-public class EdiReader : IEdiReader
+public sealed class EdiReader : IEdiReader
 {
     private const int BufferSize = 4096;
 
@@ -55,10 +55,7 @@ public class EdiReader : IEdiReader
             async () => await ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer, separators,
                 cancellationToken), cancellationToken);
 
-        await foreach (var segment in channel.Reader.ReadAllAsync(cancellationToken))
-        {
-            segments.Add(segment);
-        }
+        await foreach (var segment in channel.Reader.ReadAllAsync(cancellationToken)) segments.Add(segment);
 
         return segments;
     }

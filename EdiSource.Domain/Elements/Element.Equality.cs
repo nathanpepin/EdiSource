@@ -8,9 +8,8 @@ public partial class Element
         if (compositeElements.Count != _compositeElements.Count) return false;
 
         foreach (var (e, x) in compositeElements.Zip(_compositeElements, (s, s1) => (s, s1)))
-        {
-            if (!e.Equals(x)) return false;
-        }
+            if (!e.Equals(x))
+                return false;
 
         return true;
     }

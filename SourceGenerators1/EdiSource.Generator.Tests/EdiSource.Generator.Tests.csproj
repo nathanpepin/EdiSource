@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\EdiSource.Domain\EdiSource.Domain.csproj" />
+        <ProjectReference Include="..\..\EdiSource.Domain\EdiSource.Domain.csproj"/>
         <ProjectReference Include="..\..\EdiSource.Generator\EdiSource.Generator\EdiSource.Generator.csproj"/>
     </ItemGroup>
 </Project>

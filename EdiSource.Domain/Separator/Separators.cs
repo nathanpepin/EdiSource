@@ -1,6 +1,6 @@
-namespace EdiSource.Domain.Seperator;
+namespace EdiSource.Domain.Separator;
 
-public partial class Separators
+public sealed partial class Separators
 {
     public static readonly Separators DefaultSeparators = new('~', '*', ':');
 

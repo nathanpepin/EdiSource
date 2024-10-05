@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using EdiSource.Generator.Helper;
@@ -10,7 +11,7 @@ public partial class EdiItemsIncrementalGenerator
     public static class QueueConstructorGenerator
     {
         public static string Generate(string className, string namespaceName,
-            ImmutableArray<string> usings,
+            HashSet<string> usings,
             ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems,
             string parent)
         {
@@ -18,31 +19,27 @@ public partial class EdiItemsIncrementalGenerator
 
             cw.AppendLine("#nullable enable");
             
-            cw.AddUsing("System");
-            cw.AddUsing("System.Collections.Generic");
-            foreach (var @using in usings)
-            {
-                cw.AddUsing(@using);
-            }
+            foreach (var @using in usings) cw.AddUsing(@using);
             cw.AppendLine();
+            
             using (var ns = cw.StartNamespace(namespaceName))
             {
                 using (var cs = cw.StartClass(className))
                 {
-                    
                     cw.AppendLine($"public {className}(IEnumerable<ISegment> segments, TransactionSet? parent = null)");
                     cw.AppendLine(": this(new Queue<ISegment>(segments), parent)");
                     cw.AppendLine("{}");
                     cw.AppendLine();
-                    
-                    using (var con = cw.StartConstructor(className, arguments: ["Queue<ISegment> segments", $"{parent}? parent = null"]))
+
+                    using (var con = cw.StartConstructor(className,
+                               arguments: ["Queue<ISegment> segments", $"{parent}? parent = null"]))
                     {
                         if (className != parent)
                         {
-                            cw.AppendLine("Parent = parent;"); 
+                            cw.AppendLine("Parent = parent;");
                             cw.AppendLine();
                         }
-                        
+
                         var headerItems = orderedEdiItems
                             .Where(x => LoopAggregation.Header.Contains(x.Attribute))
                             .ToImmutableArray();
@@ -73,16 +70,16 @@ public partial class EdiItemsIncrementalGenerator
             return cw.ToString();
         }
 
-        private static void GenerateHeaderOrFooter(string className, ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
+        private static void GenerateHeaderOrFooter(string className,
+            ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
         {
             foreach (var item in items)
-            {
                 cw.AppendLine(
                     $"{item.Name} = SegmentLoopFactory<{item.Property.Type}, {className}>.Create(segments, this);");
-            }
         }
 
-        private static void GenerateBody(string className, ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
+        private static void GenerateBody(string className,
+            ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
         {
             using (_ = cw.AddWhile("segments.Count > 0"))
             {
@@ -96,8 +93,10 @@ public partial class EdiItemsIncrementalGenerator
 
                     cw.AppendLine(attribute switch
                     {
-                        SegmentAttribute or Segment => $"{name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);",
-                        SegmentListAttribute or SegmentList => $"{name}.Add(SegmentLoopFactory<{typeName}, {className}>.Create(segments, this));",
+                        SegmentAttribute or Segment =>
+                            $"{name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);",
+                        SegmentListAttribute or SegmentList =>
+                            $"{name}.Add(SegmentLoopFactory<{typeName}, {className}>.Create(segments, this));",
                         LoopAttribute or Loop => $"{name} = new {property.Type}(segments, this);",
                         LoopListAttribute or LoopList => $"{name}.Add(new {typeName}(segments, this));",
                         OptionalSegmentFooter or OptionalSegmentFooterAttribute =>

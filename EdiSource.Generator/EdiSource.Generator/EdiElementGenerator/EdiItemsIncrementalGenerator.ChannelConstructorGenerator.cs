@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using EdiSource.Generator.Helper;
@@ -10,27 +11,26 @@ public partial class EdiItemsIncrementalGenerator
     public static class ChannelConstructorGenerator
     {
         public static string Generate(string className, string namespaceName,
-            ImmutableArray<string> usings,
+            HashSet<string> usings,
             ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems,
             GeneratorItem generatorItem)
         {
             var cw = new CodeWriter();
 
             cw.AppendLine("#nullable enable");
-
-            cw.AddUsing("System");
-            cw.AddUsing("System.Collections.Generic");
+            
+            cw.AddUsing("System.Diagnostics.CodeAnalysis");
             cw.AddUsing("System.Threading.Channels");
-            foreach (var @using in usings)
-            {
-                cw.AddUsing(@using);
-            }
+            foreach (var @using in usings) cw.AddUsing(@using);
 
             cw.AppendLine();
             using (var ns = cw.StartNamespace(namespaceName))
             {
                 using (var cs = cw.StartClass(className))
                 {
+                    cw.AppendLine("""
+                                  [SuppressMessage("CodeQuality", "IDE0060:Remove unused parameter", Justification = "Empty constructor is required")]
+                                  """);
                     using (var con = cw.StartConstructor(className))
                     {
                     }
@@ -44,10 +44,7 @@ public partial class EdiItemsIncrementalGenerator
                                ]))
                     {
                         cw.AppendLine("var loop = InitializeAsync(segmentReader, parent).GetAwaiter().GetResult();");
-                        foreach (var item in orderedEdiItems)
-                        {
-                            cw.AppendLine($"{item.Name} = loop.{item.Name};");
-                        }
+                        foreach (var item in orderedEdiItems) cw.AppendLine($"{item.Name} = loop.{item.Name};");
                     }
 
                     cw.AppendLine();
@@ -59,6 +56,7 @@ public partial class EdiItemsIncrementalGenerator
                         {
                             cw.AppendLine($"return InitializeAsync(segmentReader, ({generatorItem.Parent}?) null);");
                         }
+
                         cw.AppendLine();
 
                         using (var _ = cw.AddIf($"parent is not {generatorItem.Parent} typedParent"))
@@ -66,6 +64,7 @@ public partial class EdiItemsIncrementalGenerator
                             cw.AppendLine(
                                 $"""throw new ArgumentException($"Parent must be of type {generatorItem.Parent}");""");
                         }
+
                         cw.AppendLine();
 
                         cw.AppendLine("return InitializeAsync(segmentReader, typedParent);");
@@ -121,10 +120,8 @@ public partial class EdiItemsIncrementalGenerator
             ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
         {
             foreach (var item in items)
-            {
                 cw.AppendLine(
                     $"loop.{item.Name} = await SegmentLoopFactory<{item.Property.Type}, {className}>.CreateAsync(segmentReader, loop);");
-            }
         }
 
         private static void GenerateBody(string className,

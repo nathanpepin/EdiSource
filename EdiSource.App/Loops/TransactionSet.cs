@@ -1,4 +1,3 @@
-using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.SourceGeneration;
@@ -21,7 +20,6 @@ public partial class TransactionSet
 
     [SegmentFooter] public TS_SE SE { get; set; }
 }
-
 
 /*
 

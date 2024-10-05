@@ -1,12 +1,13 @@
 using System.Globalization;
 using System.Text;
-using EdiSource.Domain.Seperator;
+using EdiSource.Domain.Separator;
 
 namespace EdiSource.Domain.Segments;
 
 public static class SegmentExtensions
 {
-    public static DateTime? GetDate(this ISegment segment, int elementIndex, int compositeElement = 0, string format = "yyyyMMdd")
+    public static DateTime? GetDate(this ISegment segment, int elementIndex, int compositeElement = 0,
+        string format = "yyyyMMdd")
     {
         var element = segment.GetCompositeElementOrNull(elementIndex, compositeElement);
         return element is null
@@ -36,7 +37,8 @@ public static class SegmentExtensions
                 : null;
     }
 
-    public static bool? GetBool(this ISegment segment, string trueValue, int elementIndex, int compositeElement = 0, bool implicitFalse = true, string falseValue = "N")
+    public static bool? GetBool(this ISegment segment, string trueValue, int elementIndex, int compositeElement = 0,
+        bool implicitFalse = true, string falseValue = "N")
     {
         var element = segment.GetCompositeElementOrNull(elementIndex, compositeElement);
         return element is null
@@ -50,7 +52,8 @@ public static class SegmentExtensions
                         : null;
     }
 
-    public static TEnum GetEnum<TEnum>(this ISegment segment, int elementIndex, int compositeElement = 0, bool tryAddUnderscore = true) where TEnum : struct, Enum
+    public static TEnum GetEnum<TEnum>(this ISegment segment, int elementIndex, int compositeElement = 0,
+        bool tryAddUnderscore = true) where TEnum : struct, Enum
     {
         var element = segment.GetCompositeElementOrNull(elementIndex, compositeElement);
         return element is null
@@ -58,13 +61,14 @@ public static class SegmentExtensions
             : Enum.TryParse<TEnum>(element, out var value)
                 ? value
                 : tryAddUnderscore
-                    ? Enum.TryParse<TEnum>($"_{element}", out value)
+                    ? Enum.TryParse($"_{element}", out value)
                         ? value
                         : default
                     : default;
     }
 
-    public static DateOnly GetDateOnly(this ISegment segment, int elementIndex, int compositeElement = 0, string format = "yyyyMMdd")
+    public static DateOnly GetDateOnly(this ISegment segment, int elementIndex, int compositeElement = 0,
+        string format = "yyyyMMdd")
     {
         var element = segment.GetCompositeElementOrNull(elementIndex, compositeElement);
         return element is null
@@ -72,7 +76,8 @@ public static class SegmentExtensions
             : DateOnly.ParseExact(element, format, CultureInfo.InvariantCulture);
     }
 
-    public static TimeOnly GetTimeOnly(this ISegment segment, int elementIndex, int compositeElement = 0, string format = "HHmm")
+    public static TimeOnly GetTimeOnly(this ISegment segment, int elementIndex, int compositeElement = 0,
+        string format = "HHmm")
     {
         var element = segment.GetCompositeElementOrNull(elementIndex, compositeElement);
         return element is null
@@ -80,10 +85,12 @@ public static class SegmentExtensions
             : TimeOnly.ParseExact(element, format, CultureInfo.InvariantCulture);
     }
 
-    public static StringBuilder WriteToStringBuilder<T>(this T segment, StringBuilder? stringBuilder = null, Separators separators = default)
+    public static StringBuilder WriteToStringBuilder<T>(this T segment, StringBuilder? stringBuilder = null,
+        Separators? separators = default)
         where T : ISegment
     {
         stringBuilder ??= new StringBuilder();
+        separators ??= Separators.DefaultSeparators;
 
         foreach (var element in segment.Elements.SkipLast(1))
         {

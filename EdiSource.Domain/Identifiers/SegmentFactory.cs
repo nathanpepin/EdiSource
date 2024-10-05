@@ -1,7 +1,6 @@
 using System.Threading.Channels;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
-using EdiSource.Domain.Seperator;
 
 namespace EdiSource.Domain.Identifiers;
 

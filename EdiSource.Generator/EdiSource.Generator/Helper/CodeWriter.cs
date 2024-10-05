@@ -6,12 +6,12 @@ namespace EdiSource.Generator.Helper;
 
 public sealed class CodeWriter
 {
-    private readonly StringBuilder _builder = new();
-    private int _indentLevel;
-    private readonly Stack<string> _disposeStack = new(0);
-
     private const string Indent =
         "                                                                                                                                ";
+
+    private readonly StringBuilder _builder = new();
+    private readonly Stack<string> _disposeStack = new(0);
+    private int _indentLevel;
 
     public void AppendLine(string line = "")
     {
@@ -68,24 +68,6 @@ public sealed class CodeWriter
         return new IndentationBlock(this);
     }
 
-    private class IndentationBlock : IDisposable
-    {
-        private readonly CodeWriter _writer;
-
-        public IndentationBlock(CodeWriter writer, string dispose = "}")
-        {
-            _writer = writer;
-            _writer._indentLevel++;
-            _writer._disposeStack.Push(dispose);
-        }
-
-        public void Dispose()
-        {
-            _writer._indentLevel--;
-            _writer.AppendLine(_writer._disposeStack.Pop());
-        }
-    }
-
     public IDisposable StartNamespace(string namespaceName)
     {
         AppendLine($"namespace {namespaceName}");
@@ -111,8 +93,9 @@ public sealed class CodeWriter
         }
 
         AppendLine(partial
-            ? $"{modifier} partial class {className} : {string.Join(", ", implementations)}"
-            : $"{modifier} class {className}: {string.Join(", ", implementations)}");
+            ? $"{modifier} partial class {className}"
+            : $"{modifier} class {className}");
+        AppendLine($": {string.Join(", ", implementations)}");
         AppendLine("{");
         return new IndentationBlock(this);
     }
@@ -163,5 +146,23 @@ public sealed class CodeWriter
     public override string ToString()
     {
         return _builder.ToString();
+    }
+
+    private class IndentationBlock : IDisposable
+    {
+        private readonly CodeWriter _writer;
+
+        public IndentationBlock(CodeWriter writer, string dispose = "}")
+        {
+            _writer = writer;
+            _writer._indentLevel++;
+            _writer._disposeStack.Push(dispose);
+        }
+
+        public void Dispose()
+        {
+            _writer._indentLevel--;
+            _writer.AppendLine(_writer._disposeStack.Pop());
+        }
     }
 }

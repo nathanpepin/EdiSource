@@ -65,7 +65,8 @@ public static class Helper
         return new GeneratorItem(classDeclarationSyntax, parent, self, id);
     }
 
-    public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId) PredicateOnClassAttributesClassParent(GeneratorSyntaxContext context, ImmutableArray<string> items)
+    public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId)
+        PredicateOnClassAttributesClassParent(GeneratorSyntaxContext context, ImmutableArray<string> items)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
 
@@ -93,18 +94,12 @@ public static class Helper
     public static AttributeSyntax? GetAttributeSyntax(ClassDeclarationSyntax classDeclaration, string[] attributeNames)
     {
         foreach (var attributeList in classDeclaration.AttributeLists)
+        foreach (var attribute in attributeList.Attributes)
         {
-            foreach (var attribute in attributeList.Attributes)
-            {
-                var attributeName = attribute.Name.ToString();
-                foreach (var name in attributeNames)
-                {
-                    if (attributeName.StartsWith($"{name}<"))
-                    {
-                        return attribute;
-                    }
-                }
-            }
+            var attributeName = attribute.Name.ToString();
+            foreach (var name in attributeNames)
+                if (attributeName.StartsWith($"{name}<"))
+                    return attribute;
         }
 
         return null;
@@ -114,18 +109,12 @@ public static class Helper
     public static bool HasAttribute(ClassDeclarationSyntax classDeclaration, string[] attributeNames)
     {
         foreach (var attributeList in classDeclaration.AttributeLists)
+        foreach (var attribute in attributeList.Attributes)
         {
-            foreach (var attribute in attributeList.Attributes)
-            {
-                var attributeName = attribute.Name.ToString();
-                foreach (var name in attributeNames)
-                {
-                    if (attributeName.StartsWith($"{name}<"))
-                    {
-                        return true;
-                    }
-                }
-            }
+            var attributeName = attribute.Name.ToString();
+            foreach (var name in attributeNames)
+                if (attributeName.StartsWith($"{name}<"))
+                    return true;
         }
 
         return false;
@@ -136,9 +125,7 @@ public static class Helper
         var parent = classDeclaration.Parent;
 
         while (parent != null && parent is not NamespaceDeclarationSyntax && !(parent is CompilationUnitSyntax))
-        {
             parent = parent.Parent;
-        }
 
         return parent switch
         {

@@ -1,9 +1,10 @@
-using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class)]
+// ReSharper disable once UnusedTypeParameter
+#pragma warning disable CS9113 // Parameter is unread.
 public sealed class SegmentGenerator<TParent>(string primaryId, string? secondaryId) : Attribute
+#pragma warning restore CS9113 // Parameter is unread.
     where TParent : ILoop;

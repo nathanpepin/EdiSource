@@ -1,10 +1,5 @@
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.IO.EdiWriter;
 using EdiSource.Domain.Segments;
-using EdiSource.Domain.Seperator;
 
 namespace EdiSource.Domain.Loop;
 
@@ -16,7 +11,6 @@ public static class LoopExtensions
         where T : ILoop
     {
         foreach (var ediItem in it.EdiItems)
-        {
             switch (ediItem)
             {
                 case null: continue;
@@ -33,7 +27,6 @@ public static class LoopExtensions
                     loopListAction?.Invoke([..loopList]);
                     continue;
             }
-        }
     }
 
     public static IEnumerable<ISegment> YieldChildSegments<T>(this T it, bool recursive = true)
@@ -48,29 +41,20 @@ public static class LoopExtensions
         where T : ILoop
     {
         EdiAction(it,
-            segmentAction: action,
-            segmentListAction: segmentList =>
+            action,
+            segmentList =>
             {
-                foreach (var segment in segmentList)
-                {
-                    action(segment);
-                }
+                foreach (var segment in segmentList) action(segment);
             },
-            loopAction: loop =>
+            loop =>
             {
                 if (!recursive) return;
-                foreach (var childSegment in loop.YieldChildSegments())
-                {
-                    action(childSegment);
-                }
+                foreach (var childSegment in loop.YieldChildSegments()) action(childSegment);
             },
-            loopListAction: loopList =>
+            loopList =>
             {
                 if (!recursive) return;
-                foreach (var childSegment in loopList.SelectMany(x => x.YieldChildSegments()))
-                {
-                    action(childSegment);
-                }
+                foreach (var childSegment in loopList.SelectMany(x => x.YieldChildSegments())) action(childSegment);
             });
     }
 
@@ -101,20 +85,18 @@ public static class LoopExtensions
         List<T> output = [];
 
         EdiAction(it,
-            segmentAction: x =>
+            x =>
             {
                 if (x is T t)
                     output.Add(t);
             },
-            segmentListAction: segmentList =>
+            segmentList =>
             {
                 foreach (var segment in segmentList)
-                {
                     if (segment is T t)
                         output.Add(t);
-                }
             },
-            loopAction: loop =>
+            loop =>
             {
                 if (loop is T t)
                 {
@@ -124,7 +106,7 @@ public static class LoopExtensions
 
                 loop.FindEdiElement<T>();
             },
-            loopListAction: loopList =>
+            loopList =>
             {
                 foreach (var loop in loopList)
                 {
@@ -143,143 +125,6 @@ public static class LoopExtensions
             });
 
         return output;
-    }
-
-    public static StringBuilder WriteToStringBuilder<T>(this T loop, StringBuilder? stringBuilder = null,
-        Separators? separators = null, bool includeNewLine = true)
-        where T : ILoop
-    {
-        separators ??= Separators.DefaultSeparators;
-        stringBuilder ??= new StringBuilder();
-
-        var childSegments = loop.YieldChildSegments().ToArray();
-
-        foreach (var segment in loop.YieldChildSegments())
-        {
-            segment.WriteToStringBuilder(stringBuilder, separators);
-
-            if (includeNewLine)
-                stringBuilder.AppendLine();
-        }
-
-        return stringBuilder;
-    }
-
-    public static async Task WriteToStream<T>(this T loop, Stream stream,
-        Separators? separators = null, bool includeNewLine = true, CancellationToken cancellationToken = default)
-        where T : ILoop
-    {
-        separators ??= Separators.DefaultSeparators;
-
-        using var writer = new StreamEdiWriter(stream);
-
-        foreach (var segment in loop.YieldChildSegments())
-        {
-            var text = segment.WriteToStringBuilder(separators: separators).ToString();
-            await writer.WriteTextAsync(text, cancellationToken);
-
-            if (includeNewLine)
-                await writer.WriteTextAsync(Environment.NewLine, cancellationToken);
-        }
-    }
-
-    public static LoopPrinter PrettyPrintToStringBuilder<T>(this T loop, LoopPrinter? loopPrinter = null,
-        Separators? separators = null, bool firstIteration = true)
-        where T : ILoop
-    {
-        separators ??= Separators.DefaultSeparators;
-        loopPrinter ??= new LoopPrinter();
-
-        var loopHeader = firstIteration
-            ? loopPrinter.AppendLoop(typeof(T).Name)
-            : null;
-
-        EdiAction(loop,
-            segmentAction: x =>
-            {
-                var text = x.WriteToStringBuilder(separators: separators).ToString();
-                loopPrinter.AppendLine(text);
-            },
-            segmentListAction: segmentList =>
-            {
-                foreach (var text in segmentList
-                             .Select(segment => segment.WriteToStringBuilder(separators: separators).ToString()))
-                {
-                    loopPrinter.AppendLine(text);
-                }
-            },
-            loopAction: loopL =>
-            {
-                var loopText = loopL.GetType().Name;
-                using var d = loopPrinter.AppendLoop(loopText);
-                loopL.PrettyPrintToStringBuilder(loopPrinter, separators, firstIteration: false);
-            },
-            loopListAction: loopList =>
-            {
-                foreach (var loopL in loopList)
-                {
-                    var loopText = loopL.GetType().Name;
-                    using var d = loopPrinter.AppendLoop(loopText);
-                    loopL.PrettyPrintToStringBuilder(loopPrinter, separators, firstIteration: false);
-                }
-            });
-
-        loopHeader?.Dispose();
-
-        return loopPrinter;
-    }
-
-    public static EdiTree ToTree<T>(this T loop, EdiTree? node = null,
-        Separators? separators = null, bool firstIteration = true)
-        where T : ILoop
-    {
-        separators ??= Separators.DefaultSeparators;
-        node ??= new EdiTree();
-
-        if (firstIteration)
-        {
-            node.Name = typeof(T).Name;
-        }
-
-        EdiAction(loop,
-            segmentAction: x =>
-            {
-                var text = x.WriteToStringBuilder(separators: separators).ToString();
-                node.Children.Add(text);
-            },
-            segmentListAction: segmentList =>
-            {
-                foreach (var text in segmentList
-                             .Select(segment => segment.WriteToStringBuilder(separators: separators).ToString()))
-                {
-                    node.Children.Add(text);
-                }
-            },
-            loopAction: loopL =>
-            {
-                var loopNode = new EdiTree
-                {
-                    Name = loopL.GetType().Name,
-                };
-
-                loopL.ToTree(loopNode, separators, firstIteration: false);
-                node.ChildrenTrees.Add(loopNode);
-            },
-            loopListAction: loopList =>
-            {
-                foreach (var loopL in loopList)
-                {
-                    var loopNode = new EdiTree
-                    {
-                        Name = loopL.GetType().Name,
-                    };
-
-                    loopL.ToTree(loopNode, separators, firstIteration: false);
-                    node.ChildrenTrees.Add(loopNode);
-                }
-            });
-
-        return node;
     }
 
     public static ILoop GetRoot(this ILoop loop, bool avoidCircularReferences = true)
@@ -314,76 +159,4 @@ public static class LoopExtensions
                 throw new Exception($"Loop has more than {maxIterations} iterations, likely a circular reference.");
         }
     }
-}
-
-public sealed class LoopPrinter
-{
-    private readonly StringBuilder _builder = new();
-    private int _indentLevel;
-    private readonly Stack<string> _disposeStack = new(0);
-
-    private const string Indent =
-        "                                                                                                                                ";
-
-    public void AppendLine(string line = "")
-    {
-        if (!string.IsNullOrEmpty(line))
-        {
-            _builder.Append(Indent.AsSpan(0, _indentLevel * 4));
-            _builder.AppendLine(line);
-        }
-        else
-        {
-            _builder.AppendLine();
-        }
-    }
-
-
-    public IDisposable AppendLoop(string line = "")
-    {
-        if (!string.IsNullOrEmpty(line))
-        {
-            _builder.Append(Indent[..(_indentLevel * 4)]);
-            _builder.AppendLine(line);
-        }
-        else
-        {
-            _builder.AppendLine();
-        }
-
-        return new IndentationBlock(this);
-    }
-
-    public IDisposable IndentBlock()
-    {
-        return new IndentationBlock(this);
-    }
-
-    private class IndentationBlock : IDisposable
-    {
-        private readonly LoopPrinter _writer;
-
-        public IndentationBlock(LoopPrinter writer)
-        {
-            _writer = writer;
-            _writer._indentLevel++;
-        }
-
-        public void Dispose()
-        {
-            _writer._indentLevel--;
-        }
-    }
-
-    public override string ToString()
-    {
-        return _builder.ToString();
-    }
-}
-
-public sealed class EdiTree
-{
-    public string Name { get; set; } = string.Empty;
-    public List<string> Children { get; set; } = [];
-    public List<EdiTree> ChildrenTrees { get; set; } = [];
 }

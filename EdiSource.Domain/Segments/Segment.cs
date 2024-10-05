@@ -1,14 +1,8 @@
-using System.Text;
 using EdiSource.Domain.Elements;
 using EdiSource.Domain.Loop;
-using EdiSource.Domain.Seperator;
+using EdiSource.Domain.Separator;
 
 namespace EdiSource.Domain.Segments;
-
-public abstract class TypedSegment<T> : Segment where T : ILoop
-{
-    T? Parent { get; set; }
-}
 
 public class Segment : ISegment
 {
@@ -19,39 +13,33 @@ public class Segment : ISegment
         Parent = parent;
     }
 
-    public Segment(IEnumerable<Element>? elements = null, Separators separators = default, ILoop? parent = null)
+    public Segment(IEnumerable<Element>? elements = null, Separators? separators = default, ILoop? parent = null)
     {
         Elements = elements?.ToList() ?? [];
-        Separators = separators;
+        Separators = separators ?? Separators.DefaultSeparators;
         Parent = parent;
     }
 
-    public Segment(string segmentText, Separators separators = default, ILoop? parent = null)
+    public Segment(string segmentText, Separators? separators = null, ILoop? parent = null)
     {
         Elements = ReadElements(segmentText, separators).ToList();
-        Separators = separators;
+        Separators = separators ?? Separators.DefaultSeparators;
         Parent = parent;
     }
 
-    public static IEnumerable<Segment> ReadMultipleSegment(string segmentText, Separators separators = default)
+    public ILoop? Parent { get; set; }
+
+    public string this[int index]
     {
-        return segmentText
-            .Trim()
-            .Split(separators.SegmentSeparator)
-            .Select(x => new Segment(ReadElements(x, separators), separators));
+        get => this[index, 0];
+        set => this[index, 0] = value;
     }
 
-    public static IEnumerable<Element> ReadElements(string segmentText, Separators separators = default)
+    public string this[int dataElement, int compositeElement]
     {
-        return segmentText
-            .Trim()
-            .Trim(separators.SegmentSeparator)
-            .Split(separators.DataElementSeparator)
-            .Select(x => x.Split(separators.CompositeElementSeparator))
-            .Select(x => new Element(x));
+        get => GetCompositeElement(dataElement, compositeElement);
+        set => SetCompositeElement(dataElement, compositeElement, value);
     }
-
-    public string InstanceId => Elements[0][0];
 
     public IList<Element> Elements { get; set; }
 
@@ -108,13 +96,33 @@ public class Segment : ISegment
 
     public bool CompositeElementExists(int dataElementIndex, int compositeElementIndex)
     {
-        return ElementExists(dataElementIndex) &&
-            compositeElementIndex >= Elements[dataElementIndex].Count || compositeElementIndex < 0;
+        return (ElementExists(dataElementIndex) &&
+                compositeElementIndex >= Elements[dataElementIndex].Count) || compositeElementIndex < 0;
     }
 
     public Separators Separators { get; set; }
 
-    public ILoop? Parent { get; set; }
+    public static IEnumerable<Segment> ReadMultipleSegment(string segmentText, Separators? separators = null)
+    {
+        separators ??= Separators.DefaultSeparators;
+
+        return segmentText
+            .Trim()
+            .Split(separators.SegmentSeparator)
+            .Select(x => new Segment(ReadElements(x, separators), separators));
+    }
+
+    public static IEnumerable<Element> ReadElements(string segmentText, Separators? separators = null)
+    {
+        separators ??= Separators.DefaultSeparators;
+
+        return segmentText
+            .Trim()
+            .Trim(separators.SegmentSeparator)
+            .Split(separators.DataElementSeparator)
+            .Select(x => x.Split(separators.CompositeElementSeparator))
+            .Select(x => new Element(x));
+    }
 
     public override string ToString()
     {
@@ -124,17 +132,5 @@ public class Segment : ISegment
     public string ToString(Separators separators)
     {
         return this.WriteToStringBuilder(separators: separators).ToString();
-    }
-
-    public string this[int index]
-    {
-        get => this[index, 0];
-        set => this[index, 0] = value;
-    }
-
-    public string this[int dataElement, int compositeElement]
-    {
-        get => GetCompositeElement(dataElement, compositeElement);
-        set => SetCompositeElement(dataElement, compositeElement, value);
     }
 }

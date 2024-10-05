@@ -1,5 +1,5 @@
 using EdiSource.Domain.Segments;
-using EdiSource.Domain.Seperator;
+using EdiSource.Domain.Separator;
 
 namespace EdiSource.Domain.Structure;
 

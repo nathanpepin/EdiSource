@@ -1,5 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
 using EdiSource.Domain.SourceGeneration;
 using EdiSource.Loops;
 
