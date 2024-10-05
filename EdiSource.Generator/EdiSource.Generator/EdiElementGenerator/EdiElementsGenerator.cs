@@ -64,7 +64,10 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
             context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
 
             var loopConstructorSourceCode = QueueConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
-            context.AddSource($"{className}.Constructor.g.cs", SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
+            context.AddSource($"{className}.QueueConstructor.g.cs", SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
+            
+            var channelConstructorSourceCode = ChannelConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
+            context.AddSource($"{className}.ChannelConstructor.g.cs", SourceText.From(channelConstructorSourceCode, Encoding.UTF8));
         }
     }
 }

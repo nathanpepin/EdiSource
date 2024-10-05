@@ -1,12 +1,9 @@
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
+using EdiSource.Domain.SourceGeneration;
 using EdiSource.Loops;
 
 namespace EdiSource.Segments;
 
-public class TS_ST : Segment, ISegment<TransactionSet>, ISegmentIdentifier<TS_ST>, IEdiId
-{
-    public TransactionSet? Parent { get; }
-
-    public static (string Primary, string? Secondary) EdiId => ("ST", null);
-}
+[SegmentGenerator<TransactionSet>("ST", null)]
+public partial class TS_ST;

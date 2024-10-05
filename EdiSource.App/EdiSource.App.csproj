@@ -14,30 +14,4 @@
                           OutputItemType="Analyzer"
                           ReferenceOutputAssembly="false"/>
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Segments\Loop2000_DTP.cs" />
-      <None Include="Segments\Loop2000_DTP.cs" />
-      <Compile Remove="Segments\Loop2000_INS.cs" />
-      <None Include="Segments\Loop2000_INS.cs" />
-      <Compile Remove="Segments\Loop2000_REF.cs" />
-      <None Include="Segments\Loop2000_REF.cs" />
-      <Compile Remove="Segments\Loop2100_NM1.cs" />
-      <None Include="Segments\Loop2100_NM1.cs" />
-      <Compile Remove="Segments\TS_DTP.cs" />
-      <None Include="Segments\TS_DTP.cs" />
-      <Compile Remove="Segments\TS_REF.cs" />
-      <None Include="Segments\TS_REF.cs" />
-      <Compile Remove="Segments\TS_SE.cs" />
-      <None Include="Segments\TS_SE.cs" />
-      <Compile Remove="Segments\TS_ST.cs" />
-      <None Include="Segments\TS_ST.cs" />
-      <Compile Remove="Loops\Loop2000.cs" />
-      <None Include="Loops\Loop2000.cs" />
-      <Compile Remove="Loops\Loop2100.cs" />
-      <None Include="Loops\Loop2100.cs" />
-      <Compile Remove="Loops\TransactionSet.cs" />
-      <None Include="Loops\TransactionSet.cs" />
-    </ItemGroup>
-
 </Project>

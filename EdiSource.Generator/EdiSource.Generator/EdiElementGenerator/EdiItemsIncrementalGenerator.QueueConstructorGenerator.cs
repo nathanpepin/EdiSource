@@ -29,6 +29,12 @@ public partial class EdiItemsIncrementalGenerator
             {
                 using (var cs = cw.StartClass(className))
                 {
+                    
+                    cw.AppendLine($"public {className}(IEnumerable<ISegment> segments, TransactionSet? parent = null)");
+                    cw.AppendLine(": this(new Queue<ISegment>(segments), parent)");
+                    cw.AppendLine("{}");
+                    cw.AppendLine();
+                    
                     using (var con = cw.StartConstructor(className, arguments: ["Queue<ISegment> segments", $"{parent}? parent = null"]))
                     {
                         cw.AppendLine("Parent = parent;"); 

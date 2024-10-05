@@ -17,7 +17,7 @@ public interface IEdiReader
         CancellationToken cancellationToken = default);
 
     Task ReadEdiSegmentsIntoChannelAsync(StreamReader streamReader,
-        ChannelWriter<Segment> channelWriter,
+        ChannelWriter<ISegment> channelWriter,
         Separators? separators = null,
         CancellationToken cancellationToken = default);
 }

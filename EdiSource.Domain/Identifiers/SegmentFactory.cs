@@ -1,3 +1,4 @@
+using System.Threading.Channels;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 
@@ -35,5 +36,28 @@ public static class SegmentLoopFactory<T, TLoop>
     public static T? CreateIfMatches(ISegment segment, TLoop? parent = null)
     {
         return ISegmentIdentifier<T>.Matches(segment) ? null : new T { Elements = segment.Elements, Parent = parent };
+    }
+
+    public static async Task<T> CreateAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
+    {
+        await segmentReader.WaitToReadAsync();
+        
+        if (!await ISegmentIdentifier<T>.MatchesAsync(segmentReader))
+            throw new ArgumentException(
+                $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {await segmentReader.ReadAsync()}");
+
+        var segment = await segmentReader.ReadAsync();
+        return new T { Elements = segment.Elements, Parent = parent };
+    }
+
+    public static async Task<T?> CreateIfMatchesAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
+    {
+        await segmentReader.WaitToReadAsync();
+        
+        if (!await ISegmentIdentifier<T>.MatchesAsync(segmentReader))
+            return null;
+
+        var segment = await segmentReader.ReadAsync();
+        return new T { Elements = segment.Elements, Parent = parent };
     }
 }

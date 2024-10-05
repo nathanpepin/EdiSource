@@ -6,7 +6,7 @@ using EdiSource.Segments;
 
 namespace EdiSource.Loops;
 
-[LoopGenerator<TransactionSet, TS_ST>]
+[LoopGenerator<TransactionSet, Loop2000_INS, Loop2000>]
 public partial class Loop2000
 {
     [SegmentHeader] public Loop2000_INS INS { get; set; }

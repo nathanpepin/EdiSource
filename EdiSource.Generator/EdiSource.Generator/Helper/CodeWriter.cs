@@ -26,6 +26,34 @@ public sealed class CodeWriter
         }
     }
 
+
+    public IDisposable AppendLineIndent(string line = "")
+    {
+        if (!string.IsNullOrEmpty(line))
+        {
+            _builder.Append(Indent.Substring(0, _indentLevel * 4));
+            _builder.AppendLine(line);
+        }
+        else
+        {
+            _builder.AppendLine();
+        }
+
+        return new IndentationBlock(this);
+    }
+
+    public IDisposable AppendBlock(string line = "", string blockChar = "{", string blockEndChar = "}")
+    {
+        _builder.Append(Indent.Substring(0, _indentLevel * 4));
+        _builder.AppendLine(line);
+
+        _builder.AppendLine(blockChar);
+
+        _disposeStack.Push(blockEndChar);
+
+        return new IndentationBlock(this);
+    }
+
     public void IncreaseIndent()
     {
         _indentLevel++;

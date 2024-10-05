@@ -47,9 +47,9 @@ public class EdiReader : IEdiReader
         Separators? separators = null,
         CancellationToken cancellationToken = default)
     {
-        var channel = Channel.CreateBounded<Segment>(1);
+        var channel = Channel.CreateBounded<ISegment>(1);
 
-        List<Segment> segments = [];
+        List<ISegment> segments = [];
 
         _ = Task.Run(
             async () => await ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer, separators,
@@ -64,7 +64,7 @@ public class EdiReader : IEdiReader
     }
 
     public async Task ReadEdiSegmentsIntoChannelAsync(StreamReader streamReader,
-        ChannelWriter<Segment> channelWriter,
+        ChannelWriter<ISegment> channelWriter,
         Separators? separators = null,
         CancellationToken cancellationToken = default)
     {
@@ -98,6 +98,7 @@ public class EdiReader : IEdiReader
 
                         stringBuffer.Clear();
 
+                        await channelWriter.WaitToWriteAsync(cancellationToken);
                         await channelWriter.WriteAsync(segmentBuffer, cancellationToken);
                         segmentBuffer = new Segment([]);
                     }
