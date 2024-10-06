@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using EdiSource.Generator.Helper;
 using Microsoft.CodeAnalysis;
 
@@ -23,7 +21,7 @@ public partial class EdiItemsIncrementalGenerator
             cw.AppendLine();
             using (cw.StartNamespace(namespaceName))
             {
-                using (cw.StartClass(className, implementations: []))
+                using (cw.StartClass(className, []))
                 {
                     var names = orderedEdiItems.Select(x => x.Name).ToArray();
                     cw.AddCalcProperty("EdiItems", "List<IEdi?>",

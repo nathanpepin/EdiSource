@@ -26,6 +26,20 @@ public static class Constants
     public const string LoopListAttribute = "LoopListAttribute";
     public const string SegmentGeneratorAttribute = "SegmentGeneratorAttribute";
 
+
+    public static HashSet<string> Usings =>
+    [
+        "EdiSource.Domain.Separator",
+        "EdiSource.Domain.Segments",
+        "EdiSource.Domain.Identifiers",
+        "EdiSource.Domain.SourceGeneration",
+        "EdiSource.Domain.Loop",
+        "EdiSource.Loops",
+        "System.Linq",
+        "System.Collections.Generic",
+        "System"
+    ];
+
     public static class LoopAggregation
     {
         public static readonly ImmutableArray<string> LoopGeneratorNames = [LoopGenerator, LoopGeneratorAttribute];

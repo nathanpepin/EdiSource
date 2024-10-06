@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using EdiSource.Generator.Helper;
 using Microsoft.CodeAnalysis;
 
@@ -24,7 +22,7 @@ public partial class EdiItemsIncrementalGenerator
 
             using (cw.StartNamespace(namespaceName))
             {
-                using (cw.StartClass(className, implementations: []))
+                using (cw.StartClass(className, []))
                 {
                     cw.AppendLine($"public {className}(IEnumerable<ISegment> segments, TransactionSet? parent = null)");
                     cw.AppendLine(": this(new Queue<ISegment>(segments), parent)");

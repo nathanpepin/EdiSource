@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Text;
-using EdiSource.Generator.Helper;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -44,27 +41,9 @@ public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerato
                 .Select(x => x.Name?.ToString())
                 .OfType<string>()
                 .ToImmutableArray();
-            
-            var usings = new HashSet<string>(classUsings)
-            {
-                "EdiSource.Domain.Separator",
-                "EdiSource.Domain.Segments",
-                "EdiSource.Domain.Identifiers",
-                "EdiSource.Domain.SourceGeneration",
-                "EdiSource.Domain.Loop",
-                "EdiSource.Loops",
-                "System.Linq",
-                "System.Collections.Generic",
-                "System"
-            };
 
-            var ediItems = properties
-                .Select(property => new { property, attribute = GetEdiAttribute(property) })
-                .Where(t => !string.IsNullOrEmpty(t.attribute))
-                .Select(t => (t.property.Name, t.attribute, t.property))
-                .ToArray();
-
-            var implementationCode = Generate(className, namespaceName, usings, parent, primaryId, secondaryId);
+            var implementationCode = Generate(className, namespaceName, [..classUsings, ..Usings], parent, primaryId,
+                secondaryId);
             context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
         }
     }

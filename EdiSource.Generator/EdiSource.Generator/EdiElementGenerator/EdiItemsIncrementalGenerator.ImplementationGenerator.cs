@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using EdiSource.Generator.Helper;
 
 namespace EdiSource.Generator.EdiElementGenerator;
@@ -25,7 +23,7 @@ public partial class EdiItemsIncrementalGenerator
                     "ILoop", $"ILoop<{parent}>", $"ISegmentIdentifier<{className}>", $"ISegmentIdentifier<{id}>",
                     $"ILoopInitialize<{parent}, {className}>"
                 ];
-                using (cw.StartClass(className, implementations: implementations))
+                using (cw.StartClass(className, implementations))
                 {
                     cw.AppendLine("ILoop? ILoop.Parent => Parent;");
 

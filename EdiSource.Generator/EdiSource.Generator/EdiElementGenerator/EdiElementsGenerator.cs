@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -44,18 +42,7 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
                 .OfType<string>()
                 .ToImmutableHashSet();
 
-            var usings = new HashSet<string>(classUsings)
-            {
-                "EdiSource.Domain.Separator",
-                "EdiSource.Domain.Segments",
-                "EdiSource.Domain.Identifiers",
-                "EdiSource.Domain.SourceGeneration",
-                "EdiSource.Domain.Loop",
-                "EdiSource.Loops",
-                "System.Linq",
-                "System.Collections.Generic",
-                "System"
-            };
+            HashSet<string> usings = [..classUsings, ..Usings];
 
             var ediItems = properties
                 .Select(property => new { property, attribute = GetEdiAttribute(property) })
