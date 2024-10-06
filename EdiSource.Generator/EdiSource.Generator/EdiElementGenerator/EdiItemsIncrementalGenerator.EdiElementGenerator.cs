@@ -23,7 +23,7 @@ public partial class EdiItemsIncrementalGenerator
             cw.AppendLine();
             using (cw.StartNamespace(namespaceName))
             {
-                using (cw.StartClass(className))
+                using (cw.StartClass(className, implementations: []))
                 {
                     var names = orderedEdiItems.Select(x => x.Name).ToArray();
                     cw.AddCalcProperty("EdiItems", "List<IEdi?>",

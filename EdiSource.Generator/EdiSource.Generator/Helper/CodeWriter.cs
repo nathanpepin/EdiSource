@@ -80,10 +80,10 @@ public sealed class CodeWriter
         AppendLine($"using {usingName};");
     }
 
-    public IDisposable StartClass(string className, string modifier = "public", bool partial = true,
-        string[]? implementations = null)
+    public IDisposable StartClass(string className, ReadOnlySpan<string> implementations, string modifier = "public",
+        bool partial = true)
     {
-        if (implementations is null)
+        if (implementations.Length == 0)
         {
             AppendLine(partial
                 ? $"{modifier} partial class {className}"
@@ -95,7 +95,7 @@ public sealed class CodeWriter
         AppendLine(partial
             ? $"{modifier} partial class {className}"
             : $"{modifier} class {className}");
-        AppendLine($": {string.Join(", ", implementations)}");
+        AppendLine($": {string.Join(", ", [..implementations])}");
         AppendLine("{");
         return new IndentationBlock(this);
     }

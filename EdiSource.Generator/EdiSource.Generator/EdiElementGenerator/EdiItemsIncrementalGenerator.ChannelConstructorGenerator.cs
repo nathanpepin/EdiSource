@@ -26,7 +26,7 @@ public partial class EdiItemsIncrementalGenerator
             cw.AppendLine();
             using (cw.StartNamespace(namespaceName))
             {
-                using (cw.StartClass(className))
+                using (cw.StartClass(className, implementations: []))
                 {
                     cw.AppendLine("""
                                   [SuppressMessage("CodeQuality", "IDE0060:Remove unused parameter", Justification = "Empty constructor is required")]

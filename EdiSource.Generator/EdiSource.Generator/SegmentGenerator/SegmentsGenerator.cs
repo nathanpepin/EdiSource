@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace EdiSource.Generator.SegmentGenerator;
 
 [Generator]
-public class SegmentGeneratorIncrementalGenerator : IIncrementalGenerator
+public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -67,33 +67,5 @@ public class SegmentGeneratorIncrementalGenerator : IIncrementalGenerator
             var implementationCode = Generate(className, namespaceName, usings, parent, primaryId, secondaryId);
             context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
         }
-    }
-
-    private static string Generate(string className, string namespaceName, HashSet<string> usings, string parent,
-        string primaryId, string secondaryId)
-    {
-        var cw = new CodeWriter();
-
-        cw.AppendLine("#nullable enable");
-
-        cw.AddUsing("System.Collections.Generic");
-        cw.AddUsing("EdiSource.Domain.Segments");
-        cw.AddUsing("EdiSource.Domain.Identifiers");
-        foreach (var @using in usings) cw.AddUsing(@using);
-
-        cw.AppendLine();
-        using (var ns = cw.StartNamespace(namespaceName))
-        {
-            string[] implementations =
-                ["Segment", $"ISegment<{parent}>", $"ISegmentIdentifier<{className}>"];
-            using (var cl = cw.StartClass(className, implementations: implementations))
-            {
-                cw.AppendLine($"new public {parent}? Parent {{ get; set; }}");
-                cw.AppendLine(
-                    $"public static (string Primary, string? Secondary) EdiId => ({primaryId}, {secondaryId});");
-            }
-        }
-
-        return cw.ToString();
     }
 }
