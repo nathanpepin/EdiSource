@@ -7,18 +7,24 @@ namespace EdiSource.Domain.Validation.Validator;
 
 public sealed class ValidateEdi : IValidateEdi
 {
-    public ValidationResult Validate<T>(T ediItem) where T : IEdi
+    /// <summary>
+    /// Validates an IEdi item
+    /// </summary>
+    /// <param name="ediItem"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public EdiValidationResult Validate<T>(T ediItem) where T : IEdi
     {
         var loopLine = 0;
         var segmentLine = 0;
         return YieldValidationMessages(ediItem, null, ref loopLine, ref segmentLine);
     }
 
-    private ValidationResult YieldValidationMessages<T>(T ediItem, ValidationResult? validationResult,
+    private static EdiValidationResult YieldValidationMessages<T>(T ediItem, EdiValidationResult? validationResult,
         ref int loopLine, ref int segmentLine) where T : IEdi
     {
-        validationResult ??= new ValidationResult();
-        
+        validationResult ??= new EdiValidationResult();
+
         switch (ediItem)
         {
             case null: return validationResult;

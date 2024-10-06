@@ -16,6 +16,7 @@ public interface IEdiSerializer
     /// <returns></returns>
     Task WriteToStream(ILoop loop, Stream stream, Separators? separators = null,
         bool includeNewLine = true, CancellationToken cancellationToken = default);
+    
 
     /// <summary>
     /// Writes a loop to a file

@@ -1,5 +1,8 @@
 namespace EdiSource.Domain.Validation.Data;
 
+/// <summary>
+/// Validation severities in escalating order
+/// </summary>
 public enum ValidationSeverity
 {
     None = 0,

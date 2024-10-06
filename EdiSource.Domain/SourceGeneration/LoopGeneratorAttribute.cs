@@ -4,6 +4,10 @@ using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.SourceGeneration;
 
+/// <summary>
+/// Enables source generation to occur on a loop.
+/// Generics are needed for the source generation.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class LoopGeneratorAttribute<TParent, TSelf, TId> : Attribute
     where TParent : ILoop

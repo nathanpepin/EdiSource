@@ -3,15 +3,15 @@ using EdiSource.Domain.Validation.Data;
 
 namespace EdiSource.Domain.Validation.IO;
 
-public class ValidationMessageCsvConverter : IValidationMessageCsvConverter
+public sealed class ValidationMessageCsvConverter : IValidationMessageCsvConverter
 {
-    public async Task WriteToCsvAsync(ValidationResult result, FileInfo fileInfo,
+    public async Task WriteToCsvAsync(EdiValidationResult result, FileInfo fileInfo,
         CancellationToken cancellationToken = default)
     {
         await File.WriteAllTextAsync(fileInfo.FullName, ToCsvString(result), cancellationToken);
     }
 
-    public string ToCsvString(ValidationResult result)
+    public string ToCsvString(EdiValidationResult result)
     {
         var csvBuilder = new StringBuilder();
 
@@ -44,7 +44,7 @@ public class ValidationMessageCsvConverter : IValidationMessageCsvConverter
     {
         return string.Join(",", new[]
         {
-            EscapeCsvField(message.ValidationSeverity.ToString()),
+            EscapeCsvField(message.Severity.ToString()),
             EscapeCsvField(message.Message),
             EscapeCsvField(message.Subject),
             EscapeCsvField(message.LoopLine?.ToString() ?? ""),

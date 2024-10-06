@@ -8,7 +8,7 @@ public static partial class ValidationFactory
     public static ValidationMessage Create(ILoop loop, ValidationSeverity validationSeverity,
         string message) => new()
     {
-        ValidationSeverity = validationSeverity,
+        Severity = validationSeverity,
         Subject = "Loop",
         Message = message,
         Loop = loop.GetType().Name

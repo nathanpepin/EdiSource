@@ -1,9 +1,13 @@
 using EdiSource.Domain.Elements;
 using EdiSource.Domain.Loop;
+using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Separator;
 
 namespace EdiSource.Domain.Segments;
 
+/// <summary>
+/// A basic implementation of ISegment
+/// </summary>
 public class Segment : ISegment
 {
     public Segment(ISegment segment, ILoop? parent = null)
@@ -100,7 +104,13 @@ public class Segment : ISegment
                 compositeElementIndex >= Elements[dataElementIndex].Count) || compositeElementIndex < 0;
     }
 
-    public Separators Separators { get; set; }
+    private Separators? _separators;
+
+    public Separators Separators
+    {
+        get => _separators ?? Separators.DefaultSeparators;
+        set => _separators = value;
+    }
 
     public static IEnumerable<Segment> ReadMultipleSegment(string segmentText, Separators? separators = null)
     {

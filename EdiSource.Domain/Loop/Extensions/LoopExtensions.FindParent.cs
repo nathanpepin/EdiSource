@@ -1,11 +1,19 @@
+using EdiSource.Domain.Exceptions;
+
 namespace EdiSource.Domain.Loop.Extensions;
 
 public static partial class LoopExtensions
 {
-    public static T? FindParent<T>(this ILoop loop, bool avoidCircularReferences = true) where T : ILoop
+    /// Finds and returns the parent loop of the specified type for a given loop.
+    /// <param name="loop">The loop for which the parent is to be found.</param>
+    /// <param name="avoidCircularReferences">Specifies whether to avoid circular references to prevent infinite loops. Defaults to true.</param>
+    /// <param name="maxIterations">The maximum number of iterations allowed when avoiding circular references.</param>
+    /// <typeparam name="T">The type of the parent loop to be found.</typeparam>
+    /// <return>The parent loop of the specified type if found; otherwise, the default value for the type.</return>
+    public static T? FindParent<T>(this ILoop loop, bool avoidCircularReferences = true, int maxIterations = 1_000)
+        where T : ILoop
     {
         var iterations = 0;
-        const int maxIterations = 1_000;
 
         while (true)
         {
@@ -16,7 +24,7 @@ public static partial class LoopExtensions
             loop = loop.Parent;
 
             if (avoidCircularReferences && iterations++ > maxIterations)
-                throw new Exception($"Loop has more than {maxIterations} iterations, likely a circular reference.");
+                throw new ProbableCircularReferenceException(iterations, maxIterations);
         }
     }
 }

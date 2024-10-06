@@ -8,7 +8,7 @@ public static partial class ValidationFactory
     public static ValidationMessage Create(ISegment segment, ValidationSeverity validationSeverity,
         string message, int? dataElement = null, int? compositeElement = null) => new()
     {
-        ValidationSeverity = validationSeverity,
+        Severity = validationSeverity,
         Subject = "Segment",
         Message = message,
         Loop = segment.Parent?.GetType().Name,

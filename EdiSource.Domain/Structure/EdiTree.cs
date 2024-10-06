@@ -5,56 +5,34 @@ using EdiSource.Domain.Separator;
 
 namespace EdiSource.Domain.Structure;
 
-public sealed class EdiTree
+/// <summary>
+/// The EdiTree class represents the hierarchical structure of EDI data segments and loops.
+/// It may have some use in instances where the edi data format needs conversion into another format,
+/// like html.
+/// </summary>
+public sealed partial class EdiTree
 {
+    /// <summary>
+    /// Represents the name or identifier of the loop in the EDI tree structure.
+    /// </summary>
     public string Loop { get; set; } = string.Empty;
-    public List<string> Segments { get; set; } = [];
-    public List<EdiTree> Loops { get; set; } = [];
 
-    public static EdiTree Create<T>(T loop, EdiTree? node = null,
-        Separators? separators = null, bool firstIteration = true)
-        where T : ILoop
-    {
-        separators ??= Separators.DefaultSeparators;
-        node ??= new EdiTree();
+    /// <summary>
+    /// Represents the collection of segments associated with the current EDI (Electronic Data Interchange) tree node.
+    /// </summary>
+    /// <remarks>
+    /// Each segment in the list is a string that follows the structured format of EDI segments,
+    /// which can include various types of data elements separated by defined separators.
+    /// </remarks>
+    public List<string> Segments { get; } = [];
 
-        if (firstIteration) node.Loop = typeof(T).Name;
-
-        loop.EdiAction(x =>
-            {
-                var text = x.WriteToStringBuilder(separators: separators).ToString();
-                node.Segments.Add(text);
-            },
-            segmentList =>
-            {
-                foreach (var text in segmentList
-                             .Select(segment => segment.WriteToStringBuilder(separators: separators).ToString()))
-                    node.Segments.Add(text);
-            },
-            loopL =>
-            {
-                var loopNode = new EdiTree
-                {
-                    Loop = loopL.GetType().Name
-                };
-
-                Create(loopL, loopNode, separators, false);
-                node.Loops.Add(loopNode);
-            },
-            loopList =>
-            {
-                foreach (var loopL in loopList)
-                {
-                    var loopNode = new EdiTree
-                    {
-                        Loop = loopL.GetType().Name
-                    };
-
-                    Create(loopL, loopNode, separators, false);
-                    node.Loops.Add(loopNode);
-                }
-            });
-
-        return node;
-    }
+    /// <summary>
+    /// Gets or sets the nested loops within the current loop structure.
+    /// </summary>
+    /// <remarks>
+    /// The <c>Loops</c> property is a list of <see cref="EdiTree"/> objects representing
+    /// the hierarchical nature of EDI loop structures. Each <see cref="EdiTree"/> object within
+    /// the <c>Loops</c> collection can contain its own child loops and segments.
+    /// </remarks>
+    public List<EdiTree> Loops { get; } = [];
 }

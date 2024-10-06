@@ -10,16 +10,18 @@ public interface IEdiParser<T> where T : class, ILoopInitialize<T>, new()
     /// </summary>
     /// <param name="streamReader"></param>
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<T> ParseEdi(StreamReader streamReader, Separators? separators = null);
+    Task<T> ParseEdi(StreamReader streamReader, Separators? separators = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Converts a file to a loop.
     /// </summary>
     /// <param name="fileInfo"></param>
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<T> ParseEdi(FileInfo fileInfo, Separators? separators = null);
+    Task<T> ParseEdi(FileInfo fileInfo, Separators? separators = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Converts text to a loop.
@@ -31,21 +33,23 @@ public interface IEdiParser<T> where T : class, ILoopInitialize<T>, new()
 
     /// <summary>
     /// Converts a stream to an interchange envelope.
-    ///
+    /// 
     /// Separators not needed as they will be read from the ISA segment
     /// </summary>
     /// <param name="streamReader"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<T> ParseEdiEnvelope(StreamReader streamReader);
+    Task<T> ParseEdiEnvelope(StreamReader streamReader, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Converts a file to an interchange envelope.
-    ///
+    /// 
     /// Separators not needed as they will be read from the ISA segment
     /// </summary>
     /// <param name="fileInfo"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<T> ParseEdiEnvelope(FileInfo fileInfo);
+    Task<T> ParseEdiEnvelope(FileInfo fileInfo, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Converts text to an interchange envelope.

@@ -1,4 +1,5 @@
-﻿using EdiSource.Domain.IO.Parser;
+﻿using EdiSource.Domain;
+using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Validation;
@@ -35,10 +36,9 @@ var input =
 
 var ts = await new EdiParser<TransactionSet>().ParseEdi(input);
 
-var v = ts.Validate();
+EdiCommon.Validate(ts);
 
-foreach (var i in v.ValidationMessages)
-    Console.WriteLine(i);
+
 //
 // Console.WriteLine(
 // new EdiSerializer().WriteToPrettyString(ts));

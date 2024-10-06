@@ -4,7 +4,13 @@ namespace EdiSource.Domain.Loop.Extensions;
 
 public static partial class LoopExtensions
 {
-    public static IEnumerable<T> FindEdiElement<T>(this ILoop it) where T : IEdi
+    /// <summary>
+    /// Finds all EDI elements of a specified type within the given loop.
+    /// </summary>
+    /// <typeparam name="T">The type of EDI elements to find.</typeparam>
+    /// <param name="it">The loop to search within.</param>
+    /// <returns>A collection of EDI elements of the specified type.</returns>
+    public static List<T> FindEdiElement<T>(this ILoop it) where T : IEdi
     {
         List<T> output = [];
 

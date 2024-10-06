@@ -2,6 +2,9 @@ using EdiSource.Domain.Loop;
 
 namespace EdiSource.Domain.SourceGeneration;
 
+/// <summary>
+/// Mark a segment class with this attribute to enable source generation.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 // ReSharper disable once UnusedTypeParameter
 #pragma warning disable CS9113 // Parameter is unread.
