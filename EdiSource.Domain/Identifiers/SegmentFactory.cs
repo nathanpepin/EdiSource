@@ -4,10 +4,22 @@ using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.Identifiers;
 
+/// <summary>
+/// Used for creating segments dynamically
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <typeparam name="TLoop"></typeparam>
 public static class SegmentLoopFactory<T, TLoop>
     where T : Segment, ISegment<TLoop>, ISegmentIdentifier<T>, new()
     where TLoop : class, ILoop
 {
+    /// <summary>
+    /// Creates a segment if it matches the criteria
+    /// </summary>
+    /// <param name="segments"></param>
+    /// <param name="parent"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static T Create(Queue<ISegment> segments, TLoop? parent = null)
     {
         if (!ISegmentIdentifier<T>.Matches(segments.Peek()))
@@ -18,44 +30,18 @@ public static class SegmentLoopFactory<T, TLoop>
         return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 
-    public static T Create(ISegment segment, TLoop? parent = null)
-    {
-        if (!ISegmentIdentifier<T>.Matches(segment))
-            throw new ArgumentException(
-                $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {segment}");
-
-        return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
-    }
-
-    public static T? CreateIfMatches(Queue<ISegment> segments, TLoop? parent = null)
-    {
-        if (!ISegmentIdentifier<T>.Matches(segments.Peek())) return null;
-
-        var segment = segments.Dequeue();
-        return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
-    }
-
-    public static T? CreateIfMatches(ISegment segment, TLoop? parent = null)
-    {
-        return !ISegmentIdentifier<T>.Matches(segment)
-            ? null
-            : new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
-    }
-
-    public static async Task<T> CreateAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
+    /// <summary>
+    /// Creates a segment is it matches the criteria
+    /// </summary>
+    /// <param name="segmentReader"></param>
+    /// <param name="parent"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public static async ValueTask<T> CreateAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
     {
         if (!await ISegmentIdentifier<T>.MatchesAsync(segmentReader))
             throw new ArgumentException(
                 $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {await segmentReader.ReadAsync()}");
-
-        var segment = await segmentReader.ReadAsync();
-        return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
-    }
-
-    public static async Task<T?> CreateIfMatchesAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
-    {
-        if (!await ISegmentIdentifier<T>.MatchesAsync(segmentReader))
-            return null;
 
         var segment = await segmentReader.ReadAsync();
         return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };

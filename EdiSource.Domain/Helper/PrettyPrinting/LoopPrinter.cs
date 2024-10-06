@@ -1,8 +1,11 @@
 using System.Text;
 
-namespace EdiSource.Domain.Helper;
+namespace EdiSource.Domain.Helper.PrettyPrinting;
 
-public sealed class LoopPrinter
+/// <summary>
+/// Used for pretty printing loops and segments
+/// </summary>
+public sealed class LoopPrinter : ILoopPrinter
 {
     private const string Indent =
         "                                                                                                                                ";
@@ -10,26 +13,24 @@ public sealed class LoopPrinter
     private readonly StringBuilder _builder = new();
     private int _indentLevel;
 
-    public void AppendLine(string line = "")
+    public void AppendLine()
     {
-        if (!string.IsNullOrEmpty(line))
-        {
-            _builder.Append(Indent.AsSpan(0, _indentLevel * 4));
-            _builder.AppendLine(line);
-        }
-        else
-        {
-            _builder.AppendLine();
-        }
+        _builder.AppendLine();
+    }
+
+    public void AppendLine(string segment)
+    {
+        _builder.Append(Indent.AsSpan(0, _indentLevel * 4));
+        _builder.AppendLine(segment);
     }
 
 
-    public IDisposable AppendLoop(string line = "")
+    public IDisposable AppendLoop(string loopName)
     {
-        if (!string.IsNullOrEmpty(line))
+        if (!string.IsNullOrEmpty(loopName))
         {
             _builder.Append(Indent[..(_indentLevel * 4)]);
-            _builder.AppendLine(line);
+            _builder.AppendLine(loopName);
         }
         else
         {

@@ -1,27 +1,29 @@
 using System.Text;
 using EdiSource.Domain.Helper;
+using EdiSource.Domain.Helper.PrettyPrinting;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Separator;
 
 namespace EdiSource.Domain.IO.Serializer;
 
-public sealed class EdiSerializer : IEdiSerializer
+public sealed partial class EdiSerializer : IEdiSerializer
 {
     public async Task WriteToStream(ILoop loop, Stream stream, Separators? separators = null,
         bool includeNewLine = true, CancellationToken cancellationToken = default)
     {
         separators ??= Separators.DefaultSeparators;
 
-        await using var writer = new StreamEdiWriter(stream);
+        await using var writer = new StreamWriter(stream);
 
         foreach (var segment in loop.YieldChildSegments())
         {
-            var text = segment.WriteToStringBuilder(separators: separators).ToString();
-            await writer.WriteTextAsync(text, cancellationToken);
+            var text = segment.WriteToStringBuilder(separators: separators);
 
             if (includeNewLine)
-                await writer.WriteTextAsync(Environment.NewLine, cancellationToken);
+                await writer.WriteLineAsync(text, cancellationToken);
+            else
+                await writer.WriteAsync(text, cancellationToken);
         }
     }
 
@@ -47,52 +49,5 @@ public sealed class EdiSerializer : IEdiSerializer
         }
 
         return stringBuilder.ToString();
-    }
-
-    public string WriteToPrettyString(ILoop loop, Separators? separators = null)
-    {
-        return PrettyPrintToStringBuilder(loop, separators: separators).ToString();
-
-        static LoopPrinter PrettyPrintToStringBuilder(ILoop loop, LoopPrinter? loopPrinter = null,
-            Separators? separators = null, bool firstIteration = true)
-        {
-            separators ??= Separators.DefaultSeparators;
-            loopPrinter ??= new LoopPrinter();
-
-            var loopHeader = firstIteration
-                ? loopPrinter.AppendLoop(loop.GetType().Name)
-                : null;
-
-            loop.EdiAction(x =>
-                {
-                    var text = x.WriteToStringBuilder(separators: separators).ToString();
-                    loopPrinter.AppendLine(text);
-                },
-                segmentList =>
-                {
-                    foreach (var text in segmentList
-                                 .Select(segment => segment.WriteToStringBuilder(separators: separators).ToString()))
-                        loopPrinter.AppendLine(text);
-                },
-                loopL =>
-                {
-                    var loopText = loopL.GetType().Name;
-                    using var d = loopPrinter.AppendLoop(loopText);
-                    PrettyPrintToStringBuilder(loopL, loopPrinter, separators, false);
-                },
-                loopList =>
-                {
-                    foreach (var loopL in loopList)
-                    {
-                        var loopText = loopL.GetType().Name;
-                        using var d = loopPrinter.AppendLoop(loopText);
-                        PrettyPrintToStringBuilder(loopL, loopPrinter, separators, false);
-                    }
-                });
-
-            loopHeader?.Dispose();
-
-            return loopPrinter;
-        }
     }
 }
