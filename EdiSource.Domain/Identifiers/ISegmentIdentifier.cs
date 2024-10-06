@@ -4,7 +4,7 @@ using EdiSource.Domain.Segments;
 namespace EdiSource.Domain.Identifiers;
 
 /// <summary>
-/// Used to identify a segment
+///     Used to identify a segment
 /// </summary>
 public interface ISegmentIdentifier
 {
@@ -12,14 +12,14 @@ public interface ISegmentIdentifier
 }
 
 /// <summary>
-/// Matches segments to their identifiers
+///     Matches segments to their identifiers
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public interface ISegmentIdentifier<T> : ISegmentIdentifier
     where T : ISegmentIdentifier<T>
 {
     /// <summary>
-    /// Matches a segment using the segment identifiers
+    ///     Matches a segment using the segment identifiers
     /// </summary>
     /// <param name="segment"></param>
     /// <returns></returns>
@@ -36,7 +36,7 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
     }
 
     /// <summary>
-    /// Matches the first item from a Queue using the segment identifiers
+    ///     Matches the first item from a Queue using the segment identifiers
     /// </summary>
     /// <param name="segments"></param>
     /// <returns></returns>
@@ -49,7 +49,7 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
     }
 
     /// <summary>
-    /// Matches the first item from a Channel using the segment identifiers
+    ///     Matches the first item from a Channel using the segment identifiers
     /// </summary>
     /// <param name="segmentReader"></param>
     /// <returns></returns>

@@ -3,7 +3,7 @@ using EdiSource.Domain.Validation.Data;
 namespace EdiSource.Domain.Validation.IO;
 
 /// <summary>
-/// Converts validation messages to a comma seperated value
+///     Converts validation messages to a comma seperated value
 /// </summary>
 public interface IValidationMessageCsvConverter
 {

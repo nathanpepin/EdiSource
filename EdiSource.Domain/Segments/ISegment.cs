@@ -6,38 +6,38 @@ using EdiSource.Domain.Separator;
 namespace EdiSource.Domain.Segments;
 
 /// <summary>
-/// Represents an EDI (Electronic Data Interchange) segment. This interface encapsulates methods and properties
-/// for handling EDI segments, their elements, composite elements, and associated separators.
+///     Represents an EDI (Electronic Data Interchange) segment. This interface encapsulates methods and properties
+///     for handling EDI segments, their elements, composite elements, and associated separators.
 /// </summary>
 public interface ISegment : IEdi, IParent
 {
     /// <summary>
-    /// Gets or sets the collection of elements associated with the segment.
+    ///     Gets or sets the collection of elements associated with the segment.
     /// </summary>
     IList<Element> Elements { get; set; }
 
     /// <summary>
-    /// Gets the separators used to parse the EDI segments.
-    /// The separators include segment separator, data element separator, and composite element separator.
+    ///     Gets the separators used to parse the EDI segments.
+    ///     The separators include segment separator, data element separator, and composite element separator.
     /// </summary>
     Separators Separators { get; }
 
     /// <summary>
-    /// Retrieves the element at the specified index within the segment.
+    ///     Retrieves the element at the specified index within the segment.
     /// </summary>
     /// <param name="elementIndex">The index of the element to retrieve.</param>
     /// <returns>The element at the specified index.</returns>
     Element GetElement(int elementIndex);
 
     /// <summary>
-    /// Retrieves the element at the specified index, or returns null if the index is out of range.
+    ///     Retrieves the element at the specified index, or returns null if the index is out of range.
     /// </summary>
     /// <param name="elementIndex">The index of the element to retrieve.</param>
     /// <returns>The element at the specified index, or null if the index is out of range.</returns>
     Element? GetElementOrNull(int elementIndex);
 
     /// <summary>
-    /// Retrieves the value of a composite element at the specified data element index and composite element index.
+    ///     Retrieves the value of a composite element at the specified data element index and composite element index.
     /// </summary>
     /// <param name="dataElementIndex">The index of the data element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
@@ -45,8 +45,8 @@ public interface ISegment : IEdi, IParent
     string GetCompositeElement(int dataElementIndex, int compositeElementIndex);
 
     /// <summary>
-    /// Retrieves the value of a composite element at the specified data element index and
-    /// composite element index, or returns null if the composite element does not exist.
+    ///     Retrieves the value of a composite element at the specified data element index and
+    ///     composite element index, or returns null if the composite element does not exist.
     /// </summary>
     /// <param name="dataElementIndex">The index of the data element containing the composite element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
@@ -54,7 +54,7 @@ public interface ISegment : IEdi, IParent
     string? GetCompositeElementOrNull(int dataElementIndex, int compositeElementIndex);
 
     /// <summary>
-    /// Retrieves a data element based on the specified data element index.
+    ///     Retrieves a data element based on the specified data element index.
     /// </summary>
     /// <param name="dataElementIndex">The index of the data element to retrieve.</param>
     /// <returns>Returns the data element as a string.</returns>
@@ -64,7 +64,7 @@ public interface ISegment : IEdi, IParent
     }
 
     /// <summary>
-    /// Retrieves the data element at the specified index, or returns null if the data element does not exist.
+    ///     Retrieves the data element at the specified index, or returns null if the data element does not exist.
     /// </summary>
     /// <param name="dataElementIndex">The zero-based index of the data element to retrieve.</param>
     /// <returns>The data element at the specified index if it exists; otherwise, null.</returns>
@@ -74,7 +74,7 @@ public interface ISegment : IEdi, IParent
     }
 
     /// <summary>
-    /// Sets the data element at the specified index with the provided values.
+    ///     Sets the data element at the specified index with the provided values.
     /// </summary>
     /// <param name="elementIndex">The index of the element to be set.</param>
     /// <param name="values">The values to set for the data element.</param>
@@ -82,7 +82,7 @@ public interface ISegment : IEdi, IParent
     bool SetDataElement(int elementIndex, params string[] values);
 
     /// <summary>
-    /// Sets the value of a composite element within a data element at the specified indices.
+    ///     Sets the value of a composite element within a data element at the specified indices.
     /// </summary>
     /// <param name="dataElementIndex">The index of the data element that contains the composite element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element to set.</param>
@@ -91,14 +91,14 @@ public interface ISegment : IEdi, IParent
     bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value);
 
     /// <summary>
-    /// Checks if an element exists at the specified index.
+    ///     Checks if an element exists at the specified index.
     /// </summary>
     /// <param name="elementIndex">The index of the element to check for existence.</param>
     /// <returns>True if the element exists, otherwise false.</returns>
     bool ElementExists(int elementIndex);
 
     /// <summary>
-    /// Checks if a composite element exists at the specified data element and composite element indexes.
+    ///     Checks if a composite element exists at the specified data element and composite element indexes.
     /// </summary>
     /// <param name="dataElementIndex">The index of the data element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
@@ -107,15 +107,15 @@ public interface ISegment : IEdi, IParent
 }
 
 /// <summary>
-/// Interface defining the structure and behavior of an EDI segment, including parent loop, elements, and separators.
-/// Encapsulates methods for retrieving and manipulating both simple and composite elements.
+///     Interface defining the structure and behavior of an EDI segment, including parent loop, elements, and separators.
+///     Encapsulates methods for retrieving and manipulating both simple and composite elements.
 /// </summary>
 public interface ISegment<out TLoop>
     : ISegment
     where TLoop : ILoop
 {
     /// <summary>
-    /// The typed parent loop of the segment if any
+    ///     The typed parent loop of the segment if any
     /// </summary>
     new TLoop? Parent { get; }
 }

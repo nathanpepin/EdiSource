@@ -36,7 +36,7 @@ public sealed partial class Element(IEnumerable<string>? values = null) : IList<
     }
 
     /// <summary>
-    /// Create a segment equivalent from segment text
+    ///     Create a segment equivalent from segment text
     /// </summary>
     /// <param name="segmentText"></param>
     /// <param name="separators"></param>
@@ -55,7 +55,7 @@ public sealed partial class Element(IEnumerable<string>? values = null) : IList<
     }
 
     /// <summary>
-    /// Creates multiple segment equivalents from segment text
+    ///     Creates multiple segment equivalents from segment text
     /// </summary>
     /// <param name="segmentText"></param>
     /// <param name="separators"></param>

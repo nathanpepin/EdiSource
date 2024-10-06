@@ -17,43 +17,24 @@ public sealed class ValidationMessageCsvConverter : IValidationMessageCsvConvert
 
         csvBuilder.AppendLine(GetCsvHeader());
 
-        foreach (var message in result.ValidationMessages)
-        {
-            csvBuilder.AppendLine(ConvertToCsvRow(message));
-        }
+        foreach (var message in result.ValidationMessages) csvBuilder.AppendLine(ConvertToCsvRow(message));
 
         return csvBuilder.ToString();
     }
 
     private static string GetCsvHeader()
     {
-        return string.Join(",", [
-            "ValidationSeverity",
-            "Message",
-            "Subject",
-            "LoopLine",
-            "SegmentLine",
-            "Loop",
-            "Segment",
-            "DataElement",
-            "CompositeElement"
-        ]);
+        return string.Join(",", "ValidationSeverity", "Message", "Subject", "LoopLine", "SegmentLine", "Loop",
+            "Segment", "DataElement", "CompositeElement");
     }
 
     private static string ConvertToCsvRow(ValidationMessage message)
     {
-        return string.Join(",", new[]
-        {
-            EscapeCsvField(message.Severity.ToString()),
-            EscapeCsvField(message.Message),
-            EscapeCsvField(message.Subject),
-            EscapeCsvField(message.LoopLine?.ToString() ?? ""),
-            EscapeCsvField(message.SegmentLine?.ToString() ?? ""),
-            EscapeCsvField(message.Loop ?? ""),
-            EscapeCsvField(message.Segment ?? ""),
-            EscapeCsvField(message.DataElement?.ToString() ?? ""),
-            EscapeCsvField(message.CompositeElement?.ToString() ?? "")
-        });
+        return string.Join(",", EscapeCsvField(message.Severity.ToString()), EscapeCsvField(message.Message),
+            EscapeCsvField(message.Subject), EscapeCsvField(message.LoopLine?.ToString() ?? ""),
+            EscapeCsvField(message.SegmentLine?.ToString() ?? ""), EscapeCsvField(message.Loop ?? ""),
+            EscapeCsvField(message.Segment ?? ""), EscapeCsvField(message.DataElement?.ToString() ?? ""),
+            EscapeCsvField(message.CompositeElement?.ToString() ?? ""));
     }
 
     private static string EscapeCsvField(string field)

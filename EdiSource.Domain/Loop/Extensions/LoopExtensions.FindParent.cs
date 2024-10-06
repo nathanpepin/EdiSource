@@ -6,7 +6,10 @@ public static partial class LoopExtensions
 {
     /// Finds and returns the parent loop of the specified type for a given loop.
     /// <param name="loop">The loop for which the parent is to be found.</param>
-    /// <param name="avoidCircularReferences">Specifies whether to avoid circular references to prevent infinite loops. Defaults to true.</param>
+    /// <param name="avoidCircularReferences">
+    ///     Specifies whether to avoid circular references to prevent infinite loops.
+    ///     Defaults to true.
+    /// </param>
     /// <param name="maxIterations">The maximum number of iterations allowed when avoiding circular references.</param>
     /// <typeparam name="T">The type of the parent loop to be found.</typeparam>
     /// <return>The parent loop of the specified type if found; otherwise, the default value for the type.</return>

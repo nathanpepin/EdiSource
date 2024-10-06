@@ -5,7 +5,7 @@ namespace EdiSource.Domain.Loop.Extensions;
 public static partial class LoopExtensions
 {
     /// <summary>
-    /// Iterates over segments in the loop and applies a given action to each segment.
+    ///     Iterates over segments in the loop and applies a given action to each segment.
     /// </summary>
     /// <typeparam name="T">The type of loop, which must implement the ILoop interface.</typeparam>
     /// <param name="it">The loop instance on which to perform the operation.</param>

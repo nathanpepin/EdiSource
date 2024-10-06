@@ -3,7 +3,7 @@ using System.Text;
 namespace EdiSource.Domain.Helper.PrettyPrinting;
 
 /// <summary>
-/// Used for pretty printing loops and segments
+///     Used for pretty printing loops and segments
 /// </summary>
 public sealed class LoopPrinter : ILoopPrinter
 {

@@ -5,7 +5,7 @@ using EdiSource.Domain.Segments;
 namespace EdiSource.Domain.Identifiers;
 
 /// <summary>
-/// Used for creating segments dynamically
+///     Used for creating segments dynamically
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="TLoop"></typeparam>
@@ -14,7 +14,7 @@ public static class SegmentLoopFactory<T, TLoop>
     where TLoop : class, ILoop
 {
     /// <summary>
-    /// Creates a segment if it matches the criteria
+    ///     Creates a segment if it matches the criteria
     /// </summary>
     /// <param name="segments"></param>
     /// <param name="parent"></param>
@@ -31,7 +31,7 @@ public static class SegmentLoopFactory<T, TLoop>
     }
 
     /// <summary>
-    /// Creates a segment is it matches the criteria
+    ///     Creates a segment is it matches the criteria
     /// </summary>
     /// <param name="segmentReader"></param>
     /// <param name="parent"></param>

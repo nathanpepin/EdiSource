@@ -1,7 +1,7 @@
 namespace EdiSource.Domain.Validation.Data;
 
 /// <summary>
-/// A helper class that holds validation messages
+///     A helper class that holds validation messages
 /// </summary>
 public class EdiValidationResult
 {

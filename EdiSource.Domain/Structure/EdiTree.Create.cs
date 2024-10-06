@@ -1,6 +1,5 @@
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Loop.Extensions;
-using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Separator;
 
@@ -9,7 +8,7 @@ namespace EdiSource.Domain.Structure;
 public sealed partial class EdiTree
 {
     /// <summary>
-    /// Creates an EdiTree from the given loop with specified separators.
+    ///     Creates an EdiTree from the given loop with specified separators.
     /// </summary>
     /// <typeparam name="T">The type of the loop implementing ILoop interface.</typeparam>
     /// <param name="loop">The loop to be converted into an EdiTree.</param>

@@ -8,7 +8,7 @@ namespace EdiSource.Domain.Validation.Validator;
 public sealed class ValidateEdi : IValidateEdi
 {
     /// <summary>
-    /// Validates an IEdi item
+    ///     Validates an IEdi item
     /// </summary>
     /// <param name="ediItem"></param>
     /// <typeparam name="T"></typeparam>
@@ -60,15 +60,10 @@ public sealed class ValidateEdi : IValidateEdi
             case ILoop loop:
                 loopLine = segmentLine;
 
-                if (loop is IValidatable validatable3)
-                {
-                    validationResult.AddRange(validatable3.Validate());
-                }
+                if (loop is IValidatable validatable3) validationResult.AddRange(validatable3.Validate());
 
                 foreach (var item in loop.EdiItems.OfType<IEdi>())
-                {
                     YieldValidationMessages(item, validationResult, ref loopLine, ref segmentLine);
-                }
 
                 break;
             case IEnumerable<ILoop> loopList:
@@ -76,10 +71,7 @@ public sealed class ValidateEdi : IValidateEdi
                 {
                     loopLine = segmentLine;
 
-                    if (loop is IValidatable validatable4)
-                    {
-                        validationResult.AddRange(validatable4.Validate());
-                    }
+                    if (loop is IValidatable validatable4) validationResult.AddRange(validatable4.Validate());
 
                     YieldValidationMessages(loop, validationResult, ref loopLine, ref segmentLine);
                 }

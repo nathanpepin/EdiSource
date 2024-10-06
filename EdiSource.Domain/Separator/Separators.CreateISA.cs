@@ -3,7 +3,7 @@ namespace EdiSource.Domain.Separator;
 public partial class Separators
 {
     /// <summary>
-    /// Parses out the segments from an ISA stream
+    ///     Parses out the segments from an ISA stream
     /// </summary>
     /// <param name="streamReader"></param>
     /// <returns></returns>
@@ -27,7 +27,7 @@ public partial class Separators
     }
 
     /// <summary>
-    /// Parses out the segment values from an ISA text span
+    ///     Parses out the segment values from an ISA text span
     /// </summary>
     /// <param name="ediText"></param>
     /// <returns></returns>

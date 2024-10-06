@@ -1,7 +1,6 @@
 using EdiSource.Domain.Helper.PrettyPrinting;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Loop.Extensions;
-using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Separator;
 

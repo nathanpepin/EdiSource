@@ -8,21 +8,21 @@ namespace EdiSource.Domain.IO.EdiReader;
 public interface IEdiReader
 {
     /// <summary>
-    /// Converts text to a BasicEdi format. Must be in envelope form.
+    ///     Converts text to a BasicEdi format. Must be in envelope form.
     /// </summary>
     /// <param name="ediString"></param>
     /// <returns></returns>
     BasicEdi ReadBasicEdi(string ediString);
 
     /// <summary>
-    /// Converts a stream into BasicEdi format. Must be in envelope form.
+    ///     Converts a stream into BasicEdi format. Must be in envelope form.
     /// </summary>
     /// <param name="streamReader"></param>
     /// <returns></returns>
     BasicEdi ReadBasicEdi(StreamReader streamReader);
 
     /// <summary>
-    /// Converts a stream into BasicEdi format. Must be in envelope form.
+    ///     Converts a stream into BasicEdi format. Must be in envelope form.
     /// </summary>
     /// <param name="streamReader"></param>
     /// <param name="cancellationToken"></param>
@@ -30,7 +30,7 @@ public interface IEdiReader
     Task<BasicEdi> ReadBasicEdiAsync(StreamReader streamReader, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///  Converts text into a list of segments.
+    ///     Converts text into a list of segments.
     /// </summary>
     /// <param name="ediString"></param>
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
@@ -38,7 +38,7 @@ public interface IEdiReader
     IEnumerable<ISegment> ReadEdiSegments(string ediString, Separators? separators = null);
 
     /// <summary>
-    ///  Converts a stream into a list of segments.
+    ///     Converts a stream into a list of segments.
     /// </summary>
     /// <param name="streamReader"></param>
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
@@ -46,7 +46,7 @@ public interface IEdiReader
     IEnumerable<ISegment> ReadEdiSegments(StreamReader streamReader, Separators? separators = null);
 
     /// <summary>
-    ///  Converts a stream into a list of segments.
+    ///     Converts a stream into a list of segments.
     /// </summary>
     /// <param name="streamReader"></param>
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
@@ -56,7 +56,7 @@ public interface IEdiReader
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Converts contents from a stream into segments and pushes results to a channel
+    ///     Converts contents from a stream into segments and pushes results to a channel
     /// </summary>
     /// <param name="streamReader"></param>
     /// <param name="channelWriter"></param>

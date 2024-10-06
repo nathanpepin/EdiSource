@@ -5,7 +5,7 @@ namespace EdiSource.Domain.Loop.Extensions;
 public static partial class LoopExtensions
 {
     /// <summary>
-    /// Applies an action to matching elements of type T
+    ///     Applies an action to matching elements of type T
     /// </summary>
     /// <param name="it"></param>
     /// <param name="action"></param>
@@ -14,9 +14,6 @@ public static partial class LoopExtensions
     {
         var elements = it.FindEdiElement<T>();
 
-        foreach (var element in elements)
-        {
-            action(element);
-        }
+        foreach (var element in elements) action(element);
     }
 }

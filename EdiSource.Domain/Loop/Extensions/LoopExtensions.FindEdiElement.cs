@@ -5,7 +5,7 @@ namespace EdiSource.Domain.Loop.Extensions;
 public static partial class LoopExtensions
 {
     /// <summary>
-    /// Finds all EDI elements of a specified type within the given loop.
+    ///     Finds all EDI elements of a specified type within the given loop.
     /// </summary>
     /// <typeparam name="T">The type of EDI elements to find.</typeparam>
     /// <param name="it">The loop to search within.</param>

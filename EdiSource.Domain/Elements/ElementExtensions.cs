@@ -5,7 +5,7 @@ namespace EdiSource.Domain.Elements;
 public static class ElementExtensions
 {
     /// <summary>
-    /// Attempts to parse a date from an element
+    ///     Attempts to parse a date from an element
     /// </summary>
     /// <param name="it"></param>
     /// <param name="compositeElement"></param>
@@ -25,7 +25,7 @@ public static class ElementExtensions
     }
 
     /// <summary>
-    /// Attempts to parse an int from an element
+    ///     Attempts to parse an int from an element
     /// </summary>
     /// <param name="it"></param>
     /// <param name="compositeElement"></param>
@@ -44,7 +44,7 @@ public static class ElementExtensions
     }
 
     /// <summary>
-    /// Attempts to parse a decimal from an element
+    ///     Attempts to parse a decimal from an element
     /// </summary>
     /// <param name="it"></param>
     /// <param name="compositeElement"></param>
@@ -63,13 +63,15 @@ public static class ElementExtensions
     }
 
     /// <summary>
-    /// Attempts to parse a bool from an element
+    ///     Attempts to parse a bool from an element
     /// </summary>
     /// <param name="it"></param>
     /// <param name="trueValue">The value that is expected when true</param>
     /// <param name="compositeElement"></param>
-    /// <param name="implicitFalse">When true, if element is not trueValue then false.
-    /// When false, if element is not trueValue or falseValue then null</param>
+    /// <param name="implicitFalse">
+    ///     When true, if element is not trueValue then false.
+    ///     When false, if element is not trueValue or falseValue then null
+    /// </param>
     /// <param name="falseValue">The value expected when false</param>
     /// <returns></returns>
     public static bool? GetBool(this Element it, string trueValue, int compositeElement = 0, bool implicitFalse = true,
@@ -90,10 +92,9 @@ public static class ElementExtensions
     }
 
     /// <summary>
-    /// Attempts to parse an enum from an element via enum name.
-    ///
-    /// If tryAddUnderscore is true, the will also try an enum name with
-    /// an '_' prefix to enable enums that start with not allowed characters.
+    ///     Attempts to parse an enum from an element via enum name.
+    ///     If tryAddUnderscore is true, the will also try an enum name with
+    ///     an '_' prefix to enable enums that start with not allowed characters.
     /// </summary>
     /// <param name="it"></param>
     /// <param name="compositeElement"></param>
@@ -119,7 +120,7 @@ public static class ElementExtensions
     }
 
     /// <summary>
-    /// Attempts to parse a DateOnly from element.
+    ///     Attempts to parse a DateOnly from element.
     /// </summary>
     /// <param name="it"></param>
     /// <param name="compositeElement"></param>
@@ -139,7 +140,7 @@ public static class ElementExtensions
     }
 
     /// <summary>
-    /// Attempts to parse a TimeOnly from an element
+    ///     Attempts to parse a TimeOnly from an element
     /// </summary>
     /// <param name="it"></param>
     /// <param name="compositeElement"></param>

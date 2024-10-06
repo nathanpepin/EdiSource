@@ -5,9 +5,9 @@ namespace EdiSource.Domain.Loop.Extensions;
 public static partial class LoopExtensions
 {
     /// <summary>
-    /// Executes the specified actions on different types of EDI items within the loop.
+    ///     Executes the specified actions on different types of EDI items within the loop.
     /// </summary>
-    /// <typeparam name="T">The type of the loop, which must implement <see cref="ILoop"/>.</typeparam>
+    /// <typeparam name="T">The type of the loop, which must implement <see cref="ILoop" />.</typeparam>
     /// <param name="it">The instance of the loop on which the actions are to be executed.</param>
     /// <param name="segmentAction">An action to be performed on individual segments, or null.</param>
     /// <param name="segmentListAction">An action to be performed on lists of segments, or null.</param>

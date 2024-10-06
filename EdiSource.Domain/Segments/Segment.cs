@@ -6,10 +6,12 @@ using EdiSource.Domain.Separator;
 namespace EdiSource.Domain.Segments;
 
 /// <summary>
-/// A basic implementation of ISegment
+///     A basic implementation of ISegment
 /// </summary>
 public class Segment : ISegment
 {
+    private Separators? _separators;
+
     public Segment(ISegment segment, ILoop? parent = null)
     {
         Elements = segment.Elements;
@@ -31,8 +33,6 @@ public class Segment : ISegment
         Parent = parent;
     }
 
-    public ILoop? Parent { get; set; }
-
     public string this[int index]
     {
         get => this[index, 0];
@@ -44,6 +44,8 @@ public class Segment : ISegment
         get => GetCompositeElement(dataElement, compositeElement);
         set => SetCompositeElement(dataElement, compositeElement, value);
     }
+
+    public ILoop? Parent { get; set; }
 
     public IList<Element> Elements { get; set; }
 
@@ -103,8 +105,6 @@ public class Segment : ISegment
         return (ElementExists(dataElementIndex) &&
                 compositeElementIndex >= Elements[dataElementIndex].Count) || compositeElementIndex < 0;
     }
-
-    private Separators? _separators;
 
     public Separators Separators
     {
