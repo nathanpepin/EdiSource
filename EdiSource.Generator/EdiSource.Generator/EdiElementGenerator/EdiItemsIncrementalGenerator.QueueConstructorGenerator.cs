@@ -18,20 +18,20 @@ public partial class EdiItemsIncrementalGenerator
             var cw = new CodeWriter();
 
             cw.AppendLine("#nullable enable");
-            
+
             foreach (var @using in usings) cw.AddUsing(@using);
             cw.AppendLine();
-            
-            using (var ns = cw.StartNamespace(namespaceName))
+
+            using (cw.StartNamespace(namespaceName))
             {
-                using (var cs = cw.StartClass(className))
+                using (cw.StartClass(className))
                 {
                     cw.AppendLine($"public {className}(IEnumerable<ISegment> segments, TransactionSet? parent = null)");
                     cw.AppendLine(": this(new Queue<ISegment>(segments), parent)");
                     cw.AppendLine("{}");
                     cw.AppendLine();
 
-                    using (var con = cw.StartConstructor(className,
+                    using (cw.StartConstructor(className,
                                arguments: ["Queue<ISegment> segments", $"{parent}? parent = null"]))
                     {
                         if (className != parent)
@@ -81,7 +81,7 @@ public partial class EdiItemsIncrementalGenerator
         private static void GenerateBody(string className,
             ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
         {
-            using (_ = cw.AddWhile("segments.Count > 0"))
+            using (cw.AddWhile("segments.Count > 0"))
             {
                 foreach (var (name, attribute, property) in items)
                 {
@@ -89,7 +89,7 @@ public partial class EdiItemsIncrementalGenerator
                         ? named[0]
                         : property.Type;
 
-                    using var i = cw.AddIf($"ISegmentIdentifier<{typeName}>.Matches(segments)");
+                    using var _ = cw.AddIf($"ISegmentIdentifier<{typeName}>.Matches(segments)");
 
                     cw.AppendLine(attribute switch
                     {

@@ -24,7 +24,7 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
             static (spc, source) => Execute(source.Item1, source.Right, spc));
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<GeneratorItem> classes,
+    private static void Execute(Compilation compilation, ImmutableArray<EdiItem> classes,
         SourceProductionContext context)
     {
         foreach (var generatorItem in classes)
@@ -77,7 +77,7 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
                 SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
 
             var channelConstructorSourceCode =
-                ChannelConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, generatorItem);
+                ChannelConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
             context.AddSource($"{className}.ChannelConstructor.g.cs",
                 SourceText.From(channelConstructorSourceCode, Encoding.UTF8));
         }

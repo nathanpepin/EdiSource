@@ -21,9 +21,9 @@ public partial class EdiItemsIncrementalGenerator
             foreach (var @using in usings) cw.AddUsing(@using);
 
             cw.AppendLine();
-            using (var ns = cw.StartNamespace(namespaceName))
+            using (cw.StartNamespace(namespaceName))
             {
-                using (var cl = cw.StartClass(className))
+                using (cw.StartClass(className))
                 {
                     var names = orderedEdiItems.Select(x => x.Name).ToArray();
                     cw.AddCalcProperty("EdiItems", "List<IEdi?>",

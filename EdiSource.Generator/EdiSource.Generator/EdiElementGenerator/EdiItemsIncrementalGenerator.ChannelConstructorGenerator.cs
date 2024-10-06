@@ -13,34 +13,34 @@ public partial class EdiItemsIncrementalGenerator
         public static string Generate(string className, string namespaceName,
             HashSet<string> usings,
             ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> orderedEdiItems,
-            GeneratorItem generatorItem)
+            string parent)
         {
             var cw = new CodeWriter();
 
             cw.AppendLine("#nullable enable");
-            
+
             cw.AddUsing("System.Diagnostics.CodeAnalysis");
             cw.AddUsing("System.Threading.Channels");
             foreach (var @using in usings) cw.AddUsing(@using);
 
             cw.AppendLine();
-            using (var ns = cw.StartNamespace(namespaceName))
+            using (cw.StartNamespace(namespaceName))
             {
-                using (var cs = cw.StartClass(className))
+                using (cw.StartClass(className))
                 {
                     cw.AppendLine("""
                                   [SuppressMessage("CodeQuality", "IDE0060:Remove unused parameter", Justification = "Empty constructor is required")]
                                   """);
-                    using (var con = cw.StartConstructor(className))
+                    using (cw.StartConstructor(className))
                     {
                     }
 
                     cw.AppendLine();
 
-                    using (var con = cw.StartConstructor(className,
+                    using (cw.StartConstructor(className,
                                arguments:
                                [
-                                   "ChannelReader<ISegment> segmentReader", $"{generatorItem.Parent}? parent = null"
+                                   "ChannelReader<ISegment> segmentReader", $"{parent}? parent = null"
                                ]))
                     {
                         cw.AppendLine("var loop = InitializeAsync(segmentReader, parent).GetAwaiter().GetResult();");
@@ -49,20 +49,20 @@ public partial class EdiItemsIncrementalGenerator
 
                     cw.AppendLine();
 
-                    using (var con = cw.AppendBlock(
+                    using (cw.AppendBlock(
                                $"public static Task<{className}> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)"))
                     {
                         using (var _ = cw.AddIf("parent is null"))
                         {
-                            cw.AppendLine($"return InitializeAsync(segmentReader, ({generatorItem.Parent}?) null);");
+                            cw.AppendLine($"return InitializeAsync(segmentReader, ({parent}?) null);");
                         }
 
                         cw.AppendLine();
 
-                        using (var _ = cw.AddIf($"parent is not {generatorItem.Parent} typedParent"))
+                        using (cw.AddIf($"parent is not {parent} typedParent"))
                         {
                             cw.AppendLine(
-                                $"""throw new ArgumentException($"Parent must be of type {generatorItem.Parent}");""");
+                                $"""throw new ArgumentException($"Parent must be of type {parent}");""");
                         }
 
                         cw.AppendLine();
@@ -71,13 +71,13 @@ public partial class EdiItemsIncrementalGenerator
                     }
 
                     cw.AppendLine();
-                    using (var con = cw.AppendBlock(
-                               $"public static async Task<{className}> InitializeAsync(ChannelReader<ISegment> segmentReader, {generatorItem.Parent}? parent)"))
+                    using (cw.AppendBlock(
+                               $"public static async Task<{className}> InitializeAsync(ChannelReader<ISegment> segmentReader, {parent}? parent)"))
                     {
                         cw.AppendLine($"var loop = new {className}();");
                         cw.AppendLine();
 
-                        if (className != generatorItem.Parent)
+                        if (className != parent)
                         {
                             cw.AppendLine("loop.Parent = parent;");
                             cw.AppendLine();
@@ -127,7 +127,7 @@ public partial class EdiItemsIncrementalGenerator
         private static void GenerateBody(string className,
             ImmutableArray<(string Name, string Attribute, IPropertySymbol Property)> items, CodeWriter cw)
         {
-            using (_ = cw.AddWhile("await segmentReader.WaitToReadAsync()"))
+            using (cw.AddWhile("await segmentReader.WaitToReadAsync()"))
             {
                 foreach (var (name, attribute, property) in items)
                 {
@@ -135,7 +135,7 @@ public partial class EdiItemsIncrementalGenerator
                         ? named[0]
                         : property.Type;
 
-                    using var i = cw.AddIf($"await ISegmentIdentifier<{typeName}>.MatchesAsync(segmentReader)");
+                    using var _ = cw.AddIf($"await ISegmentIdentifier<{typeName}>.MatchesAsync(segmentReader)");
 
                     cw.AppendLine(attribute switch
                     {
@@ -160,40 +160,3 @@ public partial class EdiItemsIncrementalGenerator
         }
     }
 }
-
-/*
-
-
-       private async Task InitializeAsync(ChannelReader<ISegment> segmentReader, TransactionSet? parent)
-       {
-           ST = await SegmentLoopFactory<TS_ST, TransactionSet>.CreateAsync(segmentReader, this);
-
-           while (await segmentReader.WaitToReadAsync())
-           {
-               if (await ISegmentIdentifier<TS_DTP>.MatchesAsync(segmentReader))
-               {
-                   DTP = await SegmentLoopFactory<TS_DTP, TransactionSet>.CreateAsync(segmentReader, this);
-                   continue;
-               }
-               if (await ISegmentIdentifier<TS_REF>.MatchesAsync(segmentReader))
-               {
-                   REFs.Add(await SegmentLoopFactory<TS_REF, TransactionSet>.CreateAsync(segmentReader, this));
-                   continue;
-               }
-               if (await ISegmentIdentifier<Loop2000>.MatchesAsync(segmentReader))
-               {
-                   Loop2000 = new Loop2000(segmentReader, this);
-                   continue;
-               }
-               if (await ISegmentIdentifier<Loop2100>.MatchesAsync(segmentReader))
-               {
-                   Loop2100s.Add(new Loop2100(segmentReader, this));
-                   continue;
-               }
-               break;
-           }
-
-           SE = await SegmentLoopFactory<TS_SE, TransactionSet>.CreateAsync(segmentReader, this);
-       }
-   }
-   */

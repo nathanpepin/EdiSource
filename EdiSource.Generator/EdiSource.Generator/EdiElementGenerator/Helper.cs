@@ -49,7 +49,7 @@ public static class Helper
         return ediAttribute?.AttributeClass?.Name ?? string.Empty;
     }
 
-    public static GeneratorItem PredicateOnClassAttributes(GeneratorSyntaxContext context, ImmutableArray<string> items)
+    public static EdiItem PredicateOnClassAttributes(GeneratorSyntaxContext context, ImmutableArray<string> items)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
 
@@ -62,7 +62,7 @@ public static class Helper
         var self = typeArgumentListSyntaxes[0].Arguments[1].ToString();
         var id = typeArgumentListSyntaxes[0].Arguments[2].ToString();
 
-        return new GeneratorItem(classDeclarationSyntax, parent, self, id);
+        return new EdiItem(classDeclarationSyntax, parent, self, id);
     }
 
     public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId)
