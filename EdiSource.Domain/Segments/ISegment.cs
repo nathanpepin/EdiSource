@@ -7,6 +7,7 @@ namespace EdiSource.Domain.Segments;
 
 public interface ISegment : IEdi
 {
+    ILoop? Parent { get; }
     IList<Element> Elements { get; set; }
     Separators Separators { get; }
     Element GetElement(int elementIndex);
@@ -34,5 +35,5 @@ public interface ISegment<out TLoop>
     : ISegment
     where TLoop : ILoop
 {
-    TLoop? Parent { get; }
+    new TLoop? Parent { get; }
 }

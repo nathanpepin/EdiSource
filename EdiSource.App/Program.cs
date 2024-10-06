@@ -1,6 +1,8 @@
 ﻿using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
+using EdiSource.Domain.Validation;
+using EdiSource.Domain.Validation.Validator;
 using EdiSource.Loops;
 
 var input =
@@ -33,5 +35,10 @@ var input =
 
 var ts = await new EdiParser<TransactionSet>().ParseEdi(input);
 
-Console.WriteLine(
-new EdiSerializer().WriteToPrettyString(ts));
+var v = ts.Validate();
+
+foreach (var i in v.ValidationMessages)
+    Console.WriteLine(i);
+//
+// Console.WriteLine(
+// new EdiSerializer().WriteToPrettyString(ts));
