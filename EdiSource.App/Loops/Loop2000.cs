@@ -8,9 +8,10 @@ using EdiSource.Segments;
 namespace EdiSource.Loops;
 
 [LoopGenerator<TransactionSet, Loop2000, Loop2000_INS>]
-public partial class Loop2000: IValidatable
+public partial class Loop2000 : IValidatable
 {
     [SegmentHeader] public Loop2000_INS INS { get; set; }
+
     public IEnumerable<ValidationMessage> Validate()
     {
         yield return ValidationFactory.Create(this, ValidationSeverity.Warning, "Nof");

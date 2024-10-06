@@ -2,6 +2,7 @@ using System.Text;
 using EdiSource.Domain.Helper;
 using EdiSource.Domain.Helper.PrettyPrinting;
 using EdiSource.Domain.Loop;
+using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Separator;
 
