@@ -43,6 +43,6 @@ public class EdiItemsIncrementalGeneratorTests
     [Fact]
     public void TestA()
     {
-        TestHelper.Verify<EdiItemsIncrementalGenerator>(Source);
+        TestHelperFunctions.Verify<EdiItemsIncrementalGenerator>(Source);
     }
 }

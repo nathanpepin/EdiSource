@@ -26,6 +26,6 @@ public class SegmentGeneratorTests
     [Fact]
     public void TestA()
     {
-        TestHelper.Verify<SegmentGeneratorIncrementalGenerator>(Source);
+        TestHelperFunctions.Verify<SegmentGeneratorIncrementalGenerator>(Source);
     }
 }

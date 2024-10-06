@@ -6,7 +6,7 @@ using VerifyXunit;
 
 namespace EdiSource.Generator.Tests;
 
-public static class TestHelper
+public static class TestHelperFunctions
 {
     public static Task Verify<T>(string source) where T : IIncrementalGenerator, new()
     {

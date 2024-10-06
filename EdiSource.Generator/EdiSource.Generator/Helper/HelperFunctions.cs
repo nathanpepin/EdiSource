@@ -1,10 +1,11 @@
 using System.Collections.Immutable;
+using EdiSource.Generator.EdiElementGenerator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace EdiSource.Generator.EdiElementGenerator;
+namespace EdiSource.Generator.Helper;
 
-public static class Helper
+public static class HelperFunctions
 {
     public static bool IsEdiAttribute(string? attributeName)
     {
@@ -101,7 +102,6 @@ public static class Helper
         }
 
         return null;
-        ;
     }
 
     public static bool HasAttribute(ClassDeclarationSyntax classDeclaration, string[] attributeNames)
