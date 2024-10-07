@@ -35,7 +35,6 @@ public partial class SegmentGenerator : IIncrementalGenerator
 
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
             var className = classSymbol.Name;
-            var properties = classSymbol.GetMembers().OfType<IPropertySymbol>();
 
             var classUsings = GetUsingStatements(classDeclaration)
                 .Select(x => x.Name?.ToString())
