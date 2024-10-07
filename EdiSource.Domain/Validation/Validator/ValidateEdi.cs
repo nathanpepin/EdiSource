@@ -40,16 +40,9 @@ public sealed class ValidateEdi : IValidateEdi
                     validationResult.AddRange(updateSegmentLine);
                 }
 
-
-                break;
-            case IEnumerable<ISegment> segmentList:
-                foreach (var segment in segmentList)
+                if (segment is ISourceGeneratorValidatable sgv)
                 {
-                    segmentLine++;
-
-                    if (segment is not IValidatable validatable2) continue;
-
-                    var updateSegmentLine = validatable2
+                    var updateSegmentLine = sgv
                         .Validate()
                         .UpdateSegmentLine(segmentLine)
                         .UpdateLoopLine(loopLine);
@@ -57,10 +50,39 @@ public sealed class ValidateEdi : IValidateEdi
                 }
 
                 break;
+            case IEnumerable<ISegment> segmentList:
+                foreach (var segment in segmentList)
+                {
+                    segmentLine++;
+
+                    if (segment is IValidatable validatable2)
+                    {
+                        var updateSegmentLine = validatable2
+                            .Validate()
+                            .UpdateSegmentLine(segmentLine)
+                            .UpdateLoopLine(loopLine);
+                        validationResult.AddRange(updateSegmentLine);
+                    }
+
+                    if (segment is ISourceGeneratorValidatable sgv2)
+                    {
+                        var updateSegmentLine = sgv2
+                            .Validate()
+                            .UpdateSegmentLine(segmentLine)
+                            .UpdateLoopLine(loopLine);
+                        validationResult.AddRange(updateSegmentLine);
+                    }
+                }
+
+                break;
             case ILoop loop:
                 loopLine = segmentLine;
 
-                if (loop is IValidatable validatable3) validationResult.AddRange(validatable3.Validate());
+                if (loop is IValidatable validatable3)
+                    validationResult.AddRange(validatable3.Validate());
+
+                if (loop is ISourceGeneratorValidatable sgv3)
+                    validationResult.AddRange(sgv3.Validate());
 
                 foreach (var item in loop.EdiItems.OfType<IEdi>())
                     YieldValidationMessages(item, validationResult, ref loopLine, ref segmentLine);
@@ -71,7 +93,11 @@ public sealed class ValidateEdi : IValidateEdi
                 {
                     loopLine = segmentLine;
 
-                    if (loop is IValidatable validatable4) validationResult.AddRange(validatable4.Validate());
+                    if (loop is IValidatable validatable4)
+                        validationResult.AddRange(validatable4.Validate());
+
+                    if (loop is ISourceGeneratorValidatable sgv4)
+                        validationResult.AddRange(sgv4.Validate());
 
                     YieldValidationMessages(loop, validationResult, ref loopLine, ref segmentLine);
                 }
