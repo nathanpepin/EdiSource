@@ -1,5 +1,5 @@
 using System.Collections.Immutable;
-using EdiSource.Generator.EdiElementGenerator;
+using EdiSource.Generator.LoopGen.Data;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -48,7 +48,7 @@ public static class HelperFunctions
         return ediAttribute?.AttributeClass?.Name ?? string.Empty;
     }
 
-    public static EdiItem PredicateOnClassAttributes(GeneratorSyntaxContext context, ImmutableArray<string> items)
+    public static LoopMeta PredicateOnClassAttributes(GeneratorSyntaxContext context, ImmutableArray<string> items)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
 
@@ -61,7 +61,7 @@ public static class HelperFunctions
         var self = typeArgumentListSyntaxes[0].Arguments[1].ToString();
         var id = typeArgumentListSyntaxes[0].Arguments[2].ToString();
 
-        return new EdiItem(classDeclarationSyntax, parent, self, id);
+        return new LoopMeta(classDeclarationSyntax, parent, self, id);
     }
 
     public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId)

@@ -1,14 +1,23 @@
-using System.Threading.Tasks;
+using System;
 using EdiSource.Domain.Identifiers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using VerifyXunit;
+using VerifyTests;
 
-namespace EdiSource.Generator.Tests;
+namespace EdiSource.Generator.Tests.Utils;
 
 public static class TestHelperFunctions
 {
-    public static Task Verify<T>(string source) where T : IIncrementalGenerator, new()
+    public static readonly Lazy<VerifySettings> Settings = new(() =>
+    {
+        var settings = new VerifySettings();
+
+        settings.DisableDiff();
+
+        return settings;
+    });
+
+    public static GeneratorDriver Verify<T>(string source) where T : IIncrementalGenerator, new()
     {
         var generator = new T();
 
@@ -21,8 +30,6 @@ public static class TestHelperFunctions
                 MetadataReference.CreateFromFile(typeof(IEdi).Assembly.Location)
             ]);
 
-        driver = driver.RunGenerators(compilation);
-
-        return Verifier.Verify(driver);
+        return driver.RunGenerators(compilation);
     }
 }

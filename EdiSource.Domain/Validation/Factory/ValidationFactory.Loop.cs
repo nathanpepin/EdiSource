@@ -11,7 +11,7 @@ public static partial class ValidationFactory
         return new ValidationMessage
         {
             Severity = validationSeverity,
-            Subject = "Loop",
+            Subject = ValidationSubject.Loop,
             Message = message,
             Loop = loop.GetType().Name
         };

@@ -1,10 +1,12 @@
-﻿using EdiSource.Domain;
+﻿using Dumpify;
+using EdiSource.Domain;
 using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Validation;
 using EdiSource.Domain.Validation.Validator;
 using EdiSource.Loops;
+using Spectre.Console;
 
 var input =
     """
@@ -18,27 +20,8 @@ var input =
     SE*123~
     """;
 
-//
-// var segments = new EdiReader()
-//     .ReadEdiSegments(input, Separators.DefaultSeparators)
-//     .ToArray();
-
-// using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(input));
-// using var streamReader = new StreamReader(memoryStream);
-//
-// var channel = Channel.CreateUnbounded<ISegment>();
-//
-// await Task.WhenAll(
-//     new EdiReader().ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer),
-//     TransactionSet.InitializeAsync(channel.Reader, null));
-
-// var ts = new TransactionSet(new Queue<ISegment>(segments));
-
 var ts = await new EdiParser<TransactionSet>().ParseEdi(input);
 
-EdiCommon.Validate(ts);
+var vr = EdiCommon.Validate(ts);
 
-
-//
-// Console.WriteLine(
-// new EdiSerializer().WriteToPrettyString(ts));
+vr.DumpConsole();

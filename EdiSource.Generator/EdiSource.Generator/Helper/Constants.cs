@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace EdiSource.Generator;
+namespace EdiSource.Generator.Helper;
 
 public static class Constants
 {

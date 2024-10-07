@@ -4,10 +4,10 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace EdiSource.Generator.SegmentGenerator;
+namespace EdiSource.Generator.SegmentGen;
 
 [Generator]
-public partial class SegmentGeneratorIncrementalGenerator : IIncrementalGenerator
+public partial class SegmentGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

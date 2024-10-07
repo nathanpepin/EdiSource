@@ -2,9 +2,9 @@ using System.Collections.Immutable;
 using EdiSource.Generator.Helper;
 using Microsoft.CodeAnalysis;
 
-namespace EdiSource.Generator.EdiElementGenerator;
+namespace EdiSource.Generator.LoopGen;
 
-public partial class EdiItemsIncrementalGenerator
+public partial class LoopGenerator
 {
     public static class QueueConstructorGenerator
     {
@@ -91,23 +91,25 @@ public partial class EdiItemsIncrementalGenerator
 
                     cw.AppendLine(attribute switch
                     {
-                        SegmentAttribute or Segment =>
+                        SegmentAttribute or Constants.Segment =>
                             $"{name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);",
                         SegmentListAttribute or SegmentList =>
                             $"{name}.Add(SegmentLoopFactory<{typeName}, {className}>.Create(segments, this));",
-                        LoopAttribute or Loop => $"{name} = new {property.Type}(segments, this);",
+                        LoopAttribute or Constants.Loop => $"{name} = new {property.Type}(segments, this);",
                         LoopListAttribute or LoopList => $"{name}.Add(new {typeName}(segments, this));",
                         OptionalSegmentFooter or OptionalSegmentFooterAttribute =>
                             $"""
                              {name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);
-                             break;
                              """,
                         _ => string.Empty
                     });
 
-                    cw.AppendLine("continue;");
+                    cw.AppendLine(attribute is OptionalSegmentFooter or OptionalSegmentFooterAttribute
+                        ? "break;"
+                        : "continue;");
                 }
 
+                cw.AppendLine();
                 cw.AppendLine("break;");
             }
         }

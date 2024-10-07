@@ -1,8 +1,8 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace EdiSource.Generator.EdiElementGenerator;
+namespace EdiSource.Generator.LoopGen.Data;
 
-public record struct EdiItem(
+public record struct LoopMeta(
     ClassDeclarationSyntax ClassDeclarationSyntax,
     string Parent,
     string Self,

@@ -31,7 +31,7 @@ public sealed class ValidationMessageCsvConverter : IValidationMessageCsvConvert
     private static string ConvertToCsvRow(ValidationMessage message)
     {
         return string.Join(",", EscapeCsvField(message.Severity.ToString()), EscapeCsvField(message.Message),
-            EscapeCsvField(message.Subject), EscapeCsvField(message.LoopLine?.ToString() ?? ""),
+            EscapeCsvField(message.Subject.ToEnumString()), EscapeCsvField(message.LoopLine?.ToString() ?? ""),
             EscapeCsvField(message.SegmentLine?.ToString() ?? ""), EscapeCsvField(message.Loop ?? ""),
             EscapeCsvField(message.Segment ?? ""), EscapeCsvField(message.DataElement?.ToString() ?? ""),
             EscapeCsvField(message.CompositeElement?.ToString() ?? ""));

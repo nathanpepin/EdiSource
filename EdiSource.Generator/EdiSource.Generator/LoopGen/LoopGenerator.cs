@@ -1,12 +1,13 @@
 using System.Collections.Immutable;
 using System.Text;
+using EdiSource.Generator.LoopGen.Data;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
-namespace EdiSource.Generator.EdiElementGenerator;
+namespace EdiSource.Generator.LoopGen;
 
 [Generator]
-public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
+public partial class LoopGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -22,7 +23,7 @@ public partial class EdiItemsIncrementalGenerator : IIncrementalGenerator
             static (spc, source) => Execute(source.Item1, source.Right, spc));
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<EdiItem> classes,
+    private static void Execute(Compilation compilation, ImmutableArray<LoopMeta> classes,
         SourceProductionContext context)
     {
         foreach (var generatorItem in classes)

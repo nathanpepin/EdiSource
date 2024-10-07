@@ -1,8 +1,8 @@
 using EdiSource.Generator.Helper;
 
-namespace EdiSource.Generator.SegmentGenerator;
+namespace EdiSource.Generator.SegmentGen;
 
-public partial class SegmentGeneratorIncrementalGenerator
+public partial class SegmentGenerator
 {
     private static string Generate(string className, string namespaceName, HashSet<string> usings, string parent,
         string primaryId, string secondaryId)

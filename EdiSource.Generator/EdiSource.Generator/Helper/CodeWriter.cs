@@ -144,6 +144,11 @@ public sealed class CodeWriter
     public override string ToString()
     {
         return _builder.ToString();
+        // return CSharpSyntaxTree
+        //     .ParseText(_builder.ToString())
+        //     .GetRoot()
+        //     .NormalizeWhitespace()
+        //     .ToFullString();
     }
 
     private class IndentationBlock : IDisposable

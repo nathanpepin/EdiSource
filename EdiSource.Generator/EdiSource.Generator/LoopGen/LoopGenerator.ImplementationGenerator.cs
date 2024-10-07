@@ -1,8 +1,8 @@
 using EdiSource.Generator.Helper;
 
-namespace EdiSource.Generator.EdiElementGenerator;
+namespace EdiSource.Generator.LoopGen;
 
-public partial class EdiItemsIncrementalGenerator
+public partial class LoopGenerator
 {
     public static class ImplementationGenerator
     {

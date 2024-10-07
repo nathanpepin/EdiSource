@@ -17,7 +17,7 @@ public sealed class ValidationMessage
     /// <summary>
     ///     The entity that produced the validation. Typically: "Segment", or "Loop".
     /// </summary>
-    public string Subject { get; set; } = "Unknown";
+    public ValidationSubject Subject { get; set; } = ValidationSubject.Unknown;
 
     /// <summary>
     ///     The loop line of the element in question

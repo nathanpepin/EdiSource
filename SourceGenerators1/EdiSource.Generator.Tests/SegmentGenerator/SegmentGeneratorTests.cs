@@ -1,7 +1,9 @@
-using EdiSource.Generator.SegmentGenerator;
+using System.Threading.Tasks;
+using EdiSource.Generator.Tests.Utils;
+using VerifyXunit;
 using Xunit;
 
-namespace EdiSource.Generator.Tests;
+namespace EdiSource.Generator.Tests.SegmentGenerator;
 
 public class SegmentGeneratorTests
 {
@@ -24,8 +26,9 @@ public class SegmentGeneratorTests
         """;
 
     [Fact]
-    public void TestA()
+    public Task TestA()
     {
-        TestHelperFunctions.Verify<SegmentGeneratorIncrementalGenerator>(Source);
+        var driver = TestHelperFunctions.Verify<SegmentGen.SegmentGenerator>(Source);
+        return Verifier.Verify(driver);
     }
 }
