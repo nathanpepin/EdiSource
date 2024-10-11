@@ -22,6 +22,9 @@ var input =
 
 var ts = await new EdiParser<TransactionSet>().ParseEdi(input);
 
+var j =
+    ts.DTP.GetCompositeElementOrNull(0, 3) is { Length: > 0 and < 10 };
+
 var vr = EdiCommon.Validate(ts);
 
 vr.DumpConsole();

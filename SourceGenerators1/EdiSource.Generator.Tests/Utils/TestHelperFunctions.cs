@@ -27,6 +27,7 @@ public static class TestHelperFunctions
             [CSharpSyntaxTree.ParseText(source)],
             [
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location), 
                 MetadataReference.CreateFromFile(typeof(IEdi).Assembly.Location)
             ]);
 

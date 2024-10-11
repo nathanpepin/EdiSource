@@ -16,7 +16,10 @@ public static partial class ValidationFactory
             Loop = segment.Parent?.GetType().Name,
             Segment = segment.ToString(),
             DataElement = dataElement,
-            CompositeElement = compositeElement
+            CompositeElement = compositeElement,
+            Value = dataElement is { } de && compositeElement is { } ce
+                ? segment.GetCompositeElementOrNull(de, ce)
+                : null
         };
     }
 

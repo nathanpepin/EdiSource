@@ -34,7 +34,9 @@ public static class Constants
         "EdiSource.Domain.Identifiers",
         "EdiSource.Domain.SourceGeneration",
         "EdiSource.Domain.Loop",
-        "EdiSource.Loops",
+        "EdiSource.Domain.Validation.SourceGeneration",
+        "EdiSource.Domain.Validation.Data",
+        "EdiSource.Domain.Validation.SourceG",
         "System.Linq",
         "System.Collections.Generic",
         "System"
