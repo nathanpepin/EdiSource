@@ -3,5 +3,5 @@ using EdiSource.Loops;
 
 namespace EdiSource.Segments;
 
-[SegmentGenerator<TransactionSet>("REF", null)]
+[SegmentGenerator<_834>("REF", null)]
 public partial class TS_REF;

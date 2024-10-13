@@ -1,4 +1,6 @@
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace EdiSource.Generator.Helper;
 
@@ -11,6 +13,11 @@ public sealed class CodeWriter
     private readonly Stack<string> _disposeStack = new(0);
     private int _indentLevel;
 
+    public void Append(ReadOnlySpan<char> span)
+    {
+        _builder.Append(span);
+    }
+    
     public void AppendLine(string line = "")
     {
         if (!string.IsNullOrEmpty(line))
@@ -143,12 +150,12 @@ public sealed class CodeWriter
 
     public override string ToString()
     {
-        return _builder.ToString();
-        // return CSharpSyntaxTree
-        //     .ParseText(_builder.ToString())
-        //     .GetRoot()
-        //     .NormalizeWhitespace()
-        //     .ToFullString();
+        // return _builder.ToString();
+        return CSharpSyntaxTree
+            .ParseText(_builder.ToString())
+            .GetRoot()
+            .NormalizeWhitespace()
+            .ToFullString();
     }
 
     private class IndentationBlock : IDisposable

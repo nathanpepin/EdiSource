@@ -10,5 +10,5 @@ public interface ISourceGeneratorValidatable
     /// Validates an IEdi item
     /// </summary>
     /// <returns></returns>
-    IEnumerable<ValidationMessage> Validate();
+    List<IIndirectValidatable> SourceGenValidations { get; }
 }

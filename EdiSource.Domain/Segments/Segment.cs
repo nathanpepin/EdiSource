@@ -73,9 +73,17 @@ public class Segment : ISegment
             : null;
     }
 
-    public bool SetDataElement(int elementIndex, params string[] values)
+    public bool SetDataElement(int elementIndex, bool create = true, params string[] values)
     {
-        if (!ElementExists(elementIndex)) return false;
+        if (create && !ElementExists(elementIndex))
+        {
+            while (elementIndex >= Elements.Count)
+                Elements.Add([]);
+        }
+        else if (!ElementExists(elementIndex))
+        {
+            return false;
+        }
 
         var element = GetElement(elementIndex);
 
@@ -87,9 +95,29 @@ public class Segment : ISegment
         return true;
     }
 
-    public bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value)
+    public bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value, bool create = true)
     {
-        if (!CompositeElementExists(dataElementIndex, compositeElementIndex)) return false;
+        if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
+        {
+            while (dataElementIndex >= Elements.Count)
+            {
+                if (dataElementIndex == Elements.Count - 1)
+                {
+                    for (var i = 0; i < compositeElementIndex; i++)
+                    {
+                        Elements[dataElementIndex].Add(string.Empty);
+                    }
+                }
+                else
+                {
+                    Elements.Add([string.Empty]);
+                }
+            }
+        }
+        else if (!CompositeElementExists(dataElementIndex, compositeElementIndex))
+        {
+            return false;
+        }
 
         Elements[dataElementIndex][compositeElementIndex] = value;
         return true;
@@ -97,7 +125,7 @@ public class Segment : ISegment
 
     public bool ElementExists(int elementIndex)
     {
-        return elementIndex >= Elements.Count || elementIndex < 0;
+        return elementIndex < Elements.Count && elementIndex >= 0;
     }
 
     public bool CompositeElementExists(int dataElementIndex, int compositeElementIndex)

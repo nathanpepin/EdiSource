@@ -1,3 +1,4 @@
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.Factory;
@@ -5,22 +6,26 @@ using EdiSource.Domain.Validation.Factory;
 namespace EdiSource.Domain.Validation.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class ElementLengthAttribute(int dataElement, int compositeElement, int min, int max)
+public sealed class ElementLengthAttribute(ValidationSeverity validationSeverity, int dataElement, int compositeElement, int min, int max)
     : Attribute, IIndirectValidatable
 {
-    public ElementLengthAttribute(int dataElement, int compositeElement, int length)
-        : this(dataElement, compositeElement, length, length)
+    public ElementLengthAttribute(ValidationSeverity validationSeverity, int dataElement, int compositeElement, int length)
+        : this(validationSeverity, dataElement, compositeElement, length, length)
     {
     }
 
-    public IEnumerable<ValidationMessage> Validate(ISegment segment)
+    public IEnumerable<ValidationMessage> Validate(IEdi element)
     {
+        if (element is not Segment segment)
+            throw new ArgumentException("Element must be a segment", nameof(element));
+
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
             && value.Length < min
             && value.Length > max)
         {
-            yield return ValidationFactory.CreateWarning(
+            yield return ValidationFactory.Create(
                 segment,
+                validationSeverity,
                 $"Element {dataElement} in composite {compositeElement} has length {value.Length} which is not between {min} and {max}",
                 dataElement,
                 compositeElement);

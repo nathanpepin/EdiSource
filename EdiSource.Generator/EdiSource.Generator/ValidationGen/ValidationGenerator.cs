@@ -3,6 +3,7 @@ using System.Text;
 using EdiSource.Generator.Helper;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
 
@@ -11,6 +12,13 @@ namespace EdiSource.Generator.ValidationGen;
 [Generator(LanguageNames.CSharp)]
 public class ValidationGenerator : IIncrementalGenerator
 {
+    private static readonly DiagnosticDescriptor GenericError = new DiagnosticDescriptor(id: "HS1000",
+        title: "Failed to generate validation code",
+        messageFormat: "Couldn't autogenerate validation code for class {0} due to reason {1}",
+        category: "Honlsoft.DependencyInjection.SourceGenerators",
+        DiagnosticSeverity.Error,
+        isEnabledByDefault: true);
+
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         IncrementalValuesProvider<ClassDeclarationSyntax> classDeclarations =
@@ -55,12 +63,16 @@ public class ValidationGenerator : IIncrementalGenerator
         {
             "ElementLength" or "ElementLengthAttribute" or
                 "Empty" or "EmptyAttribute" or
-                "HasLength" or "HasLengthAttribute" or
                 "IsOneOfValues" or "IsOneOfValuesAttribute" or
                 "NotEmpty" or "NotEmptyAttribute" or
                 "NotOneOfValues" or "NotOneOfValuesAttribute" or
                 "RequiredDataElements" or "RequiredDataElementsAttribute" or
-                "SegmentElementLength" or "SegmentElementLengthAttribute" => true,
+                "RequireElement" or "RequiredElementAttribute" or
+                "BeDate" or "SegmentElementLengthAttribute" or
+                "BeDateTime" or "BeDateTimeAttribute" or
+                "BeTime" or "BeTimeAttribute" or
+                "BeInt" or "BeIntAttribute" or
+                "BeDecimal" or "BeDecimalAttribute" => true,
             _ => false
         };
     }
@@ -75,95 +87,93 @@ public class ValidationGenerator : IIncrementalGenerator
 
         foreach (var classDeclaration in classes)
         {
-            var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
-            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
-
-            if (classSymbol == null) continue;
-
-            CodeWriter cw = new();
-            cw.AppendLine("/*");
-
-            using (cw.StartNamespace(classSymbol.ContainingNamespace.ToDisplayString()))
+            try
             {
-                foreach (var @using in Usings)
-                    cw.AddUsing(@using);
+                var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
+                var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
 
-                using (cw.StartClass(classDeclaration.Identifier.Text, ["ISourceGeneratorValidatable"]))
+                if (classSymbol == null) continue;
+
+                CodeWriter cw = new();
+                
+                foreach (var attribute in classSymbol.GetAttributes())
                 {
-                    ProcessAttributes(classDeclaration, cw, compilation);
+                    var attributeType = attribute.AttributeClass;
+                    if (attributeType == null)
+                        continue;
+
+                    // Replace IYourInterface with the actual interface you're checking for
+                    var interfaceType = compilation.GetTypeByMetadataName("EdiSource.Domain.Validation.Data.IIndirectValidatable");
+                    if (interfaceType == null)
+                        continue;
+
+                    if (attributeType.AllInterfaces.Contains(interfaceType))
+                    {
+                        cw.AppendLine($"// {attributeType.Name}");
+                        // The attribute implements the interface
+                        // You can generate code or perform other actions here
+                    }
                 }
 
-                cw.AppendLine("*/");
+                using (cw.StartNamespace(classSymbol.ContainingNamespace.ToDisplayString()))
+                {
+                    foreach (var @using in Usings)
+                        cw.AddUsing(@using);
+
+                    using (cw.StartClass(classDeclaration.Identifier.Text, ["ISourceGeneratorValidatable"]))
+                    {
+                        cw.AppendLine("public List<IIndirectValidatable> SourceGenValidations => [");
+                        cw.IncreaseIndent();
+                        ProcessAttributes(classDeclaration, cw, semanticModel);
+                        cw.DecreaseIndent();
+                        cw.AppendLine("];");
+                    }
+                }
+
+                context.AddSource($"{classSymbol.Name}.Validation.g.cs", SourceText.From(cw.ToString(), Encoding.UTF8));
             }
-
-
-            context.AddSource($"{classSymbol.Name}.Validation.g.cs", SourceText.From(cw.ToString(), Encoding.UTF8));
+            catch (Exception ex)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(GenericError, null, ex, classDeclaration.Identifier.Text));
+            }
         }
     }
 
-    private static void ProcessAttributes(ClassDeclarationSyntax classDeclarationSyntax, CodeWriter cw, Compilation compilation)
+    private static void ProcessAttributes(ClassDeclarationSyntax classDeclarationSyntax, CodeWriter cw,
+        SemanticModel model)
     {
         foreach (var attributeList in classDeclarationSyntax.AttributeLists)
         {
             foreach (var attribute in attributeList.Attributes)
             {
                 var attributeName = attribute.Name.ToString();
-                var arguments = attribute.ArgumentList?.Arguments.Select(a => 
-                                    a.ToString()).ToArray() ?? [];
 
-               var symbol = compilation.GetSemanticModel(attribute.SyntaxTree);
-               
-                switch (attributeName)
+                if (attributeName is not ("ElementLength" or "ElementLengthAttribute" or
+                    "Empty" or "EmptyAttribute" or
+                    "IsOneOfValues" or "IsOneOfValuesAttribute" or
+                    "NotEmpty" or "NotEmptyAttribute" or
+                    "NotOneOfValues" or "NotOneOfValuesAttribute" or
+                    "RequiredDataElements" or "RequiredDataElementsAttribute" or
+                    "RequireElement" or "RequiredElementAttribute" or
+                    "BeDate" or "SegmentElementLengthAttribute" or
+                    "BeDateTime" or "BeDateTimeAttribute" or
+                    "BeTime" or "BeTimeAttribute" or
+                    "BeInt" or "BeIntAttribute" or
+                    "BeDecimal" or "BeDecimalAttribute")) continue;
+
+                var attributeSymbol = model.GetSymbolInfo(attribute);
+
+                cw.Append("new ");
+                cw.Append(attributeName);
+                if (!attributeName.EndsWith("Attribute"))
                 {
-                    case "ElementLength":
-                    case "ElementLengthAttribute":
-                        if (arguments.Length >= 4)
-                        {
-                            var a = attribute.ArgumentList?.Arguments.ToString();
-                            cw.AppendLine($"new ElementLengthAttribute({a})");
-                            
-                            var dataElement = int.Parse(arguments[0]);
-                            var compositeElement = int.Parse(arguments[1]);
-                            var min = int.Parse(arguments[2]);
-                            var max = int.Parse(arguments[3]);
-
-                            if (min == max)
-                            {
-                                using (cw.AddIf($$"""
-                                                  GetCompositeElementOrNull({{dataElement}}, {{compositeElement}}) is {} item && is { Length: {{min}} }
-                                                  """)) ;
-                            }
-                            else
-                            {
-                                using (cw.AddIf($$"""
-                                                  GetCompositeElementOrNull({{dataElement}}, {{compositeElement}}) is {} item && is { Length: >= {{min}} and <= {{max}} }
-                                                  """))
-                                {
-                                }
-                            }
-                        }
-
-                        break;
+                    cw.Append("Attribute");
                 }
+
+                cw.Append("(");
+                cw.Append(attribute.ArgumentList?.Arguments.ToString());
+                cw.AppendLine("),");
             }
         }
     }
-}
-
-public readonly record struct ValidationData
-{
-    public ValidationType Type { get; }
-}
-
-public enum ValidationType
-{
-    Unknown = 0,
-    ElementLength,
-    Empty,
-    HasLength,
-    IsOneOfValues,
-    NotEmpty,
-    NotOneOfValues,
-    RequiredDataElements,
-    SegmentElementLength
 }

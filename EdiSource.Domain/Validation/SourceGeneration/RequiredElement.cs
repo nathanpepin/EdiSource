@@ -6,11 +6,7 @@ using EdiSource.Domain.Validation.Factory;
 namespace EdiSource.Domain.Validation.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class IsOneOfValuesAttribute(
-    ValidationSeverity validationSeverity,
-    int dataElement,
-    int compositeElement,
-    params string[] values)
+public sealed class RequiredElementAttribute(ValidationSeverity validationSeverity, int dataElement, int compositeElement)
     : Attribute, IIndirectValidatable
 {
     public IEnumerable<ValidationMessage> Validate(IEdi element)
@@ -18,15 +14,13 @@ public sealed class IsOneOfValuesAttribute(
         if (element is not Segment segment)
             throw new ArgumentException("Element must be a segment", nameof(element));
 
-        if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
-            && !value.Contains(value))
+        if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is null)
         {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
-                $"Element {dataElement} in composite {compositeElement} must be one of: {string.Join(", ", values)}",
-                dataElement,
-                compositeElement);
+                $"Data element {dataElement} in composite element {compositeElement} is required but does not exist",
+                dataElement);
         }
     }
 }

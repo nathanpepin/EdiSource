@@ -77,9 +77,10 @@ public interface ISegment : IEdi, IParent
     ///     Sets the data element at the specified index with the provided values.
     /// </summary>
     /// <param name="elementIndex">The index of the element to be set.</param>
+    /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <param name="values">The values to set for the data element.</param>
     /// <returns>True if the element exists and the values are set, otherwise false.</returns>
-    bool SetDataElement(int elementIndex, params string[] values);
+    bool SetDataElement(int elementIndex, bool create = true, params string[] values);
 
     /// <summary>
     ///     Sets the value of a composite element within a data element at the specified indices.
@@ -87,8 +88,9 @@ public interface ISegment : IEdi, IParent
     /// <param name="dataElementIndex">The index of the data element that contains the composite element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element to set.</param>
     /// <param name="value">The value to set for the specified composite element.</param>
+    /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns>True if the composite element was successfully set; otherwise, false.</returns>
-    bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value);
+    bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value, bool create = true);
 
     /// <summary>
     ///     Checks if an element exists at the specified index.

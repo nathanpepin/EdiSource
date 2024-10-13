@@ -1,3 +1,4 @@
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.Validation.Data;
@@ -11,5 +12,5 @@ public interface IIndirectValidatable
     /// Validates an IEdi item
     /// </summary>
     /// <returns></returns>
-    IEnumerable<ValidationMessage> Validate(ISegment segment);
+    IEnumerable<ValidationMessage> Validate(IEdi element);
 }

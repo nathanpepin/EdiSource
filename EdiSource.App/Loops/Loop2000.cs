@@ -8,7 +8,7 @@ using EdiSource.Segments;
 
 namespace EdiSource.Loops;
 
-[LoopGenerator<TransactionSet, Loop2000, Loop2000_INS>]
+[LoopGenerator<_834, Loop2000, Loop2000_INS>]
 public partial class Loop2000 : IValidatable
 {
     [SegmentHeader] public Loop2000_INS INS { get; set; }

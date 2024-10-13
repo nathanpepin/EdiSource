@@ -3,7 +3,7 @@ using EdiSource.Domain.Separator;
 
 namespace EdiSource.Domain.Segments.Extensions;
 
-public static class SegmentExtensions
+public static partial class SegmentExtensions
 {
     public static StringBuilder WriteToStringBuilder<T>(this T segment, StringBuilder? stringBuilder = null,
         Separators? separators = default)

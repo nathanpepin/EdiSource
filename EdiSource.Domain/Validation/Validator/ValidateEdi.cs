@@ -29,82 +29,109 @@ public sealed class ValidateEdi : IValidateEdi
         {
             case null: return validationResult;
             case ISegment segment:
-                segmentLine++;
-
-                if (segment is IValidatable validatable)
-                {
-                    var updateSegmentLine = validatable
-                        .Validate()
-                        .UpdateSegmentLine(segmentLine)
-                        .UpdateLoopLine(loopLine);
-                    validationResult.AddRange(updateSegmentLine);
-                }
-
-                if (segment is ISourceGeneratorValidatable sgv)
-                {
-                    var updateSegmentLine = sgv
-                        .Validate()
-                        .UpdateSegmentLine(segmentLine)
-                        .UpdateLoopLine(loopLine);
-                    validationResult.AddRange(updateSegmentLine);
-                }
-
+                HandleSegment<T>(validationResult, loopLine, ref segmentLine, segment);
                 break;
             case IEnumerable<ISegment> segmentList:
-                foreach (var segment in segmentList)
-                {
-                    segmentLine++;
-
-                    if (segment is IValidatable validatable2)
-                    {
-                        var updateSegmentLine = validatable2
-                            .Validate()
-                            .UpdateSegmentLine(segmentLine)
-                            .UpdateLoopLine(loopLine);
-                        validationResult.AddRange(updateSegmentLine);
-                    }
-
-                    if (segment is ISourceGeneratorValidatable sgv2)
-                    {
-                        var updateSegmentLine = sgv2
-                            .Validate()
-                            .UpdateSegmentLine(segmentLine)
-                            .UpdateLoopLine(loopLine);
-                        validationResult.AddRange(updateSegmentLine);
-                    }
-                }
-
+                HandleSegmentList<T>(validationResult, loopLine, ref segmentLine, segmentList);
                 break;
             case ILoop loop:
-                loopLine = segmentLine;
-
-                if (loop is IValidatable validatable3)
-                    validationResult.AddRange(validatable3.Validate());
-
-                if (loop is ISourceGeneratorValidatable sgv3)
-                    validationResult.AddRange(sgv3.Validate());
-
-                foreach (var item in loop.EdiItems.OfType<IEdi>())
-                    YieldValidationMessages(item, validationResult, ref loopLine, ref segmentLine);
-
+                HandleLoop<T>(validationResult, out loopLine, ref segmentLine, loop);
                 break;
             case IEnumerable<ILoop> loopList:
-                foreach (var loop in loopList)
-                {
-                    loopLine = segmentLine;
-
-                    if (loop is IValidatable validatable4)
-                        validationResult.AddRange(validatable4.Validate());
-
-                    if (loop is ISourceGeneratorValidatable sgv4)
-                        validationResult.AddRange(sgv4.Validate());
-
-                    YieldValidationMessages(loop, validationResult, ref loopLine, ref segmentLine);
-                }
-
+                HanldeLoopList<T>(validationResult, out loopLine, ref segmentLine, loopList);
                 break;
         }
 
         return validationResult;
+    }
+
+    private static void HanldeLoopList<T>(EdiValidationResult validationResult, out int loopLine, ref int segmentLine,
+        IEnumerable<ILoop> loopList) where T : IEdi
+    {
+        loopLine = segmentLine;
+
+        foreach (var loop in loopList)
+        {
+            HandleLoop<T>(validationResult, out loopLine, ref segmentLine, loop);
+        }
+    }
+
+    private static void HandleLoop<T>(EdiValidationResult validationResult, out int loopLine, ref int segmentLine,
+        ILoop loop) where T : IEdi
+    {
+        loopLine = segmentLine;
+
+        if (loop is T edi)
+        {
+            foreach (var userValidation in IUserValidation<T>.UserValidations)
+            {
+                validationResult.AddRange(userValidation(edi)
+                    .UpdateLoopLine(loopLine));
+            }
+        }
+
+        if (loop is IValidatable v)
+        {
+            validationResult.AddRange(v
+                .Validate()
+                .UpdateLoopLine(loopLine));
+        }
+
+        if (loop is ISourceGeneratorValidatable v2)
+        {
+            foreach (var sourceValidation in v2.SourceGenValidations)
+            {
+                validationResult.AddRange(sourceValidation
+                    .Validate(loop)
+                    .UpdateLoopLine(loopLine));
+            }
+        }
+
+        foreach (var item in loop.EdiItems.OfType<IEdi>())
+            YieldValidationMessages(item, validationResult, ref loopLine, ref segmentLine);
+    }
+
+    private static void HandleSegmentList<T>(EdiValidationResult validationResult, int loopLine, ref int segmentLine,
+        IEnumerable<ISegment> segmentList) where T : IEdi
+    {
+        foreach (var segment in segmentList)
+        {
+            HandleSegment<T>(validationResult, loopLine, ref segmentLine, segment);
+        }
+    }
+
+    private static void HandleSegment<T>(EdiValidationResult validationResult, int loopLine, ref int segmentLine,
+        ISegment segment) where T : IEdi
+    {
+        if (segment is T edi)
+        {
+            foreach (var userValidation in IUserValidation<T>.UserValidations)
+            {
+                validationResult.AddRange(userValidation(edi)
+                    .UpdateSegmentLine(segmentLine)
+                    .UpdateLoopLine(loopLine));
+            }
+        }
+
+        if (segment is IValidatable v)
+        {
+            validationResult.AddRange(v
+                .Validate()
+                .UpdateSegmentLine(segmentLine)
+                .UpdateLoopLine(loopLine));
+        }
+
+        if (segment is ISourceGeneratorValidatable v2)
+        {
+            foreach (var sourceValidation in v2.SourceGenValidations)
+            {
+                validationResult.AddRange(sourceValidation
+                    .Validate(segment)
+                    .UpdateSegmentLine(segmentLine)
+                    .UpdateLoopLine(loopLine));
+            }
+        }
+
+        segmentLine++;
     }
 }

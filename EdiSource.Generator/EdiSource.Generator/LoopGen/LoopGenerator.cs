@@ -59,10 +59,10 @@ public partial class LoopGenerator : IIncrementalGenerator
             var implementationCode = ImplementationGenerator.Generate(className, namespaceName, usings, parent, id);
             context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
 
-            var loopConstructorSourceCode =
-                QueueConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
-            context.AddSource($"{className}.QueueConstructor.g.cs",
-                SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
+            // var loopConstructorSourceCode =
+            //     QueueConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
+            // context.AddSource($"{className}.QueueConstructor.g.cs",
+            //     SourceText.From(loopConstructorSourceCode, Encoding.UTF8));
 
             var channelConstructorSourceCode =
                 ChannelConstructorGenerator.Generate(className, namespaceName, usings, orderedEdiItems, parent);
