@@ -30,13 +30,6 @@ public class LoopGeneratorTests
         }
         """;
 
-    [Fact]
-    public Task TestA()
-    {
-        var driver = TestHelperFunctions.Verify<LoopGen.LoopGenerator>(Source);
-        return Verifier.Verify(driver, TestHelperFunctions.Settings.Value);
-    }
-
     private const string Source2 =
         """
         namespace Test;
@@ -59,6 +52,13 @@ public class LoopGeneratorTests
             [SegmentFooter] public TS_SE SE { get; set; }
         }
         """;
+
+    [Fact]
+    public Task TestA()
+    {
+        var driver = TestHelperFunctions.Verify<LoopGen.LoopGenerator>(Source);
+        return Verifier.Verify(driver, TestHelperFunctions.Settings.Value);
+    }
 
     [Fact]
     public Task IsTranscationSet()

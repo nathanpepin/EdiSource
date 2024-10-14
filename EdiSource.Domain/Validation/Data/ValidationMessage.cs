@@ -48,7 +48,7 @@ public sealed class ValidationMessage
     ///     The composite element position in question
     /// </summary>
     public int? CompositeElement { get; set; }
-    
+
     public string? Value { get; set; }
 
     public override string ToString()
@@ -65,9 +65,9 @@ public sealed class ValidationMessage
         if (DataElement.HasValue) sb.Append($", DataElement: {DataElement}");
 
         if (CompositeElement.HasValue) sb.Append($", CompositeElement: {CompositeElement}");
-        
+
         if (Value is not null) sb.Append($", Value: {Value}");
-        
+
         if (LoopLine.HasValue) sb.Append($", LoopLine: {LoopLine}");
 
         if (SegmentLine.HasValue) sb.Append($", SegmentLine: {SegmentLine}");

@@ -120,4 +120,26 @@ public interface ISegment<out TLoop>
     ///     The typed parent loop of the segment if any
     /// </summary>
     new TLoop? Parent { get; }
+
+    /// <summary>
+    ///     Assigns data elements safety one segment to another.
+    ///     Useful for avoiding the issue where two segments share
+    ///     the same reference to a List.
+    ///     The parent and separators will still be shared if not specified.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <param name="separators">Will use segment values if not provided</param>
+    /// <param name="parent">Will use segment values if not provided</param>
+    void Assign(ISegment other, Separators? separators = null, ILoop? parent = null);
+
+    /// <summary>
+    ///     Copies data elements safety one segment to a new segment.
+    ///     Useful for avoiding the issue where two segments share
+    ///     the same reference to a List.
+    ///     The parent and separators will still be shared if not specified.
+    ///     <param name="separators">Will use segment values if not provided</param>
+    ///     <param name="parent">Will use segment values if not provided</param>
+    /// </summary>
+    /// <returns></returns>
+    ISegment Copy(Separators? separators = null, ILoop? parent = null);
 }

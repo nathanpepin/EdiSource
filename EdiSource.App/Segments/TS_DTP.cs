@@ -1,7 +1,4 @@
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Common;
-using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.SourceGeneration;
 using EdiSource.Loops;
 

@@ -7,8 +7,8 @@ using EdiSource.Domain.Standard.Segments;
 namespace EdiSource.Domain.Standard.Loops;
 
 /// <summary>
-/// Used to serialize any transaction set.
-/// This definition will be used if there are no other matching definitions.
+///     Used to serialize any transaction set.
+///     This definition will be used if there are no other matching definitions.
 /// </summary>
 public sealed class GenericTransactionSet :
     ISegmentIdentifier<GenericTransactionSet>,
@@ -17,18 +17,14 @@ public sealed class GenericTransactionSet :
     public ST ST { get; set; } = default!;
     public SegmentList<ISegment> Segments { get; set; } = [];
     public SE SE { get; set; } = default!;
+    public static (string Primary, string? Secondary) EdiId { get; } = ("ST", null);
 
     public static Task<GenericTransactionSet> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)
     {
-        if (parent is null)
-        {
-            return InitializeAsync(segmentReader, null);
-        }
+        if (parent is null) return InitializeAsync(segmentReader, null);
 
         if (parent is not FunctionalGroup typedParent)
-        {
             throw new ArgumentException("Parent must be of type FunctionalGroup");
-        }
 
         return InitializeAsync(segmentReader, typedParent);
     }
@@ -62,16 +58,12 @@ public sealed class GenericTransactionSet :
     ILoop? ILoop.Parent => Parent;
     public FunctionalGroup? Parent { get; set; }
     public List<IEdi?> EdiItems => [ST, Segments, SE];
-    public static (string Primary, string? Secondary) EdiId { get; } = ("ST", null);
     ISegment ITransactionSet.ST => ST;
     ISegment ITransactionSet.SE => SE;
 
     public static TransactionSetDefinition Definition { get; } = id =>
     {
-        if (EdiId.Primary != id.Item1 || (EdiId.Secondary is not null && EdiId.Secondary != id.Item2))
-        {
-            return null;
-        }
+        if (EdiId.Primary != id.Item1 || (EdiId.Secondary is not null && EdiId.Secondary != id.Item2)) return null;
 
         return (segmentReader, parent) => InitializeAsync(segmentReader, parent).ContinueWith(ILoop (x) => x.Result);
     };

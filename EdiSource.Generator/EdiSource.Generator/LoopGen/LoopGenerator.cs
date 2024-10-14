@@ -62,7 +62,8 @@ public partial class LoopGenerator : IIncrementalGenerator
             if (isTransactionSet)
             {
                 var transactionSetCode = TransactionSetGenerator.Generate(className, namespaceName, usings, id);
-                context.AddSource($"{className}.TransactionSet.g.cs", SourceText.From(transactionSetCode, Encoding.UTF8));
+                context.AddSource($"{className}.TransactionSet.g.cs",
+                    SourceText.From(transactionSetCode, Encoding.UTF8));
             }
 
             var channelConstructorSourceCode =

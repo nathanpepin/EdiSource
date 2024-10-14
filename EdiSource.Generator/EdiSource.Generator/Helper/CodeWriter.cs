@@ -17,7 +17,7 @@ public sealed class CodeWriter
     {
         _builder.Append(span);
     }
-    
+
     public void AppendLine(string line = "")
     {
         if (!string.IsNullOrEmpty(line))
@@ -52,7 +52,7 @@ public sealed class CodeWriter
         AppendLine(line);
 
         AppendLine(blockChar);
-        
+
         return new IndentationBlock(this, blockEndChar);
     }
 

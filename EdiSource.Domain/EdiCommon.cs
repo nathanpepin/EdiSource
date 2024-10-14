@@ -3,7 +3,6 @@ using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Separator;
-using EdiSource.Domain.Standard.Loops;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.IO;
 using EdiSource.Domain.Validation.Validator;

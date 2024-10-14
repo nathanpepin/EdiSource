@@ -91,11 +91,11 @@ public partial class LoopGenerator
 
                     cw.AppendLine(attribute switch
                     {
-                        SegmentAttribute or Constants.Segment =>
+                        SegmentAttribute or Segment =>
                             $"{name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);",
                         SegmentListAttribute or SegmentList =>
                             $"{name}.Add(SegmentLoopFactory<{typeName}, {className}>.Create(segments, this));",
-                        LoopAttribute or Constants.Loop => $"{name} = new {property.Type}(segments, this);",
+                        LoopAttribute or Loop => $"{name} = new {property.Type}(segments, this);",
                         LoopListAttribute or LoopList => $"{name}.Add(new {typeName}(segments, this));",
                         OptionalSegmentFooter or OptionalSegmentFooterAttribute =>
                             $"""

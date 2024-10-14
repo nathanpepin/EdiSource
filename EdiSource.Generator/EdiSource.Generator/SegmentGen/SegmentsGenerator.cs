@@ -24,7 +24,8 @@ public partial class SegmentGenerator : IIncrementalGenerator
     }
 
     private static void Execute(Compilation compilation,
-        ImmutableArray<(ClassDeclarationSyntax, string loop, string primaryId, string secondaryId, string? subType)> classes,
+        ImmutableArray<(ClassDeclarationSyntax, string loop, string primaryId, string secondaryId, string? subType)>
+            classes,
         SourceProductionContext context)
     {
         foreach (var (classDeclaration, parent, primaryId, secondaryId, subType) in classes)

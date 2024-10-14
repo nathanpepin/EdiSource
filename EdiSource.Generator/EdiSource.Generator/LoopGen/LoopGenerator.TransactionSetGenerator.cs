@@ -26,7 +26,8 @@ public partial class LoopGenerator
                     cw.AppendLine("public static TransactionSetDefinition Definition { get; } = id =>");
                     cw.AppendLine("{");
                     cw.IncreaseIndent();
-                    using (cw.AddIf("EdiId.Primary != id.Item1 || (EdiId.Secondary is not null && EdiId.Secondary != id.Item2)"))
+                    using (cw.AddIf(
+                               "EdiId.Primary != id.Item1 || (EdiId.Secondary is not null && EdiId.Secondary != id.Item2)"))
                     {
                         cw.AppendLine("return null;");
                     }

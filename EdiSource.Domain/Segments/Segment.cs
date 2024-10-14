@@ -76,14 +76,9 @@ public class Segment : ISegment
     public bool SetDataElement(int elementIndex, bool create = true, params string[] values)
     {
         if (create && !ElementExists(elementIndex))
-        {
             while (elementIndex >= Elements.Count)
                 Elements.Add([]);
-        }
-        else if (!ElementExists(elementIndex))
-        {
-            return false;
-        }
+        else if (!ElementExists(elementIndex)) return false;
 
         var element = GetElement(elementIndex);
 
@@ -98,26 +93,13 @@ public class Segment : ISegment
     public bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value, bool create = true)
     {
         if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
-        {
             while (dataElementIndex >= Elements.Count)
-            {
                 if (dataElementIndex == Elements.Count - 1)
-                {
                     for (var i = 0; i < compositeElementIndex; i++)
-                    {
                         Elements[dataElementIndex].Add(string.Empty);
-                    }
-                }
                 else
-                {
                     Elements.Add([string.Empty]);
-                }
-            }
-        }
-        else if (!CompositeElementExists(dataElementIndex, compositeElementIndex))
-        {
-            return false;
-        }
+        else if (!CompositeElementExists(dataElementIndex, compositeElementIndex)) return false;
 
         Elements[dataElementIndex][compositeElementIndex] = value;
         return true;
@@ -170,5 +152,22 @@ public class Segment : ISegment
     public string ToString(Separators separators)
     {
         return this.WriteToStringBuilder(separators: separators).ToString();
+    }
+
+    public void Assign(ISegment other, Separators? separators = null, ILoop? parent = null)
+    {
+        Elements = other.Elements.Select(e => new Element(e)).ToList();
+
+        if (separators is not null)
+            Separators = separators;
+
+        if (parent is not null)
+            Parent = parent;
+    }
+
+    public ISegment Copy(Separators? separators = null, ILoop? parent = null)
+    {
+        var elements = Elements.Select(e => new Element(e)).ToList();
+        return new Segment(elements, separators ?? Separators, parent ?? Parent);
     }
 }

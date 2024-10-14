@@ -21,12 +21,10 @@ public sealed class BeDateAttribute(
 
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
             && !DateOnly.TryParseExact(value, format, null, DateTimeStyles.None, out _))
-        {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
                 $"Data element {dataElement} in composite element {compositeElement} should be a date but is not",
                 dataElement);
-        }
     }
 }

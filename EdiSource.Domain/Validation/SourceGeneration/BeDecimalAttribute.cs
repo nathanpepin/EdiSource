@@ -19,12 +19,10 @@ public sealed class BeDecimalAttribute(
 
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
             && !decimal.TryParse(value, out _))
-        {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
                 $"Data element {dataElement} in composite element {compositeElement} should be a decimal but is not",
                 dataElement);
-        }
     }
 }

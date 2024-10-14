@@ -82,7 +82,6 @@ public static partial class LoopExtensions
         output ??= [];
 
         foreach (var item in it.EdiItems)
-        {
             switch (item)
             {
                 case T t:
@@ -93,10 +92,8 @@ public static partial class LoopExtensions
                     return output;
                 case IEnumerable<ISegment> segments:
                     foreach (var segment in segments)
-                    {
                         if (segment is T t)
                             output.Add(t);
-                    }
 
                     if (output.Count > 0) return output;
 
@@ -107,22 +104,15 @@ public static partial class LoopExtensions
                     break;
                 case IEnumerable<ILoop> loops:
                     foreach (var loop in loops)
-                    {
                         if (loop is T t)
-                        {
                             output.Add(t);
-                        }
                         else
-                        {
                             loop.FindEdiElement(output);
-                        }
-                    }
 
                     if (output.Count > 0) return output;
 
                     break;
             }
-        }
 
         return [];
     }

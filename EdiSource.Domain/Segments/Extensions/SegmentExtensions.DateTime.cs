@@ -37,7 +37,7 @@ public static partial class SegmentExtensions
         return GetDate(it, dataElement, compositeElement, format) ??
                throw new DataElementParsingError(dataElement, compositeElement, typeof(DateTime));
     }
-    
+
     /// <summary>
     ///     Attempts to set a date from an element
     /// </summary>

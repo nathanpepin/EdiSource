@@ -1,7 +1,7 @@
 namespace EdiSource.Domain.Validation.Data;
 
 /// <summary>
-/// The subject of validation
+///     The subject of validation
 /// </summary>
 [Flags]
 public enum ValidationSubject

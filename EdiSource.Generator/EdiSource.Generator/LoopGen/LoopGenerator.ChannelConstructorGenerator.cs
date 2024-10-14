@@ -137,11 +137,11 @@ public partial class LoopGenerator
 
                     cw.AppendLine(attribute switch
                     {
-                        SegmentAttribute or Constants.Segment =>
+                        SegmentAttribute or Segment =>
                             $"loop.{name} = await SegmentLoopFactory<{typeName}, {className}>.CreateAsync(segmentReader, loop);",
                         SegmentListAttribute or SegmentList =>
                             $"loop.{name}.Add(await SegmentLoopFactory<{typeName}, {className}>.CreateAsync(segmentReader, loop));",
-                        LoopAttribute or Constants.Loop =>
+                        LoopAttribute or Loop =>
                             $"loop.{name} = await {typeName}.InitializeAsync(segmentReader, loop);",
                         LoopListAttribute or LoopList =>
                             $"loop.{name}.Add(await {typeName}.InitializeAsync(segmentReader, loop));",

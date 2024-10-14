@@ -21,12 +21,10 @@ public sealed class BeTimeAttribute(
 
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
             && !TimeOnly.TryParseExact(value, format, null, DateTimeStyles.None, out _))
-        {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
                 $"Data element {dataElement} in composite element {compositeElement} is required but does not exist",
                 dataElement);
-        }
     }
 }

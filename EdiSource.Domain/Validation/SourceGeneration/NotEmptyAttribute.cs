@@ -15,13 +15,11 @@ public sealed class NotEmptyAttribute(ValidationSeverity validationSeverity, int
             throw new ArgumentException("Element must be a segment", nameof(element));
 
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { Length: 0 })
-        {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
                 $"Element {dataElement} in composite {compositeElement} has should not be empty",
                 dataElement,
                 compositeElement);
-        }
     }
 }

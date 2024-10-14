@@ -141,7 +141,7 @@ public sealed class EdiReader : IEdiReader
             ArrayPool<char>.Shared.Return(buffer);
             channelWriter.Complete();
         }
-        
+
         if (segmentsCreated == 0)
             throw new EdiReaderException();
     }

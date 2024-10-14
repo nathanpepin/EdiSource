@@ -15,17 +15,16 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
 
     public GE GE { get; set; } = default!;
 
+    public InterchangeEnvelope? Parent { get; set; }
+    ILoop? ILoop.Parent => Parent;
+    public List<IEdi?> EdiItems => [GS, TransactionSets, GE];
+
     public static Task<FunctionalGroup> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)
     {
-        if (parent is null)
-        {
-            return InitializeAsync(segmentReader, null);
-        }
+        if (parent is null) return InitializeAsync(segmentReader, null);
 
         if (parent is not InterchangeEnvelope typedParent)
-        {
             throw new ArgumentException($"Parent must be of type {nameof(InterchangeEnvelope)}");
-        }
 
         return InitializeAsync(segmentReader, typedParent);
     }
@@ -54,6 +53,8 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
         return loop;
     }
 
+    public static (string Primary, string? Secondary) EdiId => GS.EdiId;
+
     private static async Task<bool> CreateTransactionSet(ChannelReader<ISegment> segmentReader, ISegment segment,
         FunctionalGroup loop)
     {
@@ -74,9 +75,4 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
         loop.TransactionSets.Add(await generic(segmentReader, loop));
         return true;
     }
-
-    public InterchangeEnvelope? Parent { get; set; }
-    ILoop? ILoop.Parent => Parent;
-    public List<IEdi?> EdiItems => [GS, TransactionSets, GE];
-    public static (string Primary, string? Secondary) EdiId => GS.EdiId;
 }

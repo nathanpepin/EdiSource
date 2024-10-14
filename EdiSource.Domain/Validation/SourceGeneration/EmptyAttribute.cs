@@ -16,13 +16,11 @@ public sealed class EmptyAttribute(ValidationSeverity validationSeverity, int da
 
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
             && value.Length != 0)
-        {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
                 $"Element {dataElement} in composite {compositeElement} has should be empty",
                 dataElement,
                 compositeElement);
-        }
     }
 }

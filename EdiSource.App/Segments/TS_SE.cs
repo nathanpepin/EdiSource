@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using EdiSource.Domain.SourceGeneration;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.Factory;
@@ -9,7 +8,6 @@ namespace EdiSource.Segments;
 
 [SegmentGenerator<_834>("SE", null)]
 [ElementLength(0, 1, 3, 3)]
-
 public partial class TS_SE : IValidatable
 {
     public IEnumerable<ValidationMessage> Validate()

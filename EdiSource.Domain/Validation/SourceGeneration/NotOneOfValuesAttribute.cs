@@ -6,7 +6,11 @@ using EdiSource.Domain.Validation.Factory;
 namespace EdiSource.Domain.Validation.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class NotOneOfValuesAttribute(ValidationSeverity validationSeverity, int dataElement, int compositeElement, params string[] values)
+public sealed class NotOneOfValuesAttribute(
+    ValidationSeverity validationSeverity,
+    int dataElement,
+    int compositeElement,
+    params string[] values)
     : Attribute, IIndirectValidatable
 {
     public IEnumerable<ValidationMessage> Validate(IEdi element)
@@ -16,13 +20,11 @@ public sealed class NotOneOfValuesAttribute(ValidationSeverity validationSeverit
 
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
             && value.Contains(value))
-        {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
                 $"Element {dataElement} in composite {compositeElement} must not be one of: {string.Join(", ", values)}",
                 dataElement,
                 compositeElement);
-        }
     }
 }

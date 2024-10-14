@@ -15,9 +15,9 @@ public sealed class ValidationGeneratorTests
         using EdiSource.Domain.Validation.Factory;
         using EdiSource.Domain.Validation.SourceGeneration;
         using EdiSource.Loops;
-        
+
         namespace EdiSource.Segments;
-        
+
         [ElementLength(0, 1, 3, 3)]
         public partial class TS_SE
         {

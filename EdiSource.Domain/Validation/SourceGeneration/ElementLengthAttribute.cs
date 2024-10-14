@@ -6,10 +6,16 @@ using EdiSource.Domain.Validation.Factory;
 namespace EdiSource.Domain.Validation.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class ElementLengthAttribute(ValidationSeverity validationSeverity, int dataElement, int compositeElement, int min, int max)
+public sealed class ElementLengthAttribute(
+    ValidationSeverity validationSeverity,
+    int dataElement,
+    int compositeElement,
+    int min,
+    int max)
     : Attribute, IIndirectValidatable
 {
-    public ElementLengthAttribute(ValidationSeverity validationSeverity, int dataElement, int compositeElement, int length)
+    public ElementLengthAttribute(ValidationSeverity validationSeverity, int dataElement, int compositeElement,
+        int length)
         : this(validationSeverity, dataElement, compositeElement, length, length)
     {
     }
@@ -22,14 +28,12 @@ public sealed class ElementLengthAttribute(ValidationSeverity validationSeverity
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
             && value.Length < min
             && value.Length > max)
-        {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
                 $"Element {dataElement} in composite {compositeElement} has length {value.Length} which is not between {min} and {max}",
                 dataElement,
                 compositeElement);
-        }
     }
 }
 

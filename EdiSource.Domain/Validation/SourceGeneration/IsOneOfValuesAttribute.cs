@@ -20,13 +20,11 @@ public sealed class IsOneOfValuesAttribute(
 
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
             && !value.Contains(value))
-        {
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,
                 $"Element {dataElement} in composite {compositeElement} must be one of: {string.Join(", ", values)}",
                 dataElement,
                 compositeElement);
-        }
     }
 }

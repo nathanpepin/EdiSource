@@ -39,7 +39,6 @@ public static partial class SegmentExtensions
     }
 
     /// <summary>
-    /// 
     ///     Attempts to set a DateOnly from an element
     /// </summary>
     /// <param name="it"></param>

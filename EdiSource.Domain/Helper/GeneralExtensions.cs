@@ -17,7 +17,7 @@ internal static class GeneralExtensions
     {
         return fun(it);
     }
-    
+
     public static async Task<T> DoAsync<T>(this T it, Func<T, Task> action)
     {
         await action(it);

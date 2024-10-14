@@ -28,7 +28,7 @@ public class DTP : Segment
     public DateTime? DateEnd
     {
         get => DateFormats.DateRange?
-            .Map(format => this.GetDate(3, 1, format: format));
+            .Map(format => this.GetDate(3, 1, format));
         set => DateFormats.DateRange?
             .Map(format => this.SetDate(value, 3, 1, format));
     }
@@ -131,10 +131,7 @@ public static class DateFormatMapper
 
     public static (string, string?) GetFormat(DateFormatCode code)
     {
-        if (_formatMap.TryGetValue(code, out var format))
-        {
-            return format;
-        }
+        if (_formatMap.TryGetValue(code, out var format)) return format;
 
         throw new ArgumentException($"No format string found for DateFormatCode: {code}");
     }
@@ -142,13 +139,9 @@ public static class DateFormatMapper
     public static DateFormatCode? GetCodeFromFormat(string format)
     {
         foreach (var kvp in _formatMap)
-        {
             if (kvp.Value.Item1 == format ||
                 (kvp.Value.Item2 != null && $"{kvp.Value.Item1}-{kvp.Value.Item2}" == format))
-            {
                 return kvp.Key;
-            }
-        }
 
         return null;
     }
@@ -160,12 +153,11 @@ public static class DateFormatMapper
 
         // Try parsing with all available formats
         foreach (var formatTuple in _formatMap.Values)
-        {
             if (TryParseDateTime(dateString, formatTuple.Item1, out startDate))
             {
                 if (endDateString != null && formatTuple.Item2 != null)
                 {
-                    if (TryParseDateTime(endDateString, formatTuple.Item2, out DateTime parsedEndDate))
+                    if (TryParseDateTime(endDateString, formatTuple.Item2, out var parsedEndDate))
                     {
                         endDate = parsedEndDate;
                     }
@@ -173,15 +165,12 @@ public static class DateFormatMapper
                     {
                         // If end date doesn't parse with the matching format, try parsing it with the start format
                         if (TryParseDateTime(endDateString, formatTuple.Item1, out parsedEndDate))
-                        {
                             endDate = parsedEndDate;
-                        }
                     }
                 }
 
                 return (startDate, endDate);
             }
-        }
 
         throw new FormatException($"Unable to parse the date string: {dateString}");
     }

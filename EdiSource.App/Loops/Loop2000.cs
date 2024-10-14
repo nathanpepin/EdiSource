@@ -1,7 +1,4 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
 using EdiSource.Domain.SourceGeneration;
-using EdiSource.Domain.Validation;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.Factory;
 using EdiSource.Segments;
@@ -17,6 +14,4 @@ public partial class Loop2000 : IValidatable
     {
         yield return ValidationFactory.Create(this, ValidationSeverity.Warning, "Nof");
     }
-
-    
 }

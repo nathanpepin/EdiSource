@@ -1,22 +1,8 @@
-﻿using System.Text;
-using System.Threading.Channels;
-using Dumpify;
-using EdiSource.Domain;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.IO.EdiReader;
-using EdiSource.Domain.IO.Parser;
-using EdiSource.Domain.IO.Serializer;
-using EdiSource.Domain.Loop;
+﻿using EdiSource.Domain;
 using EdiSource.Domain.Loop.Extensions;
-using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Loops;
-using EdiSource.Domain.Validation;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
-using EdiSource.Domain.Validation.Validator;
 using EdiSource.Loops;
 using EdiSource.Segments;
-using Spectre.Console;
 
 var input =
     """

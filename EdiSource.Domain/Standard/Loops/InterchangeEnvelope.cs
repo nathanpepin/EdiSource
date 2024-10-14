@@ -17,17 +17,17 @@ public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentId
 
     public ISegment IEA { get; set; } = default!;
 
+    public InterchangeEnvelope? Parent => null;
+
+    ILoop? ILoop.Parent => Parent;
+    public List<IEdi?> EdiItems => [ISA, FunctionalGroups, IEA];
+
     public static Task<InterchangeEnvelope> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)
     {
-        if (parent is null)
-        {
-            return InitializeAsync(segmentReader, null);
-        }
+        if (parent is null) return InitializeAsync(segmentReader, null);
 
         if (parent is not InterchangeEnvelope typedParent)
-        {
             throw new ArgumentException($"Parent must be of type {nameof(InterchangeEnvelope)}");
-        }
 
         return InitializeAsync(segmentReader, typedParent);
     }
@@ -55,9 +55,5 @@ public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentId
         return loop;
     }
 
-    public InterchangeEnvelope? Parent => null;
-
-    ILoop? ILoop.Parent => Parent;
-    public List<IEdi?> EdiItems => [ISA, FunctionalGroups, IEA];
     public static (string Primary, string? Secondary) EdiId => ISA.EdiId;
 }
