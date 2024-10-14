@@ -6,4 +6,5 @@ public record struct LoopMeta(
     ClassDeclarationSyntax ClassDeclarationSyntax,
     string Parent,
     string Self,
-    string Id);
+    string Id,
+    bool IsTransactionSet);

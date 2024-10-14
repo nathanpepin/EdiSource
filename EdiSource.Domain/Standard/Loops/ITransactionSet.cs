@@ -11,8 +11,7 @@ public interface ITransactionSet : ILoop
     ISegment ST { get; }
 
     ISegment SE { get; }
-
-    // static abstract TransactionSetDefinition Definition { get; }
+    static abstract TransactionSetDefinition Definition { get; }
 }
 
 public interface ITransactionSet<TSelf, TId> :
@@ -20,7 +19,4 @@ public interface ITransactionSet<TSelf, TId> :
     ILoop<FunctionalGroup>, ISegmentIdentifier<TId>,
     ILoopInitialize<FunctionalGroup, TSelf>
     where TSelf : ITransactionSet<TSelf, TId>
-    where TId : ISegmentIdentifier<TId>
-{
-    new static abstract TransactionSetDefinition<TSelf> Definition { get; }
-}
+    where TId : ISegmentIdentifier<TId>;

@@ -1,4 +1,4 @@
-﻿//HintName: TransactionSet.EdiElement.g.cs
+//HintName: TransactionSet.EdiElement.g.cs
 #nullable enable
 using EdiSource.Domain.Separator;
 using EdiSource.Domain.Segments;

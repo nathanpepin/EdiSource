@@ -9,7 +9,7 @@ namespace EdiSource.Domain.SourceGeneration;
 ///     Generics are needed for the source generation.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class LoopGeneratorAttribute<TParent, TSelf, TId> : Attribute
+public sealed class LoopGeneratorAttribute<TParent, TSelf, TId>(bool isTransactionSet = false) : Attribute
     where TParent : ILoop
     where TSelf : ILoop
     where TId : ISegment, ISegment<TSelf>, ISegmentIdentifier<TId>, IEdi;

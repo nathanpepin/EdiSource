@@ -9,10 +9,7 @@ namespace EdiSource.Domain.Standard.Loops;
 public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentIdentifier<InterchangeEnvelope>,
     ISegmentIdentifier<ISA>, ILoopInitialize<InterchangeEnvelope, InterchangeEnvelope>
 {
-    public static List<
-            Func<(string, string?),
-                Func<ChannelReader<ISegment>, FunctionalGroup, Task<ILoop>>?>>
-        TransactionSetDefinitions = [];
+    public static List<TransactionSetDefinition> TransactionSetDefinitions = [];
 
     public ISA ISA { get; set; } = default!;
 

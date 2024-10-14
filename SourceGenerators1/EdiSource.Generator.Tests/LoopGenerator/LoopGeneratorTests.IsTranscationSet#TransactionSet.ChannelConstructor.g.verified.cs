@@ -1,4 +1,4 @@
-﻿//HintName: TransactionSet.ChannelConstructor.g.cs
+//HintName: TransactionSet.ChannelConstructor.g.cs
 #nullable enable
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Channels;

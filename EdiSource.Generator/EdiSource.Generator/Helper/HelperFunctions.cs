@@ -61,7 +61,16 @@ public static class HelperFunctions
         var self = typeArgumentListSyntaxes[0].Arguments[1].ToString();
         var id = typeArgumentListSyntaxes[0].Arguments[2].ToString();
 
-        return new LoopMeta(classDeclarationSyntax, parent, self, id);
+        var isTransactionSet =
+            attribute
+                .DescendantNodes()
+                .OfType<AttributeArgumentSyntax>()
+                .FirstOrDefault()
+                ?.Expression is { } expression
+            && context.SemanticModel.GetConstantValue(expression) is var value
+            && (bool)value.Value!;
+
+        return new LoopMeta(classDeclarationSyntax, parent, self, id, isTransactionSet);
     }
 
     public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId)

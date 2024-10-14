@@ -52,10 +52,8 @@ public sealed class CodeWriter
         AppendLine(line);
 
         AppendLine(blockChar);
-
-        _disposeStack.Push(blockEndChar);
-
-        return new IndentationBlock(this);
+        
+        return new IndentationBlock(this, blockEndChar);
     }
 
     public void IncreaseIndent()
