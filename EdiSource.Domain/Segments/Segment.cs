@@ -125,13 +125,13 @@ public class Segment : ISegment
 
     public bool ElementExists(int elementIndex)
     {
-        return elementIndex < Elements.Count && elementIndex >= 0;
+        return Elements.InsideBounds(elementIndex);
     }
 
     public bool CompositeElementExists(int dataElementIndex, int compositeElementIndex)
     {
-        return (ElementExists(dataElementIndex) &&
-                compositeElementIndex >= Elements[dataElementIndex].Count) || compositeElementIndex < 0;
+        return Elements.InsideBounds(dataElementIndex)
+               && Elements[dataElementIndex].InsideBounds(compositeElementIndex);
     }
 
     public Separators Separators

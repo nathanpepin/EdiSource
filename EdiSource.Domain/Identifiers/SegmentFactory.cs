@@ -39,6 +39,8 @@ public static class SegmentLoopFactory<T, TLoop>
     /// <exception cref="ArgumentException"></exception>
     public static async ValueTask<T> CreateAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
     {
+        await segmentReader.WaitToReadAsync();
+        
         if (!await ISegmentIdentifier<T>.MatchesAsync(segmentReader))
             throw new ArgumentException(
                 $"Expected ids of ({T.EdiId.Primary}, {T.EdiId.Secondary}) but received segment: {await segmentReader.ReadAsync()}");

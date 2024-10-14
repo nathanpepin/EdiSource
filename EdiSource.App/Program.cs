@@ -1,6 +1,9 @@
-﻿using Dumpify;
+﻿using System.Text;
+using System.Threading.Channels;
+using Dumpify;
 using EdiSource.Domain;
 using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.IO.EdiReader;
 using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
@@ -17,9 +20,9 @@ using Spectre.Console;
 
 var input =
     """
-    ISA*123~
+    ISA*00*          *00*          *ZZ*SENDER         *ZZ*RECEIVER       *200901*1319*^*00501*000000905*0*P*:~
     GS*09~
-    ST*123~
+    ST*834~
     REF*A~
     REF*B~
     DTP*1*20240106~
@@ -32,19 +35,9 @@ var input =
     """;
 
 InterchangeEnvelope.TransactionSetDefinitions.Add(_834.Definition);
-var j = InterchangeEnvelope.TransactionSetDefinitions;
-;
 
-var ts = await new EdiParser<InterchangeEnvelope>().ParseEdiEnvelope(input);
-;
-//
-// IUserValidation<Loop2000>.UserValidations.Add(x => [ValidationFactory.CreateInfo(new Segment(), "Help")]);
-// IUserValidation<Loop2000_DTP>.UserValidations.Add(x => []);
-//
-// var j = IUserValidation<Loop2000>.UserValidations;
-// var jj = IUserValidation<TransactionSet>.UserValidations;
-//
-//
-// var dtp = ts.FindEdiElement<TS_DTP>()[0].Date;
-
+var env = await EdiCommon.ParseEdi<InterchangeEnvelope>(input);
+var text = EdiCommon.WriteEdiToString(env);
+var prety = EdiCommon.PrettyPrint(env);
+var validation = EdiCommon.Validate(env);
 ;

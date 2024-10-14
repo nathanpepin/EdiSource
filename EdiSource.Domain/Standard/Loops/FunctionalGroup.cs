@@ -59,10 +59,11 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
     {
         foreach (var ts in InterchangeEnvelope.TransactionSetDefinitions)
         {
-            var reader = ts((segment.GetDataElement(0), segment.GetDataElementOrNull(1)));
+            var values = (segment.GetDataElement(0), segment.GetDataElementOrNull(1));
+            var reader = ts(values);
             if (reader is null) continue;
 
-            await reader(segmentReader, loop);
+            loop.TransactionSets.Add(await reader(segmentReader, loop));
             return true;
         }
 

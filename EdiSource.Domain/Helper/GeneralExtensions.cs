@@ -23,4 +23,25 @@ internal static class GeneralExtensions
         await action(it);
         return it;
     }
+
+
+    public static bool InsideBounds<T>(this IList<T> it, int elementIndex)
+    {
+        return elementIndex < it.Count && elementIndex >= 0;
+    }
+
+    public static bool InsideBoundsTiered<T>(this IList<IList<T>> it, int first, int second)
+    {
+        return it.InsideBounds(first) && it[first].InsideBounds(second);
+    }
+
+    public static bool InsideBounds<T>(this T[] it, int elementIndex)
+    {
+        return elementIndex < it.Length && elementIndex >= 0;
+    }
+
+    public static bool InsideBoundsTiered<T>(this T[][] it, int first, int second)
+    {
+        return it.InsideBounds(first) && it[first].InsideBounds(second);
+    }
 }

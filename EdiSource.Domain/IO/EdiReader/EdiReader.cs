@@ -1,6 +1,7 @@
 using System.Buffers;
 using System.Text;
 using System.Threading.Channels;
+using EdiSource.Domain.Exceptions;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Separator;
 using EdiSource.Domain.Structure;
@@ -73,6 +74,8 @@ public sealed class EdiReader : IEdiReader
 
         var buffer = ArrayPool<char>.Shared.Rent(BufferSize);
 
+        var segmentsCreated = 0;
+
         try
         {
             streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -96,6 +99,8 @@ public sealed class EdiReader : IEdiReader
                         stringBuffer.Clear();
 
                         await channelWriter.WriteAsync(segmentBuffer, cancellationToken);
+                        segmentsCreated++;
+
                         segmentBuffer = new Segment([])
                         {
                             Separators = separators
@@ -136,5 +141,8 @@ public sealed class EdiReader : IEdiReader
             ArrayPool<char>.Shared.Return(buffer);
             channelWriter.Complete();
         }
+        
+        if (segmentsCreated == 0)
+            throw new EdiReaderException();
     }
 }

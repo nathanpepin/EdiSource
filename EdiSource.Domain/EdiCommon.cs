@@ -3,6 +3,7 @@ using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Separator;
+using EdiSource.Domain.Standard.Loops;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.IO;
 using EdiSource.Domain.Validation.Validator;
@@ -14,47 +15,6 @@ namespace EdiSource.Domain;
 /// </summary>
 public static class EdiCommon
 {
-    /// <summary>
-    ///     Parses an EDI envelope from a StreamReader.
-    /// </summary>
-    /// <typeparam name="T">The type of the object that implements ILoopInitialize.</typeparam>
-    /// <param name="stream">The StreamReader to read the EDI envelope from.</param>
-    /// <param name="cancellationToken">Optional. A CancellationToken to observe while waiting for the task to complete.</param>
-    /// <returns>A task that represents the asynchronous parse operation. The task result contains the parsed object.</returns>
-    public static Task<T> ParseEdiEnvelope<T>(StreamReader stream, CancellationToken cancellationToken = default)
-        where T : class, ILoopInitialize<T>, new()
-    {
-        return new EdiParser<T>().ParseEdiEnvelope(stream, cancellationToken);
-    }
-
-    /// <summary>
-    ///     Parses an EDI envelope from the given FileInfo with an optional cancellation token.
-    /// </summary>
-    /// <typeparam name="T">
-    ///     The type of the data structure to parse the EDI envelope into. Must implement ILoopInitialize&lt;T
-    ///     &gt; and have a parameterless constructor.
-    /// </typeparam>
-    /// <param name="fileInfo">The FileInfo from which to read the EDI data.</param>
-    /// <param name="cancellationToken">An optional CancellationToken to observe while waiting for the task to complete.</param>
-    /// <returns>A task representing the asynchronous parse operation, with the parsed EDI data structure as its result.</returns>
-    public static Task<T> ParseEdiEnvelope<T>(FileInfo fileInfo, CancellationToken cancellationToken = default)
-        where T : class, ILoopInitialize<T>, new()
-    {
-        return new EdiParser<T>().ParseEdiEnvelope(fileInfo, cancellationToken);
-    }
-
-    /// <summary>
-    ///     Parses an EDI envelope from a stream and returns an object of type T,
-    ///     which must be a class implementing ILoopInitialize.
-    /// </summary>
-    /// <typeparam name="T">The type of object to return, which must implement ILoopInitialize.</typeparam>
-    /// <param name="text">The text to read the EDI envelope data from.</param>
-    /// <returns>A task representing the asynchronous operation, with a result of type T.</returns>
-    public static Task<T> ParseEdiEnvelope<T>(string text) where T : class, ILoopInitialize<T>, new()
-    {
-        return new EdiParser<T>().ParseEdiEnvelope(text);
-    }
-
     /// <summary>
     ///     Parses an EDI envelope from a StreamReader.
     /// </summary>
@@ -149,9 +109,10 @@ public static class EdiCommon
     /// </param>
     /// <param name="includeNewLine">Specifies whether to include newline characters in the output EDI string.</param>
     /// <returns>A string representing the loop structure in EDI format.</returns>
-    public static string WriteEdiToString<T>(T loop, Separators? separators, bool includeNewLine = true)
+    public static string WriteEdiToString<T>(T loop, Separators? separators = null, bool includeNewLine = true)
         where T : class, ILoop
     {
+        separators ??= Separators.DefaultSeparators;
         return new EdiSerializer().WriteToString(loop, separators, includeNewLine);
     }
 

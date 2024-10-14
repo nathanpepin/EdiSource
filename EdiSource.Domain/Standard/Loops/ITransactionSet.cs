@@ -2,13 +2,17 @@ using System.Threading.Channels;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
+using EdiSource.Domain.Standard.Segments;
 
 namespace EdiSource.Domain.Standard.Loops;
 
 public interface ITransactionSet : ILoop
 {
-    static abstract Func<(string, string?),
-        Func<ChannelReader<ISegment>, FunctionalGroup, Task<ILoop>>?> Definition { get; }
+    ISegment ST { get; }
+
+    ISegment SE { get; }
+
+    // static abstract TransactionSetDefinition Definition { get; }
 }
 
 public interface ITransactionSet<TSelf, TId> :
@@ -18,6 +22,5 @@ public interface ITransactionSet<TSelf, TId> :
     where TSelf : ITransactionSet<TSelf, TId>
     where TId : ISegmentIdentifier<TId>
 {
-    static abstract Func<(string, string?),
-        Func<ChannelReader<ISegment>, FunctionalGroup, Task<ILoop>>?> Definition { get; }
+    new static abstract TransactionSetDefinition<TSelf> Definition { get; }
 }
