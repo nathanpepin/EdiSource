@@ -13,7 +13,7 @@ public sealed class CodeWriter
     private readonly Stack<string> _disposeStack = new(0);
     private int _indentLevel;
 
-    public void Append(ReadOnlySpan<char> span)
+    public void Append(string span)
     {
         _builder.Append(span);
     }

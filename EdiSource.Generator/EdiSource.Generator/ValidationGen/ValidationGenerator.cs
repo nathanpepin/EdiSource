@@ -10,13 +10,6 @@ namespace EdiSource.Generator.ValidationGen;
 [Generator(LanguageNames.CSharp)]
 public class ValidationGenerator : IIncrementalGenerator
 {
-    private static readonly DiagnosticDescriptor GenericError = new("HS1000",
-        "Failed to generate validation code",
-        "Couldn't autogenerate validation code for class {0} due to reason {1}",
-        "Honlsoft.DependencyInjection.SourceGenerators",
-        DiagnosticSeverity.Error,
-        true);
-
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         IncrementalValuesProvider<ClassDeclarationSyntax> classDeclarations =
@@ -78,53 +71,48 @@ public class ValidationGenerator : IIncrementalGenerator
         if (classes.IsDefaultOrEmpty) return;
 
         foreach (var classDeclaration in classes)
-            try
+        {
+            var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
+            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
+
+            if (classSymbol == null) continue;
+
+            CodeWriter cw = new();
+
+            foreach (var attribute in classSymbol.GetAttributes())
             {
-                var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
-                var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
+                var attributeType = attribute.AttributeClass;
+                if (attributeType == null)
+                    continue;
 
-                if (classSymbol == null) continue;
+                // Replace IYourInterface with the actual interface you're checking for
+                var interfaceType =
+                    compilation.GetTypeByMetadataName("EdiSource.Domain.Validation.Data.IIndirectValidatable");
+                if (interfaceType == null)
+                    continue;
 
-                CodeWriter cw = new();
-
-                foreach (var attribute in classSymbol.GetAttributes())
-                {
-                    var attributeType = attribute.AttributeClass;
-                    if (attributeType == null)
-                        continue;
-
-                    // Replace IYourInterface with the actual interface you're checking for
-                    var interfaceType =
-                        compilation.GetTypeByMetadataName("EdiSource.Domain.Validation.Data.IIndirectValidatable");
-                    if (interfaceType == null)
-                        continue;
-
-                    if (attributeType.AllInterfaces.Contains(interfaceType)) cw.AppendLine($"// {attributeType.Name}");
-                    // The attribute implements the interface
-                    // You can generate code or perform other actions here
-                }
-
-                using (cw.StartNamespace(classSymbol.ContainingNamespace.ToDisplayString()))
-                {
-                    foreach (var @using in Usings)
-                        cw.AddUsing(@using);
-
-                    using (cw.StartClass(classDeclaration.Identifier.Text, ["ISourceGeneratorValidatable"]))
-                    {
-                        cw.AppendLine("public List<IIndirectValidatable> SourceGenValidations => [");
-                        cw.IncreaseIndent();
-                        ProcessAttributes(classDeclaration, cw, semanticModel);
-                        cw.DecreaseIndent();
-                        cw.AppendLine("];");
-                    }
-                }
-
-                context.AddSource($"{classSymbol.Name}.Validation.g.cs", SourceText.From(cw.ToString(), Encoding.UTF8));
+                if (attributeType.AllInterfaces.Contains(interfaceType)) cw.AppendLine($"// {attributeType.Name}");
+                // The attribute implements the interface
+                // You can generate code or perform other actions here
             }
-            catch (Exception ex)
+
+            using (cw.StartNamespace(classSymbol.ContainingNamespace.ToDisplayString()))
             {
-                context.ReportDiagnostic(Diagnostic.Create(GenericError, null, ex, classDeclaration.Identifier.Text));
+                foreach (var @using in Usings)
+                    cw.AddUsing(@using);
+
+                using (cw.StartClass(classDeclaration.Identifier.Text, ["ISourceGeneratorValidatable"]))
+                {
+                    cw.AppendLine("public List<IIndirectValidatable> SourceGenValidations => [");
+                    cw.IncreaseIndent();
+                    ProcessAttributes(classDeclaration, cw, semanticModel);
+                    cw.DecreaseIndent();
+                    cw.AppendLine("];");
+                }
             }
+
+            context.AddSource($"{classSymbol.Name}.Validation.g.cs", SourceText.From(cw.ToString(), Encoding.UTF8));
+        }
     }
 
     private static void ProcessAttributes(ClassDeclarationSyntax classDeclarationSyntax, CodeWriter cw,
@@ -155,7 +143,7 @@ public class ValidationGenerator : IIncrementalGenerator
             if (!attributeName.EndsWith("Attribute")) cw.Append("Attribute");
 
             cw.Append("(");
-            cw.Append(attribute.ArgumentList?.Arguments.ToString());
+            cw.Append(attribute.ArgumentList?.Arguments.ToString() ?? string.Empty);
             cw.AppendLine("),");
         }
     }

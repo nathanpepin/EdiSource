@@ -6,6 +6,6 @@ namespace EdiSource.Domain.Standard.Segments;
 
 public sealed class GE : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<GE>
 {
-    public FunctionalGroup? Parent { get; }
+    public new FunctionalGroup? Parent { get; }
     public static (string Primary, string? Secondary) EdiId { get; } = ("GE", null);
 }

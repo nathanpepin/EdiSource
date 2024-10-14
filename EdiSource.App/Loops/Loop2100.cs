@@ -7,7 +7,7 @@ namespace EdiSource.Loops;
 [LoopGenerator<_834, Loop2100, Loop2100_NM1>]
 public partial class Loop2100 : IValidatable
 {
-    [SegmentHeader] public Loop2100_NM1 NM1 { get; set; }
+    [SegmentHeader] public Loop2100_NM1 NM1 { get; set; } = default!;
 
     public IEnumerable<ValidationMessage> Validate()
     {

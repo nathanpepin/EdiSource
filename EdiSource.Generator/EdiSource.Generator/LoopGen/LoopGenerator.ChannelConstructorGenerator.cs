@@ -119,7 +119,7 @@ public partial class LoopGenerator
         {
             foreach (var item in items)
                 cw.AppendLine(
-                    $"loop.{item.Name} = await SegmentLoopFactory<{item.Property.Type}, {className}>.CreateAsync(segmentReader, loop);");
+                    $"loop.{item.Name} = await SegmentLoopFactory<{item.Property.Type.ToString().Replace("?", "")}, {className}>.CreateAsync(segmentReader, loop);");
         }
 
         private static void GenerateBody(string className,
@@ -133,20 +133,20 @@ public partial class LoopGenerator
                         ? named[0]
                         : property.Type;
 
-                    using var _ = cw.AddIf($"await ISegmentIdentifier<{typeName}>.MatchesAsync(segmentReader)");
+                    using var _ = cw.AddIf($"await ISegmentIdentifier<{typeName.ToString().Replace("?", "")}>.MatchesAsync(segmentReader)");
 
                     cw.AppendLine(attribute switch
                     {
                         SegmentAttribute or Segment =>
-                            $"loop.{name} = await SegmentLoopFactory<{typeName}, {className}>.CreateAsync(segmentReader, loop);",
+                            $"loop.{name} = await SegmentLoopFactory<{typeName.ToString().Replace("?", "")}, {className}>.CreateAsync(segmentReader, loop);",
                         SegmentListAttribute or SegmentList =>
-                            $"loop.{name}.Add(await SegmentLoopFactory<{typeName}, {className}>.CreateAsync(segmentReader, loop));",
+                            $"loop.{name}.Add(await SegmentLoopFactory<{typeName.ToString().Replace("?", "")}, {className}>.CreateAsync(segmentReader, loop));",
                         LoopAttribute or Loop =>
-                            $"loop.{name} = await {typeName}.InitializeAsync(segmentReader, loop);",
+                            $"loop.{name} = await {typeName.ToString().Replace("?", "")}.InitializeAsync(segmentReader, loop);",
                         LoopListAttribute or LoopList =>
-                            $"loop.{name}.Add(await {typeName}.InitializeAsync(segmentReader, loop));",
+                            $"loop.{name}.Add(await {typeName.ToString().Replace("?", "")}.InitializeAsync(segmentReader, loop));",
                         OptionalSegmentFooter or OptionalSegmentFooterAttribute =>
-                            $"loop.{name} = SegmentLoopFactory<{typeName}, {className}>.Create(segments, this);",
+                            $"loop.{name} = SegmentLoopFactory<{typeName.ToString().Replace("?", "")}, {className}>.Create(segments, this);",
                         _ => string.Empty
                     });
 

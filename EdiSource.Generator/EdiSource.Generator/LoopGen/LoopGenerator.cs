@@ -48,7 +48,7 @@ public partial class LoopGenerator : IIncrementalGenerator
             var ediItems = properties
                 .Select(property => new { property, attribute = GetEdiAttribute(property) })
                 .Where(t => !string.IsNullOrEmpty(t.attribute))
-                .Select(t => (t.property.Name, t.attribute, t.property))
+                .Select(t => (t.property.Name.Replace("?", ""), t.attribute.Replace("?", ""), t.property))
                 .ToArray();
 
             var orderedEdiItems = OrderEdiItems(ediItems);

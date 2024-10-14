@@ -13,11 +13,11 @@ public sealed partial class _834
 
     [SegmentList] public SegmentList<TS_REF> REFs { get; set; } = [];
 
-    [Segment] public TS_DTP DTP { get; set; }
+    [Segment] public TS_DTP? DTP { get; set; } 
 
-    [Loop] public Loop2000 Loop2000 { get; set; }
+    [Loop] public Loop2000 Loop2000 { get; set; }  = default!;
 
     [LoopList] public LoopList<Loop2100> Loop2100s { get; set; } = [];
 
-    [SegmentFooter] public TS_SE SE { get; set; }
+    [SegmentFooter] public TS_SE SE { get; set; } = default!;
 }

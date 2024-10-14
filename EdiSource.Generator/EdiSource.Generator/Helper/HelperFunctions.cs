@@ -70,7 +70,22 @@ public static class HelperFunctions
             && context.SemanticModel.GetConstantValue(expression) is var value
             && (bool)value.Value!;
 
-        return new LoopMeta(classDeclarationSyntax, parent, self, id, isTransactionSet);
+        return new LoopMeta(
+            classDeclarationSyntax,
+            parent.RemoveQuestionMark(),
+            self.RemoveQuestionMark(),
+            id.RemoveQuestionMark(),
+            isTransactionSet);
+    }
+
+    private static string RemoveQuestionMark(this string it)
+    {
+        return it.EndsWith("?") ? it[..^1] : it;
+    }
+
+    private static string? RemoveQuestionMarkNull(this string? it)
+    {
+        return it is null ? null : RemoveQuestionMark(it);
     }
 
     public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId, string? subType)

@@ -8,7 +8,7 @@ namespace EdiSource.Loops;
 [LoopGenerator<_834, Loop2000, Loop2000_INS>]
 public partial class Loop2000 : IValidatable
 {
-    [SegmentHeader] public Loop2000_INS INS { get; set; }
+    [SegmentHeader] public Loop2000_INS INS { get; set; } = default!;
 
     public IEnumerable<ValidationMessage> Validate()
     {
