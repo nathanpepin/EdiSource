@@ -24,10 +24,10 @@ public partial class SegmentGenerator : IIncrementalGenerator
     }
 
     private static void Execute(Compilation compilation,
-        ImmutableArray<(ClassDeclarationSyntax, string loop, string primaryId, string secondaryId)> classes,
+        ImmutableArray<(ClassDeclarationSyntax, string loop, string primaryId, string secondaryId, string? subType)> classes,
         SourceProductionContext context)
     {
-        foreach (var (classDeclaration, parent, primaryId, secondaryId) in classes)
+        foreach (var (classDeclaration, parent, primaryId, secondaryId, subType) in classes)
         {
             var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
 
@@ -42,7 +42,7 @@ public partial class SegmentGenerator : IIncrementalGenerator
                 .ToImmutableArray();
 
             var implementationCode = Generate(className, namespaceName, [..classUsings, ..Usings], parent, primaryId,
-                secondaryId);
+                secondaryId, subType);
             context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
         }
     }

@@ -2,11 +2,14 @@ using System.Threading.Channels;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
-using EdiSource.Domain.Standard.Loops;
 using EdiSource.Domain.Standard.Segments;
 
-namespace EdiSource.Loops;
+namespace EdiSource.Domain.Standard.Loops;
 
+/// <summary>
+/// Used to serialize any transaction set.
+/// This definition will be used if there are no other matching definitions.
+/// </summary>
 public sealed class GenericTransactionSet :
     ISegmentIdentifier<GenericTransactionSet>,
     ITransactionSet<GenericTransactionSet, ST>

@@ -73,7 +73,7 @@ public static class HelperFunctions
         return new LoopMeta(classDeclarationSyntax, parent, self, id, isTransactionSet);
     }
 
-    public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId)
+    public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId, string? subType)
         PredicateOnClassAttributesClassParent(GeneratorSyntaxContext context, ImmutableArray<string> items)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
@@ -85,12 +85,17 @@ public static class HelperFunctions
 
         var parent = typeArgumentListSyntaxes[0].Arguments[0].ToString();
 
+        var subType =
+            typeArgumentListSyntaxes[0].Arguments.Count == 2
+                ? typeArgumentListSyntaxes[0].Arguments[1].ToString()
+                : null;
+
         var args = attribute.DescendantNodes().OfType<AttributeArgumentSyntax>().ToArray();
 
         var primaryId = args[0].Expression.ToString();
         var secondaryId = args[1].Expression.ToString();
 
-        return (classDeclarationSyntax, parent, primaryId, secondaryId);
+        return (classDeclarationSyntax, parent, primaryId, secondaryId, subType);
     }
 
     public static bool IsSyntaxTargetForGeneration(SyntaxNode node, ImmutableArray<string> items)

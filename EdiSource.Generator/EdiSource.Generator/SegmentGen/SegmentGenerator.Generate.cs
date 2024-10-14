@@ -5,7 +5,7 @@ namespace EdiSource.Generator.SegmentGen;
 public partial class SegmentGenerator
 {
     private static string Generate(string className, string namespaceName, HashSet<string> usings, string parent,
-        string primaryId, string secondaryId)
+        string primaryId, string? secondaryId, string? subType)
     {
         var cw = new CodeWriter();
 
@@ -17,7 +17,7 @@ public partial class SegmentGenerator
         using (cw.StartNamespace(namespaceName))
         {
             ReadOnlySpan<string> implementations =
-                ["Segment", $"ISegment<{parent}>", $"ISegmentIdentifier<{className}>"];
+                [subType ?? "Segment", $"ISegment<{parent}>", $"ISegmentIdentifier<{className}>"];
 
             using (cw.StartClass(className, implementations))
             {

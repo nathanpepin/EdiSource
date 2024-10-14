@@ -25,7 +25,7 @@ var input =
     ST*834~
     REF*A~
     REF*B~
-    DTP*1*20240106~
+    DTP*1*D8*20240106~
     INS*A~
     NM1*1~
     NM1*2~
@@ -40,4 +40,6 @@ var env = await EdiCommon.ParseEdi<InterchangeEnvelope>(input);
 var text = EdiCommon.WriteEdiToString(env);
 var prety = EdiCommon.PrettyPrint(env);
 var validation = EdiCommon.Validate(env);
+
+var dtp = env.FindEdiElement<Loop2100_NM1>();
 ;

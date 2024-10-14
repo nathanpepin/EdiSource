@@ -57,9 +57,10 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
     private static async Task<bool> CreateTransactionSet(ChannelReader<ISegment> segmentReader, ISegment segment,
         FunctionalGroup loop)
     {
+        var values = (segment.GetDataElement(0), segment.GetDataElementOrNull(1));
+
         foreach (var ts in InterchangeEnvelope.TransactionSetDefinitions)
         {
-            var values = (segment.GetDataElement(0), segment.GetDataElementOrNull(1));
             var reader = ts(values);
             if (reader is null) continue;
 
@@ -67,7 +68,11 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
             return true;
         }
 
-        return false;
+        var generic = GenericTransactionSet.Definition(values);
+        if (generic is null) return false;
+
+        loop.TransactionSets.Add(await generic(segmentReader, loop));
+        return true;
     }
 
     public InterchangeEnvelope? Parent { get; set; }
