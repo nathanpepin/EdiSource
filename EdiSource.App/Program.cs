@@ -4,6 +4,7 @@ using EdiSource.Domain.Standard.Loops;
 using EdiSource.Loops;
 using EdiSource.Segments;
 
+
 var input =
     """
     ISA*00*          *00*          *ZZ*SENDER         *ZZ*RECEIVER       *200901*1319*^*00501*000000905*0*P*:~

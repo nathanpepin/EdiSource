@@ -106,6 +106,15 @@ public interface ISegment : IEdi, IParent
     /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
     /// <returns>True if the composite element exists; otherwise, false.</returns>
     bool CompositeElementExists(int dataElementIndex, int compositeElementIndex);
+
+    /// <summary>
+    ///     Checks if a composite element exists at the specified data element and composite element indexes
+    /// and if it has a length greater than 0.
+    /// </summary>
+    /// <param name="dataElementIndex">The index of the data element.</param>
+    /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
+    /// <returns>True if the composite element exists; otherwise, false.</returns>
+    bool CompositeElementNotNullOrEmpty(int dataElementIndex, int compositeElementIndex);
 }
 
 /// <summary>

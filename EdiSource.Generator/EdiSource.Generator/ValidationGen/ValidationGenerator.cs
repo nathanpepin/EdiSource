@@ -60,7 +60,8 @@ public class ValidationGenerator : IIncrementalGenerator
                 "BeDateTime" or "BeDateTimeAttribute" or
                 "BeTime" or "BeTimeAttribute" or
                 "BeInt" or "BeIntAttribute" or
-                "BeDecimal" or "BeDecimalAttribute" => true,
+                "BeDecimal" or "BeDecimalAttribute" or
+                "CompositeElementLength" or "CompositeElementLengthAttribute" => true,
             _ => false
         };
     }
@@ -79,6 +80,15 @@ public class ValidationGenerator : IIncrementalGenerator
 
             CodeWriter cw = new();
 
+            var sgv =
+                compilation.GetTypeByMetadataName("EdiSource.Domain.Validation.Data.ISourceGeneratorValidatable");
+            if (sgv == null)
+                continue;
+
+
+            var ns = (INamedTypeSymbol)classSymbol;
+            if (ns.AllInterfaces.Contains(sgv)) cw.AppendLine($"//Has sgv {classSymbol.Name}");
+            
             foreach (var attribute in classSymbol.GetAttributes())
             {
                 var attributeType = attribute.AttributeClass;
@@ -123,20 +133,7 @@ public class ValidationGenerator : IIncrementalGenerator
         {
             var attributeName = attribute.Name.ToString();
 
-            if (attributeName is not ("ElementLength" or "ElementLengthAttribute" or
-                "Empty" or "EmptyAttribute" or
-                "IsOneOfValues" or "IsOneOfValuesAttribute" or
-                "NotEmpty" or "NotEmptyAttribute" or
-                "NotOneOfValues" or "NotOneOfValuesAttribute" or
-                "RequiredDataElements" or "RequiredDataElementsAttribute" or
-                "RequireElement" or "RequiredElementAttribute" or
-                "BeDate" or "SegmentElementLengthAttribute" or
-                "BeDateTime" or "BeDateTimeAttribute" or
-                "BeTime" or "BeTimeAttribute" or
-                "BeInt" or "BeIntAttribute" or
-                "BeDecimal" or "BeDecimalAttribute")) continue;
-
-            var attributeSymbol = model.GetSymbolInfo(attribute);
+            if (!IsTargetAttribute(attributeName)) continue;
 
             cw.Append("new ");
             cw.Append(attributeName);

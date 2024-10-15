@@ -1,22 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>EdiSource</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\EdiSource.Basic\EdiSource.Basic.csproj" />
         <ProjectReference Include="..\EdiSource.Domain\EdiSource.Domain.csproj"/>
         <ProjectReference Include="..\EdiSource.Generator\EdiSource.Generator\EdiSource.Generator.csproj"
                           OutputItemType="Analyzer"
                           ReferenceOutputAssembly="false"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Dumpify" Version="0.6.6"/>
     </ItemGroup>
 </Project>

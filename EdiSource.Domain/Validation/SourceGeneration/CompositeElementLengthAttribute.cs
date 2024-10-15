@@ -5,16 +5,18 @@ using EdiSource.Domain.Validation.Factory;
 
 namespace EdiSource.Domain.Validation.SourceGeneration;
 
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public sealed class ElementLengthAttribute(
+[AttributeUsage(AttributeTargets.Class)]
+public sealed class CompositeElementLengthAttribute(
     ValidationSeverity validationSeverity,
     int dataElement,
+    int compositeElement,
     int min,
     int max)
     : Attribute, IIndirectValidatable
 {
-    public ElementLengthAttribute(ValidationSeverity validationSeverity, int dataElement, int length)
-        : this(validationSeverity, dataElement, length, length)
+    public CompositeElementLengthAttribute(ValidationSeverity validationSeverity, int dataElement, int compositeElement,
+        int length)
+        : this(validationSeverity, dataElement, compositeElement, length, length)
     {
     }
 
@@ -23,11 +25,10 @@ public sealed class ElementLengthAttribute(
         if (element is not Segment segment)
             throw new ArgumentException("Element must be a segment", nameof(element));
 
-        return segment.GetElement(dataElement) is { } ce &&
-               ce.Sum(x => x.Length) is var sumLength &&
-               sumLength < min &&
-               sumLength > max
-            ? [CreateValidationMessage(segment, sumLength)]
+        return segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value &&
+               value.Length < min &&
+               value.Length > max
+            ? [CreateValidationMessage(segment, value.Length)]
             : [];
     }
 
@@ -36,7 +37,8 @@ public sealed class ElementLengthAttribute(
         return ValidationFactory.Create(
             segment,
             validationSeverity,
-            $"Element {dataElement}  has length {value} which is not between {min} and {max}",
-            dataElement);
+            $"Element {dataElement} in composite {compositeElement} has length {value} which is not between {min} and {max}",
+            dataElement,
+            compositeElement);
     }
 }

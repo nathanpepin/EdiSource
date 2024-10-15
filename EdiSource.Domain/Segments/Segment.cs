@@ -116,6 +116,13 @@ public class Segment : ISegment
                && Elements[dataElementIndex].InsideBounds(compositeElementIndex);
     }
 
+    public bool CompositeElementNotNullOrEmpty(int dataElementIndex, int compositeElementIndex)
+    {
+        return Elements.InsideBounds(dataElementIndex)
+               && Elements[dataElementIndex].InsideBounds(compositeElementIndex)
+               && Elements[dataElementIndex][compositeElementIndex].Length > 0;
+    }
+
     public Separators Separators
     {
         get => _separators ?? Separators.DefaultSeparators;
