@@ -113,6 +113,26 @@ public static class HelperFunctions
         return (classDeclarationSyntax, parent, primaryId, secondaryId, subType);
     }
 
+    public static TypeSyntax? GetSegmentGeneratorSubType(GeneratorSyntaxContext context)
+    {
+        var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
+
+        var attribute = GetAttributeSyntax(classDeclarationSyntax, [.. LoopAggregation.SegmentGeneratorNames]);
+
+        if (attribute is null) return null;
+        
+        var typeArgumentListSyntaxes = attribute
+            .DescendantNodes().OfType<TypeArgumentListSyntax>().ToArray();
+
+        if (typeArgumentListSyntaxes.Length == 0)
+            return null;
+        
+        return
+            typeArgumentListSyntaxes[0].Arguments.Count == 2
+                ? typeArgumentListSyntaxes[0].Arguments[1]
+                : null;
+    }
+
     public static bool IsSyntaxTargetForGeneration(SyntaxNode node, ImmutableArray<string> items)
     {
         return node is ClassDeclarationSyntax classDeclarationSyntax

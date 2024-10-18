@@ -12,14 +12,14 @@ public class ValidationGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        IncrementalValuesProvider<ClassDeclarationSyntax> classDeclarations =
+        IncrementalValuesProvider<ValidationContext> classDeclarations =
             context.SyntaxProvider
                 .CreateSyntaxProvider(
                     static (s, _) => IsSyntaxTargetForGeneration(s),
                     static (ctx, _) => GetSemanticTargetForGeneration(ctx))
                 .Where(static m => m is not null)!;
 
-        IncrementalValueProvider<(Compilation, ImmutableArray<ClassDeclarationSyntax>)> compilationAndClasses
+        IncrementalValueProvider<(Compilation, ImmutableArray<ValidationContext>)> compilationAndClasses
             = context.CompilationProvider.Combine(classDeclarations.Collect());
 
         context.RegisterSourceOutput(compilationAndClasses,
@@ -31,7 +31,13 @@ public class ValidationGenerator : IIncrementalGenerator
         return node is ClassDeclarationSyntax { AttributeLists: { Count: > 0 } };
     }
 
-    private static ClassDeclarationSyntax? GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
+    private sealed class ValidationContext
+    {
+        public required ClassDeclarationSyntax ClassDeclarationSyntax { get; set; }
+        public required TypeSyntax? SubType { get; set; }
+    }
+
+    private static ValidationContext? GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
 
@@ -39,7 +45,15 @@ public class ValidationGenerator : IIncrementalGenerator
         foreach (var attribute in attributeList.Attributes)
         {
             var attributeName = attribute.Name.ToString();
-            if (IsTargetAttribute(attributeName)) return classDeclarationSyntax;
+
+            if (IsTargetAttribute(attributeName))
+            {
+                return new ValidationContext
+                {
+                    ClassDeclarationSyntax = classDeclarationSyntax,
+                    SubType = GetSegmentGeneratorSubType(context)
+                };
+            }
         }
 
         return null;
@@ -66,13 +80,15 @@ public class ValidationGenerator : IIncrementalGenerator
         };
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classes,
+    private static void Execute(Compilation compilation, ImmutableArray<ValidationContext> classes,
         SourceProductionContext context)
     {
         if (classes.IsDefaultOrEmpty) return;
 
-        foreach (var classDeclaration in classes)
+        foreach (var it in classes)
         {
+            var (classDeclaration, subType) = (it.ClassDeclarationSyntax, it.SubType);
+
             var semanticModel = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
             var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration);
 
@@ -84,28 +100,7 @@ public class ValidationGenerator : IIncrementalGenerator
                 compilation.GetTypeByMetadataName("EdiSource.Domain.Validation.Data.ISourceGeneratorValidatable");
             if (sgv == null)
                 continue;
-
-
-            var ns = (INamedTypeSymbol)classSymbol;
-            if (ns.AllInterfaces.Contains(sgv)) cw.AppendLine($"//Has sgv {classSymbol.Name}");
             
-            foreach (var attribute in classSymbol.GetAttributes())
-            {
-                var attributeType = attribute.AttributeClass;
-                if (attributeType == null)
-                    continue;
-
-                // Replace IYourInterface with the actual interface you're checking for
-                var interfaceType =
-                    compilation.GetTypeByMetadataName("EdiSource.Domain.Validation.Data.IIndirectValidatable");
-                if (interfaceType == null)
-                    continue;
-
-                if (attributeType.AllInterfaces.Contains(interfaceType)) cw.AppendLine($"// {attributeType.Name}");
-                // The attribute implements the interface
-                // You can generate code or perform other actions here
-            }
-
             using (cw.StartNamespace(classSymbol.ContainingNamespace.ToDisplayString()))
             {
                 foreach (var @using in Usings)
@@ -113,8 +108,15 @@ public class ValidationGenerator : IIncrementalGenerator
 
                 using (cw.StartClass(classDeclaration.Identifier.Text, ["ISourceGeneratorValidatable"]))
                 {
-                    cw.AppendLine("public List<IIndirectValidatable> SourceGenValidations => [");
+                    cw.AppendLine(subType == null
+                        ? "public List<IIndirectValidatable> SourceGenValidations => ["
+                        : "new public List<IIndirectValidatable> SourceGenValidations => [");
+
                     cw.IncreaseIndent();
+                    if (subType != null)
+                    {
+                        cw.AppendLine("..base.SourceGenValidations, ");
+                    }
                     ProcessAttributes(classDeclaration, cw, semanticModel);
                     cw.DecreaseIndent();
                     cw.AppendLine("];");

@@ -1,6 +1,9 @@
-﻿using EdiSource.Domain;
+﻿using EdiSource.Basic.Segments.DTPData;
+using EdiSource.Domain;
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Standard.Loops;
+using EdiSource.Domain.Validation.Data;
 using EdiSource.Loops;
 using EdiSource.Segments;
 
@@ -12,7 +15,7 @@ var input =
     ST*834~
     REF*A~
     REF*B~
-    DTP*1*D8*20240106~
+    DTP*1*D8*2024e0106~
     INS*A~
     NM1*1~
     NM1*2~
@@ -24,9 +27,14 @@ var input =
 InterchangeEnvelope.TransactionSetDefinitions.Add(_834.Definition);
 
 var env = await EdiCommon.ParseEdi<InterchangeEnvelope>(input);
-var text = EdiCommon.WriteEdiToString(env);
-var prety = EdiCommon.PrettyPrint(env);
-var validation = EdiCommon.Validate(env);
+// var text = EdiCommon.WriteEdiToString(env);
+// var prety = EdiCommon.PrettyPrint(env);
+// var validation = EdiCommon.Validate(env);
 
-var dtp = env.FindEdiElement<Loop2100_NM1>();
+var v = EdiCommon.Validate(env);
+
+var vf = IUserValidation<TS_DTP>.UserValidations;
+
+Console.WriteLine(v);
+
 ;

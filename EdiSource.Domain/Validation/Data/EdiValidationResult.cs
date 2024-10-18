@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace EdiSource.Domain.Validation.Data;
 
 /// <summary>
@@ -31,5 +33,17 @@ public class EdiValidationResult
     public void AddRange(IEnumerable<ValidationMessage> updateSegmentLine)
     {
         ValidationMessages.AddRange(updateSegmentLine);
+    }
+
+    public override string ToString()
+    {
+        StringBuilder output = new();
+
+        foreach (var message in ValidationMessages)
+        {
+            output.AppendLine(message.ToString());
+        }
+
+        return output.ToString();
     }
 }

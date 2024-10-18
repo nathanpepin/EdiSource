@@ -23,7 +23,7 @@ public sealed class ElementLengthAttribute(
         if (element is not Segment segment)
             throw new ArgumentException("Element must be a segment", nameof(element));
 
-        return segment.GetElement(dataElement) is { } ce &&
+        return segment.GetElementOrNull(dataElement) is { } ce &&
                ce.Sum(x => x.Length) is var sumLength &&
                sumLength < min &&
                sumLength > max

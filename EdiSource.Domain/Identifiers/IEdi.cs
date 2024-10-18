@@ -1,3 +1,5 @@
+using EdiSource.Domain.Validation.Data;
+
 namespace EdiSource.Domain.Identifiers;
 
 /// <summary>
@@ -9,3 +11,9 @@ namespace EdiSource.Domain.Identifiers;
 ///     - LoopList<br />
 /// </summary>
 public interface IEdi;
+
+public interface IEdi<T> : IEdi where T : IEdi
+{
+    static List<IIndirectValidatable<T>> Validations { get; set; } = [];
+    List<IIndirectValidatable> SourceGenValidations { get; set; }
+}

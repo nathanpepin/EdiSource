@@ -2,16 +2,19 @@ using System.ComponentModel.DataAnnotations;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Validation.Data;
+using EdiSource.Domain.Validation.Factory;
 using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Basic.Segments.DTPData;
 
 [IsOneOfValues(ValidationSeverity.Critical, 0, 0, "DTP")]
 [RequiredDataElements(ValidationSeverity.Critical, [0, 1, 2])]
+[BeDateTime(ValidationSeverity.Critical, 3, 0)]
+[BeDateTime(ValidationSeverity.Critical, 3, 1)]
 [ElementLength(ValidationSeverity.Critical, 1, 3)]
 [ElementLength(ValidationSeverity.Critical, 2, 3)]
 [ElementLength(ValidationSeverity.Critical, 3, 35)]
-public partial class DTP : Segment
+public partial class DTP : Segment, IValidatable
 {
     public string Qualifier
     {
@@ -39,5 +42,11 @@ public partial class DTP : Segment
             .Map(format => this.GetDate(3, 1, format));
         set => DateFormats.DateRange?
             .Map(format => this.SetDate(value, 3, 1, format));
+    }
+
+    public IEnumerable<ValidationMessage> Validate()
+    {
+        
+        return [ValidationFactory.CreateCritical(this, "Fuck")];
     }
 }
