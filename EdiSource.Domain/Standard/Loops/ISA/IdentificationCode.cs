@@ -157,6 +157,6 @@ public static class IdentificationCodeExtensions
             .OfType<string>()
             .ToArray();
 
-        return new IsOneOfValuesAttribute(ValidationSeverity.Error, 1, 0, validCodes);
+        return new IsOneOfValuesAttribute(ValidationSeverity.Error, 5, 0, validCodes);
     }
 }

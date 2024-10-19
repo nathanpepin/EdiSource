@@ -4,6 +4,7 @@ using EdiSource.Generator.Helper;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
 
 namespace EdiSource.Generator.ValidationGen;
 
@@ -28,7 +29,7 @@ public class ValidationGenerator : IIncrementalGenerator
 
     private static bool IsSyntaxTargetForGeneration(SyntaxNode node)
     {
-        return node is ClassDeclarationSyntax { AttributeLists: { Count: > 0 } };
+        return node is ClassDeclarationSyntax { AttributeLists.Count: > 0 };
     }
 
     private sealed class ValidationContext
@@ -41,19 +42,24 @@ public class ValidationGenerator : IIncrementalGenerator
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
 
-        foreach (var attributeList in classDeclarationSyntax.AttributeLists)
-        foreach (var attribute in attributeList.Attributes)
-        {
-            var attributeName = attribute.Name.ToString();
-
-            if (IsTargetAttribute(attributeName))
+        var target = classDeclarationSyntax
+            .AttributeLists
+            .SelectMany(attributeList => attributeList.Attributes,
+                (_, attribute) => CSharpExtensions.GetTypeInfo(context.SemanticModel, attribute))
+            .Select(attributeSymbol => new
             {
-                return new ValidationContext
-                {
-                    ClassDeclarationSyntax = classDeclarationSyntax,
-                    SubType = GetSegmentGeneratorSubType(context)
-                };
-            }
+                TypeSymbol = attributeSymbol, Definition = attributeSymbol.Type?.OriginalDefinition.ToDisplayString()
+            })
+            .FirstOrDefault(x =>
+                x.Definition is "EdiSource.Domain.SourceGeneration.LoopGeneratorAttribute<TParent, TSelf, TId>");
+
+        if (target is not null)
+        {
+            return new ValidationContext
+            {
+                ClassDeclarationSyntax = classDeclarationSyntax,
+                SubType = GetSegmentGeneratorSubType(context)
+            };
         }
 
         return null;
@@ -100,7 +106,7 @@ public class ValidationGenerator : IIncrementalGenerator
                 compilation.GetTypeByMetadataName("EdiSource.Domain.Validation.Data.ISourceGeneratorValidatable");
             if (sgv == null)
                 continue;
-            
+
             using (cw.StartNamespace(classSymbol.ContainingNamespace.ToDisplayString()))
             {
                 foreach (var @using in Usings)
@@ -117,6 +123,7 @@ public class ValidationGenerator : IIncrementalGenerator
                     {
                         cw.AppendLine("..base.SourceGenValidations, ");
                     }
+
                     ProcessAttributes(classDeclaration, cw, semanticModel);
                     cw.DecreaseIndent();
                     cw.AppendLine("];");

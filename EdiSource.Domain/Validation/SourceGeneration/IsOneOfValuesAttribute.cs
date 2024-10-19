@@ -19,7 +19,7 @@ public sealed class IsOneOfValuesAttribute(
             throw new ArgumentException("Element must be a segment", nameof(element));
 
         if (segment.GetCompositeElementOrNull(dataElement, compositeElement) is { } value
-            && !value.Contains(value))
+            && !values.Contains(value))
             yield return ValidationFactory.Create(
                 segment,
                 validationSeverity,

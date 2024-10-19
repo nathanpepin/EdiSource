@@ -11,11 +11,9 @@ namespace EdiSource.Segments
     using System.Linq;
     using System.Collections.Generic;
     using System;
-    public partial class TS_SE
-    : ISourceGeneratorValidatable
+
+    public partial class TS_SE : ISourceGeneratorValidatable
     {
-        public List<IIndirectValidatable> SourceGenValidations => [
-new ElementLengthAttribute(0, 1, 3, 3            ),
-        ];
+        public List<IIndirectValidatable> SourceGenValidations => [new ElementLengthAttribute(0, 1, 3, 3), ];
     }
 }

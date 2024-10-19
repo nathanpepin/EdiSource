@@ -3,7 +3,7 @@
   "profiles": {
     "DebugRoslynSourceGenerator": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../EdiSource.Generator.Sample/EdiSource.Generator.Sample.csproj"
+      "targetProject": "../../EdiSource.App/EdiSource.App.csproj"
     }
   }
 }

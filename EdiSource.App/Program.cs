@@ -10,7 +10,7 @@ using EdiSource.Segments;
 
 var input =
     """
-    ISA*00*          *00*          *ZZ*SENDER         *ZZ*RECEIVER       *200901*1319*^*00501*000000905*0*P*:~
+    ISA*i0*          *00*          *ZZ*SENDER         *ZZ*RECEIVER       *200901*1319*^*00501*000000905*0*P*:~
     GS*09~
     ST*834~
     REF*A~
@@ -35,6 +35,5 @@ var v = EdiCommon.Validate(env);
 
 var vf = IUserValidation<TS_DTP>.UserValidations;
 
-Console.WriteLine(v);
-
+ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
 ;

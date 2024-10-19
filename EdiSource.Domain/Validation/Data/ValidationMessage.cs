@@ -54,23 +54,25 @@ public sealed class ValidationMessage
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append($"Severity: {Severity}, Message: {Message}");
+        sb.Append($"Severity: {Severity}");
 
         sb.Append($", Subject: {Subject}");
 
         if (Loop != null) sb.Append($", Loop: {Loop}");
+        
+        if (LoopLine.HasValue) sb.Append($", LoopLine: {LoopLine}");
 
-        if (Segment != null) sb.Append($", Segment: {Segment}");
+        if (SegmentLine.HasValue) sb.Append($", SegmentLine: {SegmentLine}");
 
         if (DataElement.HasValue) sb.Append($", DataElement: {DataElement}");
 
         if (CompositeElement.HasValue) sb.Append($", CompositeElement: {CompositeElement}");
-
+        
         if (Value is not null) sb.Append($", Value: {Value}");
 
-        if (LoopLine.HasValue) sb.Append($", LoopLine: {LoopLine}");
-
-        if (SegmentLine.HasValue) sb.Append($", SegmentLine: {SegmentLine}");
+        sb.Append($" Message: {Message}");
+        
+        if (Segment != null) sb.Append($", Segment: {Segment}");
 
         return sb.ToString();
     }
