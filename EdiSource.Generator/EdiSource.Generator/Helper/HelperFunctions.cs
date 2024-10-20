@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using EdiSource.Generator.LoopGen.Data;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace EdiSource.Generator.Helper;
@@ -88,7 +89,7 @@ public static class HelperFunctions
         return it is null ? null : RemoveQuestionMark(it);
     }
 
-    public static (ClassDeclarationSyntax, string loop, string primaryId, string secondaryId, string? subType)
+    public static (ClassDeclarationSyntax, string loop, ImmutableArray<string> args, string? subType)
         PredicateOnClassAttributesClassParent(GeneratorSyntaxContext context, ImmutableArray<string> items)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
@@ -105,12 +106,11 @@ public static class HelperFunctions
                 ? typeArgumentListSyntaxes[0].Arguments[1].ToString()
                 : null;
 
-        var args = attribute.DescendantNodes().OfType<AttributeArgumentSyntax>().ToArray();
+        var args = attribute.DescendantNodes().OfType<AttributeArgumentSyntax>()
+            .Select(x => x.Expression.ToString())
+            .ToImmutableArray();
 
-        var primaryId = args[0].Expression.ToString();
-        var secondaryId = args[1].Expression.ToString();
-
-        return (classDeclarationSyntax, parent, primaryId, secondaryId, subType);
+        return (classDeclarationSyntax, parent, args, subType);
     }
 
     public static TypeSyntax? GetSegmentGeneratorSubType(GeneratorSyntaxContext context)

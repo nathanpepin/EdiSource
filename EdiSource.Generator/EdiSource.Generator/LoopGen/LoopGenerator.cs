@@ -5,6 +5,36 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
 namespace EdiSource.Generator.LoopGen;
+//
+// [Generator]
+// public sealed class TLoopGenerator : IIncrementalGenerator
+// {
+//     private const string AttributeMetaDataName = "";
+//
+//     public void Initialize(IncrementalGeneratorInitializationContext context) 
+//     {
+//         GeneratorWithAttributeHelper<S>.Initialize(context, AttributeMetaDataName, Predicate, Transform,
+//             CreateOutput);
+//     }
+//
+//
+//     public static bool Predicate(SyntaxNode node, CancellationToken ct)
+//     {
+//         return true;
+//     }
+//
+//     public static S? Transform(GeneratorAttributeSyntaxContext context, CancellationToken ct)
+//     {
+//         return default;
+//     }
+//
+//     public static void CreateOutput(SourceProductionContext context, ImmutableArray<S> source)
+//     {
+//         throw new NotImplementedException();
+//     }
+// }
+
+public readonly record struct S(string Name, string Value);
 
 [Generator]
 public partial class LoopGenerator : IIncrementalGenerator

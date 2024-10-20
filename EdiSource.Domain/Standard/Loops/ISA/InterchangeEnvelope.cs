@@ -57,5 +57,5 @@ public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentId
         return loop;
     }
 
-    public static (string Primary, string? Secondary) EdiId => ISA.EdiId;
+    public static EdiId EdiId => ISA.EdiId;
 }

@@ -13,7 +13,7 @@ public class Generic_SE : SE, ISegment<GenericTransactionSet>, ISegmentIdentifie
 
 public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
 {
-    public static (string Primary, string? Secondary) EdiId { get; } = ("SE", null);
+    public static EdiId EdiId { get; } = new("SE");
 
     /// <summary>
     /// If the parent exists then it will count the segments in the

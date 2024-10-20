@@ -15,7 +15,7 @@ public partial class Generic_ST : ST, ISegment<GenericTransactionSet>, ISegmentI
 
 public partial class ST : Segment, ISegmentIdentifier<ST>, ISourceGeneratorValidatable
 {
-    public static (string Primary, string? Secondary) EdiId { get; } = ("ST", null);
+    public static EdiId EdiId { get; } = new ("ST");
 
     public TransactionSetIdentifierCode TransactionSetIdentifierCode
     {

@@ -5,7 +5,7 @@ using EdiSource.Loops;
 
 namespace EdiSource.Segments;
 
-[SegmentGenerator<Loop2100>("NM1", null)]
+[SegmentGenerator<Loop2100>("NM1")]
 public partial class Loop2100_NM1 : IValidatable
 {
     public IEnumerable<ValidationMessage> Validate()

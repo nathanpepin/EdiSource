@@ -6,5 +6,5 @@ using EdiSource.Loops;
 namespace EdiSource.Segments;
 
 [BeDate(ValidationSeverity.Critical, 2, 0)]
-[SegmentGenerator<Loop2000>("INS", null)]
+[SegmentGenerator<Loop2000>("INS")]
 public partial class Loop2000_INS;

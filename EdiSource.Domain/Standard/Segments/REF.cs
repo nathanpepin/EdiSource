@@ -1,4 +1,5 @@
 using EdiSource.Domain.Elements;
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.Factory;
@@ -8,6 +9,8 @@ namespace EdiSource.Domain.Standard.Segments;
 
 public partial class REF : Segment, IValidatable, ISourceGeneratorValidatable
 {
+    public static EdiId EdiId { get; } = new("REF");
+
     public string E01Identifier
     {
         get => GetCompositeElement(1);

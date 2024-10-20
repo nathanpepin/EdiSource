@@ -9,7 +9,7 @@ namespace EdiSource.Domain.Standard.Segments;
 public sealed class GE : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<GE>, IRefresh
 {
     public new FunctionalGroup? Parent { get; }
-    public static (string Primary, string? Secondary) EdiId { get; } = ("GE", null);
+    public static EdiId EdiId { get; } = new("GE");
 
     public int E01NumberOfTransactionSets
     {

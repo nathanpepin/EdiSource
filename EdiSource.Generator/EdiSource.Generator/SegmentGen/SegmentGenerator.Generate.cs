@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using EdiSource.Generator.Helper;
 
 namespace EdiSource.Generator.SegmentGen;
@@ -5,7 +6,7 @@ namespace EdiSource.Generator.SegmentGen;
 public partial class SegmentGenerator
 {
     private static string Generate(string className, string namespaceName, HashSet<string> usings, string parent,
-        string primaryId, string? secondaryId, string? subType)
+        ImmutableArray<string> args, string? subType)
     {
         var cw = new CodeWriter();
 
@@ -23,7 +24,7 @@ public partial class SegmentGenerator
             {
                 cw.AppendLine($"new public {parent}? Parent {{ get; set; }}");
                 cw.AppendLine(
-                    $"public static (string Primary, string? Secondary) EdiId => ({primaryId}, {secondaryId});");
+                    $"public static EdiId EdiId => new ({string.Join(", ", args)});");
             }
         }
 

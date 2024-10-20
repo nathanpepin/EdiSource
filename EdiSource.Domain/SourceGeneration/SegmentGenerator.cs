@@ -8,9 +8,9 @@ namespace EdiSource.Domain.SourceGeneration;
 ///     Mark a segment class with this attribute to enable source generation.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class SegmentGenerator<TParent>(string primaryId, string? secondaryId) : Attribute
+public sealed class SegmentGenerator<TParent>(params string?[] args) : Attribute
     where TParent : ILoop;
 
-public sealed class SegmentGenerator<TParent, TBase>(string primaryId, string? secondaryId) : Attribute
+public sealed class SegmentGenerator<TParent, TBase>(params string[] args) : Attribute
     where TParent : ILoop
     where TBase : Segment;

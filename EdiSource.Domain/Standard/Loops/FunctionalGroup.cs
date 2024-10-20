@@ -3,6 +3,7 @@ using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Segments;
+using EdiSource.Domain.Standard.Segments.STData;
 
 namespace EdiSource.Domain.Standard.Loops;
 
@@ -43,6 +44,8 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
         {
             if (!segmentReader.TryPeek(out var segment)) break;
 
+            if (!ST.EdiId.MatchesSegment(segment)) break;
+
             if (await CreateTransactionSet(segmentReader, segment, loop)) continue;
 
             break;
@@ -53,23 +56,21 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
         return loop;
     }
 
-    public static (string Primary, string? Secondary) EdiId => GS.EdiId;
+    public static EdiId EdiId => GS.EdiId;
 
     private static async Task<bool> CreateTransactionSet(ChannelReader<ISegment> segmentReader, ISegment segment,
         FunctionalGroup loop)
     {
-        var values = (segment.GetDataElement(0), segment.GetDataElementOrNull(1));
-
         foreach (var ts in InterchangeEnvelope.TransactionSetDefinitions)
         {
-            var reader = ts(values);
+            var reader = ts(segment);
             if (reader is null) continue;
 
             loop.TransactionSets.Add(await reader(segmentReader, loop));
             return true;
         }
 
-        var generic = GenericTransactionSet.Definition(values);
+        var generic = GenericTransactionSet.Definition(segment);
         if (generic is null) return false;
 
         loop.TransactionSets.Add(await generic(segmentReader, loop));

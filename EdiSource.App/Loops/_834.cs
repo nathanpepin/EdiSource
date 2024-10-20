@@ -12,9 +12,10 @@ namespace EdiSource.Loops;
 public sealed partial class _834 : ITransactionSet<_834, TS_ST, TS_SE>
 {
     [SegmentHeader] public TS_ST ST { get; set; } = default!;
+
     public static TransactionSetDefinition Definition { get; } = id =>
     {
-        if (EdiId.Primary != id.Item1 || (EdiId.Secondary is not null && EdiId.Secondary != id.Item2)) return null;
+        if (!EdiId.MatchesSegment(id)) return null;
 
         return (segmentReader, parent) => InitializeAsync(segmentReader, parent).ContinueWith(ILoop (x) => x.Result);
     };

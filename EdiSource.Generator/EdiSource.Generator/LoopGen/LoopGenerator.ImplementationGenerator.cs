@@ -31,7 +31,7 @@ public partial class LoopGenerator
                         ? $$"""new public {{parent}}? Parent => null;"""
                         : $$"""new public {{parent}}? Parent { get; set; }""");
 
-                    cw.AppendLine($"public static (string Primary, string? Secondary) EdiId => {id}.EdiId;");
+                    cw.AppendLine($"public static EdiId EdiId => {id}.EdiId;");
                 }
             }
 

@@ -9,7 +9,7 @@ namespace EdiSource.Domain.Standard.Segments;
 public sealed class ISA : Segment, ISegment<InterchangeEnvelope>, ISegmentIdentifier<ISA>, ISourceGeneratorValidatable
 {
     public new InterchangeEnvelope? Parent { get; }
-    public static (string Primary, string? Secondary) EdiId { get; } = ("ISA", null);
+    public static EdiId EdiId { get; } = new ("ISA");
     
     public List<IIndirectValidatable> SourceGenValidations { get; } =
     [

@@ -7,7 +7,7 @@ using EdiSource.Loops;
 
 namespace EdiSource.Segments;
 
-[SegmentGenerator<_834, SE>("SE", null)]
+[SegmentGenerator<_834, SE>("SE")]
 [ElementLength(0, 1, 3, 3)]
 public partial class TS_SE : IValidatable
 {

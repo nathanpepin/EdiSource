@@ -14,5 +14,5 @@ public sealed class GS : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<
         set => SetCompositeElement(value, 6);
     }
 
-    public static (string Primary, string? Secondary) EdiId { get; } = ("GS", null);
+    public static EdiId EdiId { get; } = new ("GS");
 }

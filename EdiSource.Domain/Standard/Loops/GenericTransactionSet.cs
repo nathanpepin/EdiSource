@@ -18,7 +18,7 @@ public sealed class GenericTransactionSet :
     public ST ST { get; set; } = default!;
     public SegmentList<ISegment> Segments { get; set; } = [];
     public SE SE { get; set; } = default!;
-    public static (string Primary, string? Secondary) EdiId { get; } = ("ST", null);
+    public static EdiId EdiId { get; } = ST.EdiId;
 
     public static Task<GenericTransactionSet> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)
     {
@@ -62,7 +62,7 @@ public sealed class GenericTransactionSet :
 
     public static TransactionSetDefinition Definition { get; } = id =>
     {
-        if (EdiId.Primary != id.Item1 || (EdiId.Secondary is not null && EdiId.Secondary != id.Item2)) return null;
+        if (EdiId.MatchesSegment(id)) return null;
 
         return (segmentReader, parent) => InitializeAsync(segmentReader, parent).ContinueWith(ILoop (x) => x.Result);
     };

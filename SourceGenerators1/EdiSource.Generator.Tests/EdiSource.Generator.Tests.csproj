@@ -30,4 +30,8 @@
         <ProjectReference Include="..\..\EdiSource.Domain\EdiSource.Domain.csproj"/>
         <ProjectReference Include="..\..\EdiSource.Generator\EdiSource.Generator\EdiSource.Generator.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="SegmentGenerator\SegmentGeneratorTests.TestA#Test_INS.Implementation.g.received.cs" />
+    </ItemGroup>
 </Project>

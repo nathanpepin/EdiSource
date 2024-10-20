@@ -8,7 +8,7 @@ namespace EdiSource.Domain.Identifiers;
 /// </summary>
 public interface ISegmentIdentifier
 {
-    static abstract (string Primary, string? Secondary) EdiId { get; }
+    static abstract EdiId EdiId { get; }
 }
 
 /// <summary>
@@ -25,14 +25,7 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
     /// <returns></returns>
     public static bool Matches(ISegment segment)
     {
-        return (T.EdiId.Primary, T.EdiId.Secondary) switch
-        {
-            (not null, null) => segment.GetDataElement(0) == T.EdiId.Primary,
-            (not null, not null) =>
-                segment.GetDataElement(0) == T.EdiId.Primary &&
-                segment.GetCompositeElementOrNull(1, 0) == T.EdiId.Secondary,
-            _ => false
-        };
+        return T.EdiId.MatchesSegment(segment);
     }
 
     /// <summary>
@@ -42,10 +35,7 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
     /// <returns></returns>
     public static bool Matches(Queue<ISegment> segments)
     {
-        return segments.Count > 0 &&
-               segments.Peek().GetDataElement(0) == T.EdiId.Primary &&
-               (T.EdiId.Secondary is null
-                || T.EdiId.Secondary == segments.Peek().GetCompositeElementOrNull(0, 0));
+        return segments.Count > 0 && Matches(segments.Peek());
     }
 
     /// <summary>
