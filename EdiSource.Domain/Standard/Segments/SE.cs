@@ -1,11 +1,67 @@
 using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Segments;
+using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public sealed class SE : Segment, ISegment<GenericTransactionSet>, ISegmentIdentifier<SE>
+public class Generic_SE : SE, ISegment<GenericTransactionSet>, ISegmentIdentifier<Generic_SE>
 {
-    public new GenericTransactionSet? Parent { get; }
+    public new GenericTransactionSet? Parent { get; set; }
+}
+
+public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
+{
     public static (string Primary, string? Secondary) EdiId { get; } = ("SE", null);
+
+    /// <summary>
+    /// If the parent exists then it will count the segments in the
+    /// transaction set, otherwise the value is from the segment itself.
+    ///
+    /// If a parent does exist, the value will not update.
+    /// </summary>
+    public int E01NumberOfIncludedSegments
+    {
+        get
+        {
+            if (Parent is null)
+                return this.GetIntRequired(1);
+
+            var count = Parent.YieldChildSegments().Count();
+            this.SetInt(count, 1);
+            return count;
+        }
+        set
+        {
+            if (Parent is null)
+                this.SetInt(value, 1);
+        }
+    }
+
+    /// <summary>
+    /// If the Parent exists it'll point to the Parent's ST's value,
+    /// otherwise it'll set the value directly on the segment
+    /// </summary>
+    public string E02TransactionSetControlNumber
+    {
+        get => Parent is not ITransactionSet ts
+            ? GetCompositeElement(2)
+            : ts.ST.TransactionSetControlNumber;
+        set
+        {
+            if (Parent is ITransactionSet ts)
+            {
+                ts.ST.TransactionSetControlNumber = value;
+            }
+
+            SetCompositeElement(value, 2);
+        }
+    }
+
+    public void Refresh()
+    {
+        _ = E01NumberOfIncludedSegments;
+        _ = E02TransactionSetControlNumber;
+    }
 }

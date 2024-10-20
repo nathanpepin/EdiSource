@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Generator.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Domain.Tests", "EdiSource.Domain.Tests\EdiSource.Domain.Tests.csproj", "{B9714AB2-33F4-4E2E-8ED4-F500018B5184}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Basic", "EdiSource.Basic\EdiSource.Basic.csproj", "{C4089A6E-12B6-467D-8616-55348C223167}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,9 +36,5 @@ Global
 		{B9714AB2-33F4-4E2E-8ED4-F500018B5184}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9714AB2-33F4-4E2E-8ED4-F500018B5184}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9714AB2-33F4-4E2E-8ED4-F500018B5184}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4089A6E-12B6-467D-8616-55348C223167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4089A6E-12B6-467D-8616-55348C223167}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4089A6E-12B6-467D-8616-55348C223167}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4089A6E-12B6-467D-8616-55348C223167}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

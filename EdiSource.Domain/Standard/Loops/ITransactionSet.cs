@@ -1,20 +1,27 @@
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
+using EdiSource.Domain.Standard.Segments;
+using EdiSource.Domain.Standard.Segments.STData;
 
 namespace EdiSource.Domain.Standard.Loops;
 
-public interface ITransactionSet : ILoop
+public interface ITransactionSet
+    : ILoop
 {
-    ISegment ST { get; }
-
-    ISegment SE { get; }
+    ST ST { get; }
+    SE SE { get;  }
     static abstract TransactionSetDefinition Definition { get; }
 }
 
-public interface ITransactionSet<TSelf, TId> :
+public interface ITransactionSet<TSelf, TST, TSE> :
     ITransactionSet,
-    ILoop<FunctionalGroup>, ISegmentIdentifier<TId>,
+    ILoop<FunctionalGroup>, ISegmentIdentifier<TST>,
     ILoopInitialize<FunctionalGroup, TSelf>
-    where TSelf : ITransactionSet<TSelf, TId>
-    where TId : ISegmentIdentifier<TId>;
+    where TST : ST, ISegmentIdentifier<TST>
+    where TSE : SE
+    where TSelf : ILoop
+{
+    new TST ST { get; }
+    new TSE SE { get;  }
+}

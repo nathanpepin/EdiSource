@@ -3,6 +3,7 @@ using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Segments;
+using EdiSource.Domain.Standard.Segments.STData;
 
 namespace EdiSource.Domain.Standard.Loops;
 
@@ -12,7 +13,7 @@ namespace EdiSource.Domain.Standard.Loops;
 /// </summary>
 public sealed class GenericTransactionSet :
     ISegmentIdentifier<GenericTransactionSet>,
-    ITransactionSet<GenericTransactionSet, ST>
+    ITransactionSet<GenericTransactionSet, ST, SE>
 {
     public ST ST { get; set; } = default!;
     public SegmentList<ISegment> Segments { get; set; } = [];
@@ -37,7 +38,7 @@ public sealed class GenericTransactionSet :
             Parent = parent
         };
 
-        loop.ST = await SegmentLoopFactory<ST, GenericTransactionSet>.CreateAsync(segmentReader, loop);
+        loop.ST = await SegmentLoopFactory<Generic_ST, GenericTransactionSet>.CreateAsync(segmentReader, loop);
 
         while (await segmentReader.WaitToReadAsync())
         {
@@ -50,7 +51,7 @@ public sealed class GenericTransactionSet :
             break;
         }
 
-        loop.SE = await SegmentLoopFactory<SE, GenericTransactionSet>.CreateAsync(segmentReader, loop);
+        loop.SE = await SegmentLoopFactory<Generic_SE, GenericTransactionSet>.CreateAsync(segmentReader, loop);
 
         return loop;
     }
@@ -58,8 +59,6 @@ public sealed class GenericTransactionSet :
     ILoop? ILoop.Parent => Parent;
     public FunctionalGroup? Parent { get; set; }
     public List<IEdi?> EdiItems => [ST, Segments, SE];
-    ISegment ITransactionSet.ST => ST;
-    ISegment ITransactionSet.SE => SE;
 
     public static TransactionSetDefinition Definition { get; } = id =>
     {

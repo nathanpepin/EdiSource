@@ -1,6 +1,6 @@
-using EdiSource.Basic.Segments.DTPData;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.SourceGeneration;
+using EdiSource.Domain.Standard.Segments.DTPData;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.Factory;
 using EdiSource.Domain.Validation.SourceGeneration;

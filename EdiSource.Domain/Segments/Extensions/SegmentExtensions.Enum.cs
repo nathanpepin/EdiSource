@@ -104,7 +104,7 @@ public static partial class SegmentExtensions
         var text = value.ToString().AsSpan();
         if (tryRemoveUnderscore && text[0] != '_') text = text[1..];
 
-        return it.SetCompositeElement(dataElement, compositeElement, text.ToString(), create);
+        return it.SetCompositeElement(text.ToString(), dataElement, compositeElement, create);
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ public static partial class SegmentExtensions
         var text = value.ToString().AsSpan();
         if (tryRemoveUnderscore && text[0] != '_') text = text[1..];
 
-        return it.SetCompositeElement(dataElement, compositeElement, text.ToString(), create);
+        return it.SetCompositeElement(text.ToString(), dataElement, compositeElement, create);
     }
 
     /// <summary>
@@ -147,7 +147,7 @@ public static partial class SegmentExtensions
         bool create = true)
         where TEnum : struct, Enum
     {
-        return it.SetCompositeElement(dataElement, compositeElement, fun(value), create);
+        return it.SetCompositeElement(fun(value), dataElement, compositeElement, create);
     }
 
     /// <summary>
@@ -167,6 +167,6 @@ public static partial class SegmentExtensions
         where TEnum : struct, Enum
     {
         return value is not null
-               && it.SetCompositeElement(dataElement, compositeElement, fun(value.Value), create);
+               && it.SetCompositeElement(fun(value.Value), dataElement, compositeElement, create);
     }
 }

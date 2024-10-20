@@ -1,3 +1,4 @@
+using System.Text;
 using EdiSource.Domain.Elements;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
@@ -42,7 +43,7 @@ public interface ISegment : IEdi, IParent
     /// <param name="dataElementIndex">The index of the data element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
     /// <returns>The value of the specified composite element.</returns>
-    string GetCompositeElement(int dataElementIndex, int compositeElementIndex);
+    string GetCompositeElement(int dataElementIndex, int compositeElementIndex = 0);
 
     /// <summary>
     ///     Retrieves the value of a composite element at the specified data element index and
@@ -51,7 +52,7 @@ public interface ISegment : IEdi, IParent
     /// <param name="dataElementIndex">The index of the data element containing the composite element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
     /// <returns>The value of the composite element if it exists; otherwise, null.</returns>
-    string? GetCompositeElementOrNull(int dataElementIndex, int compositeElementIndex);
+    string? GetCompositeElementOrNull(int dataElementIndex, int compositeElementIndex = 0);
 
     /// <summary>
     ///     Retrieves a data element based on the specified data element index.
@@ -60,7 +61,14 @@ public interface ISegment : IEdi, IParent
     /// <returns>Returns the data element as a string.</returns>
     string GetDataElement(int dataElementIndex)
     {
-        return GetCompositeElement(dataElementIndex, 0);
+        StringBuilder output = new();
+
+        foreach (var element in Elements[dataElementIndex])
+        {
+            output.Append(element);
+        }
+
+        return output.ToString();
     }
 
     /// <summary>
@@ -70,7 +78,9 @@ public interface ISegment : IEdi, IParent
     /// <returns>The data element at the specified index if it exists; otherwise, null.</returns>
     string? GetDataElementOrNull(int dataElementIndex)
     {
-        return GetCompositeElementOrNull(dataElementIndex, 0);
+        return ElementExists(dataElementIndex)
+            ? GetDataElement(dataElementIndex)
+            : null;
     }
 
     /// <summary>
@@ -85,12 +95,12 @@ public interface ISegment : IEdi, IParent
     /// <summary>
     ///     Sets the value of a composite element within a data element at the specified indices.
     /// </summary>
+    /// <param name="value">The value to set for the specified composite element.</param>
     /// <param name="dataElementIndex">The index of the data element that contains the composite element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element to set.</param>
-    /// <param name="value">The value to set for the specified composite element.</param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns>True if the composite element was successfully set; otherwise, false.</returns>
-    bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value, bool create = true);
+    bool SetCompositeElement(string value, int dataElementIndex, int compositeElementIndex = 0, bool create = true);
 
     /// <summary>
     ///     Checks if an element exists at the specified index.
@@ -105,7 +115,7 @@ public interface ISegment : IEdi, IParent
     /// <param name="dataElementIndex">The index of the data element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
     /// <returns>True if the composite element exists; otherwise, false.</returns>
-    bool CompositeElementExists(int dataElementIndex, int compositeElementIndex);
+    bool CompositeElementExists(int dataElementIndex, int compositeElementIndex = 0);
 
     /// <summary>
     ///     Checks if a composite element exists at the specified data element and composite element indexes
@@ -114,7 +124,7 @@ public interface ISegment : IEdi, IParent
     /// <param name="dataElementIndex">The index of the data element.</param>
     /// <param name="compositeElementIndex">The index of the composite element within the data element.</param>
     /// <returns>True if the composite element exists; otherwise, false.</returns>
-    bool CompositeElementNotNullOrEmpty(int dataElementIndex, int compositeElementIndex);
+    bool CompositeElementNotNullOrEmpty(int dataElementIndex, int compositeElementIndex = 0);
 }
 
 /// <summary>

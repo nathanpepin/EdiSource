@@ -3,6 +3,7 @@ using EdiSource.Domain.Loop;
 using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Separator;
+using EdiSource.Domain.Standard.Segments;
 
 namespace EdiSource.Domain.IO.Serializer;
 
@@ -22,19 +23,31 @@ public sealed partial class EdiSerializer
                 ? loopPrinter.AppendLoop(loop.GetType().Name)
                 : null;
 
-            loop.EdiAction(x =>
+            loop.EdiAction(segment =>
                 {
-                    var text = x.WriteToStringBuilder(separators: separators).ToString();
+                    if (segment is IRefresh refresh)
+                        refresh.Refresh();
+
+                    var text = segment.WriteToStringBuilder(separators: separators).ToString();
                     loopPrinter.AppendLine(text);
                 },
                 segmentList =>
                 {
                     foreach (var text in segmentList
-                                 .Select(segment => segment.WriteToStringBuilder(separators: separators).ToString()))
+                                 .Select(segment =>
+                                 {
+                                     if (segment is IRefresh refresh)
+                                         refresh.Refresh();
+
+                                     return segment.WriteToStringBuilder(separators: separators).ToString();
+                                 }))
                         loopPrinter.AppendLine(text);
                 },
                 loopL =>
                 {
+                    if (loopL is IRefresh refresh)
+                        refresh.Refresh();
+
                     var loopText = loopL.GetType().Name;
                     using var d = loopPrinter.AppendLoop(loopText);
                     PrettyPrintToStringBuilder(loopL, loopPrinter, separators, false);
@@ -43,6 +56,9 @@ public sealed partial class EdiSerializer
                 {
                     foreach (var loopL in loopList)
                     {
+                        if (loopL is IRefresh refresh)
+                            refresh.Refresh();  
+                        
                         var loopText = loopL.GetType().Name;
                         using var d = loopPrinter.AppendLoop(loopText);
                         PrettyPrintToStringBuilder(loopL, loopPrinter, separators, false);

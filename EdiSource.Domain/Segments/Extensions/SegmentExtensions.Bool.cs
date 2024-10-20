@@ -68,7 +68,7 @@ public static partial class SegmentExtensions
         int compositeElement = 0, bool create = true)
     {
         var text = value ? trueValue : falseValue;
-        return it.SetCompositeElement(dataElement, compositeElement, text, create);
+        return it.SetCompositeElement(text, dataElement, compositeElement, create);
     }
 
     /// <summary>
@@ -88,6 +88,6 @@ public static partial class SegmentExtensions
         if (value is null) return false;
 
         var text = value.Value ? trueValue : falseValue;
-        return it.SetCompositeElement(dataElement, compositeElement, text, create);
+        return it.SetCompositeElement(text, dataElement, compositeElement, create);
     }
 }

@@ -1,4 +1,4 @@
-namespace EdiSource.Basic.Segments.DTPData;
+namespace EdiSource.Domain.Standard.Segments.DTPData;
 
 public enum DateFormatCode
 {

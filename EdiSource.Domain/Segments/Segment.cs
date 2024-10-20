@@ -42,7 +42,7 @@ public class Segment : ISegment
     public string this[int dataElement, int compositeElement]
     {
         get => GetCompositeElement(dataElement, compositeElement);
-        set => SetCompositeElement(dataElement, compositeElement, value);
+        set => SetCompositeElement(value, dataElement, compositeElement);
     }
 
     public ILoop? Parent { get; set; }
@@ -61,12 +61,12 @@ public class Segment : ISegment
             : null;
     }
 
-    public string GetCompositeElement(int dataElementIndex, int compositeElementIndex)
+    public string GetCompositeElement(int dataElementIndex, int compositeElementIndex = 0)
     {
         return Elements[dataElementIndex][compositeElementIndex];
     }
 
-    public string? GetCompositeElementOrNull(int dataElementIndex, int compositeElementIndex)
+    public string? GetCompositeElementOrNull(int dataElementIndex, int compositeElementIndex = 0)
     {
         return CompositeElementExists(dataElementIndex, compositeElementIndex)
             ? GetCompositeElement(dataElementIndex, compositeElementIndex)
@@ -90,7 +90,7 @@ public class Segment : ISegment
         return true;
     }
 
-    public bool SetCompositeElement(int dataElementIndex, int compositeElementIndex, string value, bool create = true)
+    public bool SetCompositeElement(string value, int dataElementIndex, int compositeElementIndex = 0, bool create = true)
     {
         if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
             while (dataElementIndex >= Elements.Count)
@@ -110,13 +110,13 @@ public class Segment : ISegment
         return Elements.InsideBounds(elementIndex);
     }
 
-    public bool CompositeElementExists(int dataElementIndex, int compositeElementIndex)
+    public bool CompositeElementExists(int dataElementIndex, int compositeElementIndex = 0)
     {
         return Elements.InsideBounds(dataElementIndex)
                && Elements[dataElementIndex].InsideBounds(compositeElementIndex);
     }
 
-    public bool CompositeElementNotNullOrEmpty(int dataElementIndex, int compositeElementIndex)
+    public bool CompositeElementNotNullOrEmpty(int dataElementIndex, int compositeElementIndex = 0)
     {
         return Elements.InsideBounds(dataElementIndex)
                && Elements[dataElementIndex].InsideBounds(compositeElementIndex)

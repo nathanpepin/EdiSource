@@ -1,5 +1,4 @@
-﻿using EdiSource.Basic.Segments.DTPData;
-using EdiSource.Domain;
+﻿using EdiSource.Domain;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Standard.Loops;
@@ -12,7 +11,7 @@ var input =
     """
     ISA*i0*          *00*          *ZZ*SENDER         *ZZ*RECEIVER       *200901*1319*^*00501*000000905*0*P*:~
     GS*09~
-    ST*834~
+    ST*834*ABCD~
     REF*A~
     REF*B~
     DTP*1*D8*2024e0106~
@@ -20,7 +19,7 @@ var input =
     NM1*1~
     NM1*2~
     SE*123~
-    GE*0~
+    GE*0*098~
     IEA*1*123~
     """;
 
@@ -35,5 +34,8 @@ var v = EdiCommon.Validate(env);
 
 var vf = IUserValidation<TS_DTP>.UserValidations;
 
-ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
+;
+Console.WriteLine(EdiCommon.PrettyPrint(env));
+
+// ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
 ;

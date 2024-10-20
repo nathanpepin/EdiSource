@@ -1,25 +1,17 @@
-using System.ComponentModel.DataAnnotations;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.Factory;
 using EdiSource.Domain.Validation.SourceGeneration;
 
-namespace EdiSource.Basic.Segments.DTPData;
+namespace EdiSource.Domain.Standard.Segments.DTPData;
 
-[IsOneOfValues(ValidationSeverity.Critical, 0, 0, "DTP")]
-[RequiredDataElements(ValidationSeverity.Critical, [0, 1, 2])]
-[BeDateTime(ValidationSeverity.Critical, 3, 0)]
-[BeDateTime(ValidationSeverity.Critical, 3, 1)]
-[ElementLength(ValidationSeverity.Critical, 1, 3)]
-[ElementLength(ValidationSeverity.Critical, 2, 3)]
-[ElementLength(ValidationSeverity.Critical, 3, 35)]
-public partial class DTP : Segment, IValidatable
+public partial class DTP : Segment, IValidatable, ISourceGeneratorValidatable
 {
     public string Qualifier
     {
         get => GetCompositeElement(1, 0);
-        set => SetCompositeElement(1, 0, value);
+        set => SetCompositeElement(value, 1, 0);
     }
 
     public DateFormatCode DateFormatCode
@@ -46,7 +38,17 @@ public partial class DTP : Segment, IValidatable
 
     public IEnumerable<ValidationMessage> Validate()
     {
-        
         return [ValidationFactory.CreateCritical(this, "Fuck")];
     }
+
+    public List<IIndirectValidatable> SourceGenValidations { get; } =
+    [
+        new IsOneOfValuesAttribute(ValidationSeverity.Critical, 0, 0, "DTP"),
+        new RequiredDataElementsAttribute(ValidationSeverity.Critical, [0, 1, 2]),
+        new BeDateTimeAttribute(ValidationSeverity.Critical, 3, 0),
+        new BeDateTimeAttribute(ValidationSeverity.Critical, 3, 1),
+        new ElementLengthAttribute(ValidationSeverity.Critical, 1, 3),
+        new ElementLengthAttribute(ValidationSeverity.Critical, 2, 3),
+        new ElementLengthAttribute(ValidationSeverity.Critical, 3, 35)
+    ];
 }

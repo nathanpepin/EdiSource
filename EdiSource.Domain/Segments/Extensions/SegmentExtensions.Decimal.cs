@@ -48,7 +48,7 @@ public static partial class SegmentExtensions
         string? format = null, bool create = true)
     {
         var text = format is null ? value.ToString(CultureInfo.InvariantCulture) : value.ToString(format);
-        return it.SetCompositeElement(dataElement, compositeElement, text, create);
+        return it.SetCompositeElement(text, dataElement, compositeElement, create);
     }
 
     /// <summary>
@@ -66,6 +66,6 @@ public static partial class SegmentExtensions
     {
         if (value is null) return false;
         var text = format is null ? value.Value.ToString(CultureInfo.InvariantCulture) : value.Value.ToString(format);
-        return it.SetCompositeElement(dataElement, compositeElement, text, create);
+        return it.SetCompositeElement(text, dataElement, compositeElement, create);
     }
 }

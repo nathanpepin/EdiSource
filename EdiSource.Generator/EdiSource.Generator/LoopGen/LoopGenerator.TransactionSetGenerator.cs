@@ -19,10 +19,6 @@ public partial class LoopGenerator
             {
                 using (cw.StartClass(className, [$"ITransactionSet<{className}, {id}>"]))
                 {
-                    cw.AppendLine("ISegment ITransactionSet.ST => ST;");
-
-                    cw.AppendLine("ISegment ITransactionSet.SE => SE;");
-
                     cw.AppendLine("public static TransactionSetDefinition Definition { get; } = id =>");
                     cw.AppendLine("{");
                     cw.IncreaseIndent();

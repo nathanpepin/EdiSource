@@ -51,7 +51,7 @@ public static partial class SegmentExtensions
     public static bool SetDate(this ISegment it, DateTime value, int dataElement, int compositeElement = 0,
         string format = "yyyyMMdd", bool create = true)
     {
-        return it.SetCompositeElement(dataElement, compositeElement, value.ToString(format), create);
+        return it.SetCompositeElement(value.ToString(format), dataElement, compositeElement, create);
     }
 
     /// <summary>
@@ -68,6 +68,6 @@ public static partial class SegmentExtensions
         string format = "yyyyMMdd", bool create = true)
     {
         return value is not null
-               && it.SetCompositeElement(dataElement, compositeElement, value.Value.ToString(format), create);
+               && it.SetCompositeElement(value.Value.ToString(format), dataElement, compositeElement, create);
     }
 }
