@@ -1,4 +1,5 @@
 using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.Loop;
 using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Extensions;
@@ -8,17 +9,19 @@ namespace EdiSource.Domain.Standard.Segments;
 
 public sealed class GE : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<GE>, IRefresh
 {
-    public new FunctionalGroup? Parent { get; }
+    public new FunctionalGroup? Parent => base.Parent as FunctionalGroup;
     public static EdiId EdiId { get; } = new("GE");
 
     public int E01NumberOfTransactionSets
     {
         get
         {
-            if (Parent is null)
+            var parent = Parent ?? base.Parent;
+            
+            if (parent is not FunctionalGroup fg)
                 return this.GetIntRequired(1);
 
-            var count = Parent.TransactionSets.Count;
+            var count = fg.TransactionSets.Count;
             this.SetInt(count, 1);
             return count;
         }

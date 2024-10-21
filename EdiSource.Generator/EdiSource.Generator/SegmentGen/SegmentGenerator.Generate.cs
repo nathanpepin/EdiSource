@@ -22,7 +22,7 @@ public partial class SegmentGenerator
 
             using (cw.StartClass(className, implementations))
             {
-                cw.AppendLine($"new public {parent}? Parent {{ get; set; }}");
+                cw.AppendLine($"public new {parent}? Parent => base.Parent as {parent};");
                 cw.AppendLine(
                     $"public static EdiId EdiId => new ({string.Join(", ", args)});");
             }

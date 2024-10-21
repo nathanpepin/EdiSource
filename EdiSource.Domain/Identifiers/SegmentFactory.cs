@@ -27,6 +27,7 @@ public static class SegmentLoopFactory<T, TLoop>
                 $"Expected ids of ({T.EdiId.ToString()}) but received segment: {segments}");
 
         var segment = segments.Dequeue();
+        if (segment is Segment s) s.Parent = parent;
         return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 
@@ -46,6 +47,7 @@ public static class SegmentLoopFactory<T, TLoop>
                 $"Expected ids of ({T.EdiId.ToString()}) but received segment: {await segmentReader.ReadAsync()}");
 
         var segment = await segmentReader.ReadAsync();
+        if (segment is Segment s) s.Parent = parent;
         return new T { Elements = segment.Elements, Parent = parent, Separators = segment.Separators };
     }
 }
