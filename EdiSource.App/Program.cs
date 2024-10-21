@@ -1,4 +1,4 @@
-﻿using EdiSource.Domain;
+using EdiSource.Domain;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Standard.Loops;
@@ -34,9 +34,4 @@ var v = EdiCommon.Validate(env);
 
 var vf = IUserValidation<TS_DTP>.UserValidations;
 
-;
-
-Console.WriteLine(EdiCommon.PrettyPrint(env));
-
-// ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
-;
+await ValidationMessageTable.ValidationsTableToFile(new FileInfo("Validations.txt"), v);

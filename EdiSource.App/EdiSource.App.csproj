@@ -14,8 +14,4 @@
                           OutputItemType="Analyzer"
                           ReferenceOutputAssembly="false"/>
     </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Dumpify" Version="0.6.6"/>
-    </ItemGroup>
 </Project>

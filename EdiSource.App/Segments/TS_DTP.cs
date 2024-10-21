@@ -6,7 +6,6 @@ using EdiSource.Domain.Validation.Factory;
 using EdiSource.Domain.Validation.SourceGeneration;
 using EdiSource.Domain.Validation.Validator;
 using EdiSource.Loops;
-using Spectre.Console;
 
 namespace EdiSource.Segments;
 
