@@ -1,3 +1,7 @@
+using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.Loop;
+using EdiSource.Domain.Segments;
+
 namespace EdiSource.Domain.Helper;
 
 internal static class GeneralExtensions
@@ -14,6 +18,14 @@ internal static class GeneralExtensions
 
     public static T Do<T>(this T it, Action<T> action)
     {
+        action(it);
+        return it;
+    }
+    
+    public static T DoIf<T>(this T it, Action<T> action, bool condition)
+    {
+        if (condition) return it;
+        
         action(it);
         return it;
     }
@@ -57,6 +69,4 @@ internal static class GeneralExtensions
     {
         return it.InsideBounds(first) && it[first].InsideBounds(second);
     }
-
-
 }

@@ -4,7 +4,7 @@ public static class EnumExtensions
 {
     private static readonly Dictionary<Type, string[]> EnumLookup = new();
 
-    public static string[] EnumToStringArray<T>(bool removeUnderscore = true) where T : Enum
+    public static string[] EnumToStringArray<T>(bool removeUnderscoreFromStart = true) where T : Enum
     {
         var type = typeof(T);
 
@@ -14,7 +14,7 @@ public static class EnumExtensions
                 .Cast<T>()
                 .Select(code => code
                     .ToString()
-                    .ApplyIf(x => x.Replace('_', ' '), removeUnderscore))
+                    .ApplyIf(x => x.TrimStart('_', ' '), removeUnderscoreFromStart))
                 .ToArray();
     }
 }

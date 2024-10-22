@@ -1,6 +1,8 @@
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Loops;
+using EdiSource.Domain.Validation.Factory;
+using EdiSource.Domain.Validation.Validator;
 
 namespace EdiSource.Domain.Standard.Segments;
 
@@ -14,5 +16,5 @@ public sealed class GS : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<
         set => SetCompositeElement(value, 6);
     }
 
-    public static EdiId EdiId { get; } = new ("GS");
+    public static EdiId EdiId { get; } = new("GS");
 }

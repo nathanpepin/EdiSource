@@ -1,7 +1,9 @@
 ﻿using EdiSource.Domain;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop.Extensions;
+using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Loops;
+using EdiSource.Domain.Standard.Segments.STData;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Loops;
 using EdiSource.Segments;
@@ -22,21 +24,22 @@ var input =
     GE*0*098~
     IEA*1*123~
     """;
-
-InterchangeEnvelope.TransactionSetDefinitions.Add(_834.Definition);
-
-var env = await EdiCommon.ParseEdi<InterchangeEnvelope>(input);
-// var text = EdiCommon.WriteEdiToString(env);
-// var prety = EdiCommon.PrettyPrint(env);
-// var validation = EdiCommon.Validate(env);
-
-var v = EdiCommon.Validate(env);
-
-var vf = IUserValidation<TS_DTP>.UserValidations;
-
 ;
+//;
+InterchangeEnvelope.TransactionSetDefinitions.Add(_834.Definition);
+//
+var env = await EdiCommon.ParseEdi<InterchangeEnvelope>(input);
+// // var text = EdiCommon.WriteEdiToString(env);
+// // var prety = EdiCommon.PrettyPrint(env);
+// // var validation = EdiCommon.Validate(env);
+//
+var v = EdiCommon.Validate(env);
+//
+// var vf = IUserValidation<TS_DTP>.UserValidations;
+//
+// ;
+//
+// Console.WriteLine(EdiCommon.PrettyPrint(env));
 
-Console.WriteLine(EdiCommon.PrettyPrint(env));
-
-// ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
+ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
 ;

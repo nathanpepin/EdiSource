@@ -4,6 +4,11 @@ using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.Identifiers;
 
+/// <summary>
+/// Represents an ID of a segment.
+/// If a value in the elements is null, it is ignored for matching.
+/// </summary>
+/// <param name="ids"></param>
 public readonly struct EdiId(params Element?[] ids)
 {
     private Element?[] Ids { get; } = ids;
@@ -26,7 +31,7 @@ public readonly struct EdiId(params Element?[] ids)
 
         return true;
     }
-
+    
     public bool MatchesEdiId(EdiId other)
     {
         if (Ids.Length != other.Ids.Length) return false;
@@ -53,7 +58,6 @@ public readonly struct EdiId(params Element?[] ids)
 
         return true;
     }
-
 
     public override string ToString()
     {
