@@ -6,7 +6,7 @@ using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public class Generic_SE : SE, ISegment<GenericTransactionSet>, ISegmentIdentifier<Generic_SE>
+public class Generic_SE : SE, IEdi<GenericTransactionSet>, ISegmentIdentifier<Generic_SE>
 {
     public new GenericTransactionSet? Parent { get; set; }
 }

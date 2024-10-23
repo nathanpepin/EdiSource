@@ -1,3 +1,5 @@
+using EdiSource.Domain.Identifiers;
+
 namespace EdiSource.Domain.Validation.Data;
 
 /// <summary>

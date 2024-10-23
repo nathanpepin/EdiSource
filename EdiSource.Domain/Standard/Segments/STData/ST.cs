@@ -8,15 +8,14 @@ using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Domain.Standard.Segments.STData;
 
-public partial class Generic_ST : ST, ISegment<GenericTransactionSet>, ISegmentIdentifier<Generic_ST>
+public partial class Generic_ST : ST, IEdi<GenericTransactionSet>, ISegmentIdentifier<Generic_ST>
 {
-    public new GenericTransactionSet? Parent { get; set; }
+    public GenericTransactionSet? Parent { get; set; }
+    public static EdiId EdiId { get; } = new("ST");
 }
 
-public partial class ST : Segment, ISegmentIdentifier<ST>, ISourceGeneratorValidatable
+public partial class ST : Segment, ISourceGeneratorValidatable
 {
-    public static EdiId EdiId { get; } = new ("ST");
-
     public TransactionSetIdentifierCode TransactionSetIdentifierCode
     {
         get => this.GetEnumRequired<TransactionSetIdentifierCode>(1);

@@ -16,21 +16,18 @@ public partial class Segment
     {
         Elements = segment.Elements;
         Separators = segment.Separators;
-        // Parent = parent;
     }
 
     public Segment(IEnumerable<Element>? elements = null, Separators? separators = default, ILoop? parent = null)
     {
         Elements = elements?.ToList() ?? [];
         Separators = separators ?? Separators.DefaultSeparators;
-        // Parent = parent;
     }
 
     public Segment(string segmentText, Separators? separators = null, ILoop? parent = null)
     {
         Elements = ReadElements(segmentText, separators).ToList();
         Separators = separators ?? Separators.DefaultSeparators;
-        // Parent = parent;
     }
 
     public string this[int index]
@@ -44,9 +41,7 @@ public partial class Segment
         get => GetCompositeElement(dataElement, compositeElement);
         set => SetCompositeElement(value, dataElement, compositeElement);
     }
-
-    // public ILoop? Parent { get; set; }
-
+    
     public IList<Element> Elements { get; set; }
 
     public Element GetElement(int elementIndex)
@@ -168,49 +163,11 @@ public partial class Segment
 
         if (separators is not null)
             Separators = separators;
-
-        // if (parent is not null)
-        // Parent = parent;
     }
 
     public Segment Copy(Separators? separators = null, ILoop? parent = null)
     {
         var elements = Elements.Select(e => new Element(e)).ToList();
-        return new Segment(elements, separators ?? Separators); //, parent ?? Parent);
-    }
-}
-
-public partial class Segment
-{
-    public override bool Equals(object? obj)
-    {
-        if (obj is not Segment segment) return false;
-        return Equals(segment);
-    }
-
-    public bool Equals(Segment other)
-    {
-        if (other.Elements.Count != Elements.Count) return false;
-        
-        foreach (var (e, x) in other.Elements.Zip(Elements, (s, s1) => (s, s1)))
-            if (!e.Equals(x))
-                return false;
-
-        return true;
-    }
-
-    public static bool operator ==(Segment left, Segment right)
-    {
-        return Equals(left, right);
-    }
-
-    public static bool operator !=(Segment element1, Segment element2)
-    {
-        return !(element1 == element2);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(this);
+        return new Segment(elements, separators ?? Separators);
     }
 }

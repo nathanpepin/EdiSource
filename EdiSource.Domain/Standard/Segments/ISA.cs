@@ -6,7 +6,7 @@ using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public sealed class ISA : Segment, ISegment<InterchangeEnvelope>, ISegmentIdentifier<ISA>, ISourceGeneratorValidatable
+public sealed class ISA : Segment, IEdi<InterchangeEnvelope>, ISegmentIdentifier<ISA>, ISourceGeneratorValidatable
 {
     public InterchangeEnvelope? Parent { get; set; }
     public static EdiId EdiId { get; } = new ("ISA");

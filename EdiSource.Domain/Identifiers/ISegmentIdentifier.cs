@@ -6,7 +6,7 @@ namespace EdiSource.Domain.Identifiers;
 /// <summary>
 ///     Used to identify a segment
 /// </summary>
-public interface SegmentIdentifier
+public interface ISegmentIdentifier
 {
     static abstract EdiId EdiId { get; }
 }
@@ -15,8 +15,8 @@ public interface SegmentIdentifier
 ///     Matches segments to their identifiers
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface SegmentIdentifier<T> : SegmentIdentifier
-    where T : SegmentIdentifier<T>
+public interface ISegmentIdentifier<T> : ISegmentIdentifier
+    where T : ISegmentIdentifier<T>
 {
     /// <summary>
     ///     Matches a segment using the segment identifiers

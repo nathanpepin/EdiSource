@@ -8,7 +8,7 @@ using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Domain.Standard.Loops;
 
-public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentIdentifier<InterchangeEnvelope>,
+public sealed class InterchangeEnvelope : IEdi<InterchangeEnvelope>, ISegmentIdentifier<InterchangeEnvelope>,
     ISegmentIdentifier<ISA>, ILoopInitialize<InterchangeEnvelope, InterchangeEnvelope>
 {
     public static List<TransactionSetDefinition> TransactionSetDefinitions = [];
@@ -17,13 +17,17 @@ public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentId
 
     public LoopList<FunctionalGroup> FunctionalGroups { get; } = [];
 
-    public ISegment IEA { get; set; } = default!;
+    public IEA IEA { get; set; } = default!;
 
-    public InterchangeEnvelope? Parent => null;
+    public InterchangeEnvelope? Parent
+    {
+        get => null;
+        set => _ = value;
+    }
 
     public List<IEdi?> EdiItems => [ISA, FunctionalGroups, IEA];
 
-    public static Task<InterchangeEnvelope> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)
+    public static Task<InterchangeEnvelope> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
     {
         if (parent is null) return InitializeAsync(segmentReader, null);
 
@@ -33,7 +37,7 @@ public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentId
         return InitializeAsync(segmentReader, typedParent);
     }
 
-    public static async Task<InterchangeEnvelope> InitializeAsync(ChannelReader<ISegment> segmentReader,
+    public static async Task<InterchangeEnvelope> InitializeAsync(ChannelReader<Segment> segmentReader,
         InterchangeEnvelope? parent)
     {
         var loop = new InterchangeEnvelope();

@@ -96,7 +96,7 @@ public sealed class ValidateEdi : IValidateEdi
         if (segment is ISourceGeneratorValidatable v2)
             foreach (var sourceValidation in v2.SourceGenValidations)
                 validationResult.AddRange(sourceValidation
-                    .Validate(segment)
+                    .Validate((IEdi)segment)
                     .UpdateSegmentLine(segmentLine)
                     .UpdateLoopLine(loopLine));
 

@@ -12,7 +12,7 @@ public static partial class SegmentExtensions
     /// <param name="dataElement"></param>
     /// <param name="compositeElement"></param>
     /// <returns></returns>
-    public static decimal? GetDecimal(this ISegment it, int dataElement, int compositeElement = 0)
+    public static decimal? GetDecimal(this Segment it, int dataElement, int compositeElement = 0)
     {
         if (it.GetCompositeElementOrNull(dataElement, compositeElement) is not { } element) return null;
 
@@ -28,7 +28,7 @@ public static partial class SegmentExtensions
     /// <param name="dataElement"></param>
     /// <param name="compositeElement"></param>
     /// <returns></returns>
-    public static decimal GetDecimalRequired(this ISegment it, int dataElement, int compositeElement = 0)
+    public static decimal GetDecimalRequired(this Segment it, int dataElement, int compositeElement = 0)
     {
         return GetDecimal(it, dataElement, compositeElement) ??
                throw new DataElementParsingError(dataElement, compositeElement, typeof(decimal));
@@ -44,7 +44,7 @@ public static partial class SegmentExtensions
     /// <param name="format"></param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns></returns>
-    public static bool SetDecimal(this ISegment it, decimal value, int dataElement, int compositeElement = 0,
+    public static bool SetDecimal(this Segment it, decimal value, int dataElement, int compositeElement = 0,
         string? format = null, bool create = true)
     {
         var text = format is null ? value.ToString(CultureInfo.InvariantCulture) : value.ToString(format);
@@ -61,7 +61,7 @@ public static partial class SegmentExtensions
     /// <param name="format"></param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns></returns>
-    public static bool SetDecimal(this ISegment it, decimal? value, int dataElement, int compositeElement = 0,
+    public static bool SetDecimal(this Segment it, decimal? value, int dataElement, int compositeElement = 0,
         string? format = null, bool create = true)
     {
         if (value is null) return false;

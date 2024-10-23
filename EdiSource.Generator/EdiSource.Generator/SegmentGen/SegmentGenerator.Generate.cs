@@ -18,7 +18,7 @@ public partial class SegmentGenerator
         using (cw.StartNamespace(namespaceName))
         {
             ReadOnlySpan<string> implementations =
-                [subType ?? "Segment", $"ISegment<{parent}>", $"ISegmentIdentifier<{className}>"];
+                [subType ?? "Segment", $"IEdi<{parent}>", $"ISegmentIdentifier<{className}>"];
 
             using (cw.StartClass(className, implementations))
             {

@@ -13,14 +13,16 @@ namespace EdiSource.Domain.Standard.Loops;
 /// </summary>
 public sealed class GenericTransactionSet :
     ISegmentIdentifier<GenericTransactionSet>,
-    ITransactionSet<GenericTransactionSet, ST, SE>
+    ITransactionSet<GenericTransactionSet, Generic_ST, Generic_SE>
 {
-    public ST ST { get; set; } = default!;
-    public SegmentList<ISegment> Segments { get; set; } = [];
-    public SE SE { get; set; } = default!;
-    public static EdiId EdiId { get; } = ST.EdiId;
+    public Generic_ST ST { get; set; } = default!;
+    SE ITransactionSet.SE => SE;
+    public SegmentList<Segment> Segments { get; set; } = [];
+    ST ITransactionSet.ST => ST;
+    public Generic_SE SE { get; set; } = default!;
+    public static EdiId EdiId => Generic_ST.EdiId;
 
-    public static Task<GenericTransactionSet> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)
+    public static Task<GenericTransactionSet> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
     {
         if (parent is null) return InitializeAsync(segmentReader, null);
 
@@ -30,7 +32,7 @@ public sealed class GenericTransactionSet :
         return InitializeAsync(segmentReader, typedParent);
     }
 
-    public static async Task<GenericTransactionSet> InitializeAsync(ChannelReader<ISegment> segmentReader,
+    public static async Task<GenericTransactionSet> InitializeAsync(ChannelReader<Segment> segmentReader,
         FunctionalGroup? parent)
     {
         var loop = new GenericTransactionSet

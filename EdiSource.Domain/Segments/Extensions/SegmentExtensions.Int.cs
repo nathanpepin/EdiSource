@@ -11,7 +11,7 @@ public static partial class SegmentExtensions
     /// <param name="dataElement"></param>
     /// <param name="compositeElement"></param>
     /// <returns></returns>
-    public static int? GetInt(this ISegment it, int dataElement, int compositeElement = 0)
+    public static int? GetInt(this Segment it, int dataElement, int compositeElement = 0)
     {
         if (it.GetCompositeElementOrNull(dataElement, compositeElement) is not { } element) return null;
 
@@ -27,7 +27,7 @@ public static partial class SegmentExtensions
     /// <param name="dataElement"></param>
     /// <param name="compositeElement"></param>
     /// <returns></returns>
-    public static int GetIntRequired(this ISegment it, int dataElement, int compositeElement = 0)
+    public static int GetIntRequired(this Segment it, int dataElement, int compositeElement = 0)
     {
         return GetInt(it, dataElement, compositeElement) ??
                throw new DataElementParsingError(dataElement, compositeElement, typeof(int));
@@ -43,7 +43,7 @@ public static partial class SegmentExtensions
     /// <param name="format"></param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns></returns>
-    public static bool SetInt(this ISegment it, int value, int dataElement, int compositeElement = 0,
+    public static bool SetInt(this Segment it, int value, int dataElement, int compositeElement = 0,
         string? format = null, bool create = true)
     {
         var text = format is null ? value.ToString() : value.ToString(format);
@@ -60,7 +60,7 @@ public static partial class SegmentExtensions
     /// <param name="format"></param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns></returns>
-    public static bool SetInt(this ISegment it, int? value, int dataElement, int compositeElement = 0,
+    public static bool SetInt(this Segment it, int? value, int dataElement, int compositeElement = 0,
         string? format = null, bool create = true)
     {
         if (value is null) return false;

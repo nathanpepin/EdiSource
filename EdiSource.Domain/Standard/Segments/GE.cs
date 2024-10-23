@@ -7,7 +7,7 @@ using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public sealed class GE : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<GE>, IRefresh
+public sealed class GE : Segment, IEdi<FunctionalGroup>, ISegmentIdentifier<GE>, IRefresh
 {
     public FunctionalGroup? Parent { get; set; }
     public static EdiId EdiId { get; } = new("GE");

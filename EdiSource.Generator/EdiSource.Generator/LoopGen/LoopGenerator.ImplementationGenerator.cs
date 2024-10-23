@@ -20,7 +20,7 @@ public partial class LoopGenerator
             {
                 string[] implementations =
                 [
-                    "ILoop", $"ILoop<{parent}>", $"ISegmentIdentifier<{className}>", $"ISegmentIdentifier<{id}>",
+                    "ILoop", $"IEdi<{parent}>", $"ISegmentIdentifier<{className}>", $"ISegmentIdentifier<{id}>",
                     $"ILoopInitialize<{parent}, {className}>"
                 ];
                 using (cw.StartClass(className, implementations))

@@ -18,11 +18,3 @@ public interface ILoop : IEdi
     /// </summary>
     List<IEdi?> EdiItems { get; }
 }
-
-/// <summary>
-///     Types a loop with a parent of a specific type
-/// </summary>
-/// <typeparam name="TParent"></typeparam>
-public interface ILoop<out TParent> :
-    ILoop
-    where TParent : ILoop;

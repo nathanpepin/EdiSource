@@ -7,9 +7,11 @@ using EdiSource.Domain.Standard.Segments.STData;
 
 namespace EdiSource.Domain.Standard.Loops;
 
-public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdentifier<FunctionalGroup>,
+public sealed class FunctionalGroup : IEdi<InterchangeEnvelope>, ISegmentIdentifier<FunctionalGroup>,
     ISegmentIdentifier<GS>, ILoopInitialize<InterchangeEnvelope, FunctionalGroup>
 {
+    private static readonly EdiId _st = new ("ST");
+    
     public GS GS { get; set; } = default!;
 
     public LoopList<ILoop> TransactionSets { get; } = [];
@@ -19,7 +21,7 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
     public InterchangeEnvelope? Parent { get; set; }
     public List<IEdi?> EdiItems => [GS, TransactionSets, GE];
 
-    public static Task<FunctionalGroup> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)
+    public static Task<FunctionalGroup> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
     {
         if (parent is null) return InitializeAsync(segmentReader, null);
 
@@ -29,7 +31,7 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
         return InitializeAsync(segmentReader, typedParent);
     }
 
-    public static async Task<FunctionalGroup> InitializeAsync(ChannelReader<ISegment> segmentReader,
+    public static async Task<FunctionalGroup> InitializeAsync(ChannelReader<Segment> segmentReader,
         InterchangeEnvelope? parent)
     {
         var loop = new FunctionalGroup
@@ -43,7 +45,7 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
         {
             if (!segmentReader.TryPeek(out var segment)) break;
 
-            if (!ST.EdiId.MatchesSegment(segment)) break;
+            if (!_st.MatchesSegment(segment)) break;
 
             if (await CreateTransactionSet(segmentReader, segment, loop)) continue;
 
@@ -57,7 +59,7 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
 
     public static EdiId EdiId => GS.EdiId;
 
-    private static async Task<bool> CreateTransactionSet(ChannelReader<ISegment> segmentReader, ISegment segment,
+    private static async Task<bool> CreateTransactionSet(ChannelReader<Segment> segmentReader, Segment segment,
         FunctionalGroup loop)
     {
         foreach (var ts in InterchangeEnvelope.TransactionSetDefinitions)

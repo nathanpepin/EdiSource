@@ -10,18 +10,18 @@ public interface ITransactionSet
     : ILoop
 {
     ST ST { get; }
-    SE SE { get;  }
+    SE SE { get; }
     static abstract TransactionSetDefinition Definition { get; }
 }
 
 public interface ITransactionSet<TSelf, TST, TSE> :
     ITransactionSet,
-    ILoop<FunctionalGroup>, ISegmentIdentifier<TST>,
+    IEdi<FunctionalGroup>, ISegmentIdentifier<TST>,
     ILoopInitialize<FunctionalGroup, TSelf>
     where TST : ST, ISegmentIdentifier<TST>
     where TSE : SE
     where TSelf : ILoop
 {
     new TST ST { get; }
-    new TSE SE { get;  }
+    new TSE SE { get; }
 }

@@ -30,7 +30,7 @@ InterchangeEnvelope.TransactionSetDefinitions.Add(_834.Definition);
 
 
 var a = new Segment("SE*123~");
-ISegment b = new Segment("SE*123~");
+Segment b = new Segment("SE*123~");
 
 Console.WriteLine(b == a);
 

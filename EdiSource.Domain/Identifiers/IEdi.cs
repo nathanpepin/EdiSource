@@ -1,4 +1,3 @@
-using EdiSource.Domain.Loop;
 using EdiSource.Domain.Validation.Data;
 
 namespace EdiSource.Domain.Identifiers;
@@ -15,7 +14,7 @@ public interface IEdi;
 
 public interface IEdi<T> : IEdi where T : IEdi
 {
-    public new T? Parent { get; set; }
+    public T? Parent { get; set; }
 
     /// <summary>
     /// Validations that a user can supply that will be picked up by the validator.
@@ -33,12 +32,4 @@ public interface IEdi<T> : IEdi where T : IEdi
     /// </code>
     /// </summary>
     static List<IIndirectValidatable<T>> Validations { get; set; } = [];
-}
-
-public static class ParentHelpers
-{
-    public static ILoop? GetParentGeneric<T>(this T edi) where T : IEdi
-    {
-        return edi is IEdi<T> e ? (ILoop?)e.Parent : null;
-    }
 }

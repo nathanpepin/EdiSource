@@ -19,7 +19,7 @@ public sealed class BasicEdi(IEnumerable<Segment> segments, Separators separator
     public List<Segment> Segments { get; } = segments.ToList();
     public Separators Separators { get; } = separators;
 
-    public List<IEdi?> EdiItems => [.. segments];
+    public List<IEdi?> EdiItems => [..segments.Cast<IEdi?>()];
 
     public void Deconstruct(out List<Segment> outSegments, out Separators outSeparators)
     {
