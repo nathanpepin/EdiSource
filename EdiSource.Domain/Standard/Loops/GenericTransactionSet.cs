@@ -56,7 +56,6 @@ public sealed class GenericTransactionSet :
         return loop;
     }
 
-    ILoop? ILoop.Parent => Parent;
     public FunctionalGroup? Parent { get; set; }
     public List<IEdi?> EdiItems => [ST, Segments, SE];
 

@@ -12,7 +12,7 @@ namespace EdiSource.Segments;
 
 [ElementLength(ValidationSeverity.Critical, 0, 20)]
 [SegmentGenerator<_834, DTP>("DTP")]
-public partial class TS_DTP : IValidatable
+public partial class TS_DTP : IValidatable, IEdi<_834>
 {
     static TS_DTP()
     {

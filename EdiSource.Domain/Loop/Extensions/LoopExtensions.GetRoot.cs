@@ -1,4 +1,6 @@
 using EdiSource.Domain.Exceptions;
+using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Loop.Extensions;
 
@@ -18,13 +20,25 @@ public static partial class LoopExtensions
     ///     Thrown if the loop iteration exceeds <paramref name="maxIterations" />, indicating a
     ///     potential circular reference.
     /// </exception>
-    public static ILoop GetRoot(this ILoop loop, bool avoidCircularReferences = true, int maxIterations = 1_000)
+    public static InterchangeEnvelope? GetRoot(this ILoop loop, bool avoidCircularReferences = true,
+        int maxIterations = 1_000)
     {
+        if (loop is InterchangeEnvelope e) return e;
+        
+        var l = loop.GetParentGeneric();
+
         var iterations = 0;
         while (true)
         {
-            if (loop.Parent is null) return loop;
-            loop = loop.Parent;
+            switch (l)
+            {
+                case null:
+                    return null;
+                case InterchangeEnvelope envelope:
+                    return envelope;
+            }
+
+            l = loop.GetParentGeneric();
 
             if (avoidCircularReferences && iterations++ > maxIterations)
                 throw new ProbableCircularReferenceException(iterations, maxIterations);

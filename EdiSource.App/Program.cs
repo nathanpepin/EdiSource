@@ -39,7 +39,7 @@ var v = EdiCommon.Validate(env);
 //
 // ;
 //
-// Console.WriteLine(EdiCommon.PrettyPrint(env));
+Console.WriteLine(EdiCommon.PrettyPrint(env));
 
-ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
+// ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
 ;

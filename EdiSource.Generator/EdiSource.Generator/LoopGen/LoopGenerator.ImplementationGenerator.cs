@@ -25,11 +25,11 @@ public partial class LoopGenerator
                 ];
                 using (cw.StartClass(className, implementations))
                 {
-                    cw.AppendLine("ILoop? ILoop.Parent => Parent;");
+                    // cw.AppendLine("ILoop? ILoop.Parent => Parent;");
 
                     cw.AppendLine(className == parent
-                        ? $$"""new public {{parent}}? Parent => null;"""
-                        : $$"""new public {{parent}}? Parent { get; set; }""");
+                        ? $$"""public {{parent}}? Parent => null;"""
+                        : $$"""public {{parent}}? Parent { get; set; }""");
 
                     cw.AppendLine($"public static EdiId EdiId => {id}.EdiId;");
                 }

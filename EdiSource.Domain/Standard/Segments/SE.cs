@@ -13,6 +13,8 @@ public class Generic_SE : SE, ISegment<GenericTransactionSet>, ISegmentIdentifie
 
 public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
 {
+    public ITransactionSet? Parent { get; set; }
+    
     public static EdiId EdiId { get; } = new("SE");
 
     /// <summary>
@@ -25,17 +27,18 @@ public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
     {
         get
         {
-            if (Parent is null)
-                return this.GetIntRequired(1);
+            return 0;
+            // if (Parent is null)
+            // return this.GetIntRequired(1);
 
-            var count = Parent.YieldChildSegments().Count();
-            this.SetInt(count, 1);
-            return count;
+            // var count = Parent.YieldChildSegments().Count();
+            // this.SetInt(count, 1);
+            // return count;
         }
         set
         {
-            if (Parent is null)
-                this.SetInt(value, 1);
+            // if (Parent is null)
+            //     this.SetInt(value, 1);
         }
     }
 
@@ -45,17 +48,9 @@ public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
     /// </summary>
     public string E02TransactionSetControlNumber
     {
-        get => Parent is not ITransactionSet ts
-            ? GetCompositeElement(2)
-            : ts.ST.TransactionSetControlNumber;
+        get => "";
         set
         {
-            if (Parent is ITransactionSet ts)
-            {
-                ts.ST.TransactionSetControlNumber = value;
-            }
-
-            SetCompositeElement(value, 2);
         }
     }
 

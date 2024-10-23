@@ -10,7 +10,7 @@ namespace EdiSource.Domain.Segments;
 ///     Represents an EDI (Electronic Data Interchange) segment. This interface encapsulates methods and properties
 ///     for handling EDI segments, their elements, composite elements, and associated separators.
 /// </summary>
-public interface ISegment : IEdi, IParent
+public interface ISegment : IEdi
 {
     /// <summary>
     ///     Gets or sets the collection of elements associated with the segment.
@@ -131,15 +131,10 @@ public interface ISegment : IEdi, IParent
 ///     Interface defining the structure and behavior of an EDI segment, including parent loop, elements, and separators.
 ///     Encapsulates methods for retrieving and manipulating both simple and composite elements.
 /// </summary>
-public interface ISegment<out TLoop>
-    : ISegment
+public interface ISegment<TLoop>
+    : ISegment, IEdi<TLoop>
     where TLoop : ILoop
 {
-    /// <summary>
-    ///     The typed parent loop of the segment if any
-    /// </summary>
-    new TLoop? Parent { get; }
-
     /// <summary>
     ///     Assigns data elements safety one segment to another.
     ///     Useful for avoiding the issue where two segments share

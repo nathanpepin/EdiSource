@@ -21,7 +21,6 @@ public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentId
 
     public InterchangeEnvelope? Parent => null;
 
-    ILoop? ILoop.Parent => Parent;
     public List<IEdi?> EdiItems => [ISA, FunctionalGroups, IEA];
 
     public static Task<InterchangeEnvelope> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)

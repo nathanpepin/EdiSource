@@ -8,7 +8,7 @@ namespace EdiSource.Domain.Standard.Segments;
 
 public sealed class GS : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<GS>
 {
-    public new FunctionalGroup? Parent { get; }
+    public FunctionalGroup? Parent { get; set; }
 
     public string E06GroupControlNumber
     {

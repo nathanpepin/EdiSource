@@ -19,7 +19,6 @@ public sealed class BasicEdi(IEnumerable<ISegment> segments, Separators separato
     public List<ISegment> Segments { get; } = segments.ToList();
     public Separators Separators { get; } = separators;
 
-    public ILoop? Parent => null;
     public List<IEdi?> EdiItems => [.. segments];
 
     public void Deconstruct(out List<ISegment> outSegments, out Separators outSeparators)

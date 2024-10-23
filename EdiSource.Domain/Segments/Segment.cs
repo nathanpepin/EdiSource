@@ -11,26 +11,28 @@ namespace EdiSource.Domain.Segments;
 public class Segment : ISegment
 {
     private Separators? _separators;
+    
+    
 
     public Segment(ISegment segment, ILoop? parent = null)
     {
         Elements = segment.Elements;
         Separators = segment.Separators;
-        Parent = parent;
+        // Parent = parent;
     }
 
     public Segment(IEnumerable<Element>? elements = null, Separators? separators = default, ILoop? parent = null)
     {
         Elements = elements?.ToList() ?? [];
         Separators = separators ?? Separators.DefaultSeparators;
-        Parent = parent;
+        // Parent = parent;
     }
 
     public Segment(string segmentText, Separators? separators = null, ILoop? parent = null)
     {
         Elements = ReadElements(segmentText, separators).ToList();
         Separators = separators ?? Separators.DefaultSeparators;
-        Parent = parent;
+        // Parent = parent;
     }
 
     public string this[int index]
@@ -45,7 +47,7 @@ public class Segment : ISegment
         set => SetCompositeElement(value, dataElement, compositeElement);
     }
 
-    public ILoop? Parent { get; set; }
+    // public ILoop? Parent { get; set; }
 
     public IList<Element> Elements { get; set; }
 
@@ -168,13 +170,13 @@ public class Segment : ISegment
         if (separators is not null)
             Separators = separators;
 
-        if (parent is not null)
-            Parent = parent;
+        // if (parent is not null)
+            // Parent = parent;
     }
 
     public ISegment Copy(Separators? separators = null, ILoop? parent = null)
     {
         var elements = Elements.Select(e => new Element(e)).ToList();
-        return new Segment(elements, separators ?? Separators, parent ?? Parent);
+        return new Segment(elements, separators ?? Separators);//, parent ?? Parent);
     }
 }

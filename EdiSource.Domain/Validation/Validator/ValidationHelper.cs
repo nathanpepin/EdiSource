@@ -5,7 +5,7 @@ namespace EdiSource.Domain.Validation.Validator;
 
 public static class ValidationHelper
 {
-    public static void Add<T>(Func<T, IEnumerable<ValidationMessage>?> it) where T : IEdi
+    public static void Add<T>(Func<T, IEnumerable<ValidationMessage>> it) where T : IEdi
     {
         IUserValidation<T>.UserValidations.Add(it);
         IUserValidation<IEdi>.UserValidations.Add(x => x is not T t ? [] : it(t));

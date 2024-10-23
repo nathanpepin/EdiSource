@@ -17,7 +17,6 @@ public sealed class FunctionalGroup : ILoop<InterchangeEnvelope>, ISegmentIdenti
     public GE GE { get; set; } = default!;
 
     public InterchangeEnvelope? Parent { get; set; }
-    ILoop? ILoop.Parent => Parent;
     public List<IEdi?> EdiItems => [GS, TransactionSets, GE];
 
     public static Task<FunctionalGroup> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)

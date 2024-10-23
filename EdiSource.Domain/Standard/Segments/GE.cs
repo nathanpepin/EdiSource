@@ -9,16 +9,15 @@ namespace EdiSource.Domain.Standard.Segments;
 
 public sealed class GE : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<GE>, IRefresh
 {
-    public new FunctionalGroup? Parent => base.Parent as FunctionalGroup;
+    public FunctionalGroup? Parent { get; set; }
     public static EdiId EdiId { get; } = new("GE");
 
     public int E01NumberOfTransactionSets
     {
         get
         {
-            var parent = Parent ?? base.Parent;
             
-            if (parent is not FunctionalGroup fg)
+            if (Parent is not { } fg)
                 return this.GetIntRequired(1);
 
             var count = fg.TransactionSets.Count;
