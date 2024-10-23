@@ -6,7 +6,7 @@ namespace EdiSource.Domain.Identifiers;
 /// <summary>
 ///     Used to identify a segment
 /// </summary>
-public interface ISegmentIdentifier
+public interface SegmentIdentifier
 {
     static abstract EdiId EdiId { get; }
 }
@@ -15,27 +15,17 @@ public interface ISegmentIdentifier
 ///     Matches segments to their identifiers
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface ISegmentIdentifier<T> : ISegmentIdentifier
-    where T : ISegmentIdentifier<T>
+public interface SegmentIdentifier<T> : SegmentIdentifier
+    where T : SegmentIdentifier<T>
 {
     /// <summary>
     ///     Matches a segment using the segment identifiers
     /// </summary>
     /// <param name="segment"></param>
     /// <returns></returns>
-    public static bool Matches(ISegment segment)
+    public static bool Matches(Segment segment)
     {
         return T.EdiId.MatchesSegment(segment);
-    }
-
-    /// <summary>
-    ///     Matches the first item from a Queue using the segment identifiers
-    /// </summary>
-    /// <param name="segments"></param>
-    /// <returns></returns>
-    public static bool Matches(Queue<ISegment> segments)
-    {
-        return segments.Count > 0 && Matches(segments.Peek());
     }
 
     /// <summary>
@@ -43,7 +33,7 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
     /// </summary>
     /// <param name="segmentReader"></param>
     /// <returns></returns>
-    public static async ValueTask<bool> MatchesAsync(ChannelReader<ISegment> segmentReader)
+    public static async ValueTask<bool> MatchesAsync(ChannelReader<Segment> segmentReader)
     {
         await segmentReader.WaitToReadAsync();
         return segmentReader.TryPeek(out var segment) && Matches(segment);

@@ -13,7 +13,7 @@ public readonly struct EdiId(params Element?[] ids)
 {
     private Element?[] Ids { get; } = ids;
 
-    public bool MatchesSegment(ISegment segment)
+    public bool MatchesSegment(Segment segment)
     {
         for (var deI = 0; deI < Ids.Length; deI++)
         {

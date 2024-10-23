@@ -14,8 +14,8 @@ public static partial class LoopExtensions
     /// <param name="loopAction">An action to be performed on individual loops, or null.</param>
     /// <param name="loopListAction">An action to be performed on lists of loops, or null.</param>
     public static void EdiAction<T>(this T it,
-        Action<ISegment>? segmentAction = null,
-        Action<SegmentList<ISegment>>? segmentListAction = null,
+        Action<Segment>? segmentAction = null,
+        Action<SegmentList<Segment>>? segmentListAction = null,
         Action<ILoop>? loopAction = null,
         Action<LoopList<ILoop>>? loopListAction = null)
         where T : ILoop
@@ -24,10 +24,10 @@ public static partial class LoopExtensions
             switch (ediItem)
             {
                 case null: continue;
-                case ISegment segment:
+                case Segment segment:
                     segmentAction?.Invoke(segment);
                     continue;
-                case IEnumerable<ISegment> segmentList:
+                case IEnumerable<Segment> segmentList:
                     segmentListAction?.Invoke([..segmentList]);
                     continue;
                 case ILoop loop:

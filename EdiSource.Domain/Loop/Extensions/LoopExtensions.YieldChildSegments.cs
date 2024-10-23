@@ -11,11 +11,11 @@ public static partial class LoopExtensions
     /// <typeparam name="T">Type of the loop, which must implement ILoop.</typeparam>
     /// <param name="it">The loop instance from which child segments are to be retrieved.</param>
     /// <param name="recursive">If true, the function will include child segments from nested loops recursively.</param>
-    /// <returns>An IEnumerable of ISegment representing the child segments of the loop.</returns>
-    public static IEnumerable<ISegment> YieldChildSegments<T>(this T it, bool recursive = true)
+    /// <returns>An IEnumerable of Segment representing the child segments of the loop.</returns>
+    public static IEnumerable<Segment> YieldChildSegments<T>(this T it, bool recursive = true)
         where T : ILoop
     {
-        List<ISegment> items = [];
+        List<Segment> items = [];
         SegmentAction(it, x => items.Add(x), recursive);
         return items;
     }

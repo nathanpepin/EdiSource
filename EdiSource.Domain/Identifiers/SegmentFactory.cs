@@ -10,7 +10,7 @@ namespace EdiSource.Domain.Identifiers;
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="TLoop"></typeparam>
 public static class SegmentLoopFactory<T, TLoop>
-    where T : Segment, ISegment<TLoop>, ISegmentIdentifier<T>, new()
+    where T : Segment, IEdi<TLoop>, SegmentIdentifier<T>, new()
     where TLoop : class, ILoop
 {
     /// <summary>
@@ -20,11 +20,11 @@ public static class SegmentLoopFactory<T, TLoop>
     /// <param name="parent"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public static async ValueTask<T> CreateAsync(ChannelReader<ISegment> segmentReader, TLoop? parent = null)
+    public static async ValueTask<T> CreateAsync(ChannelReader<Segment> segmentReader, TLoop? parent = null)
     {
         await segmentReader.WaitToReadAsync();
 
-        if (!await ISegmentIdentifier<T>.MatchesAsync(segmentReader))
+        if (!await SegmentIdentifier<T>.MatchesAsync(segmentReader))
             throw new ArgumentException(
                 $"Expected ids of ({T.EdiId.ToString()}) but received segment: {await segmentReader.ReadAsync()}");
 

@@ -6,15 +6,13 @@ using EdiSource.Domain.Separator;
 namespace EdiSource.Domain.Segments;
 
 /// <summary>
-///     A basic implementation of ISegment
+///     A basic implementation of Segment
 /// </summary>
-public class Segment : ISegment
+public partial class Segment
 {
     private Separators? _separators;
-    
-    
 
-    public Segment(ISegment segment, ILoop? parent = null)
+    public Segment(Segment segment, ILoop? parent = null)
     {
         Elements = segment.Elements;
         Separators = segment.Separators;
@@ -92,7 +90,8 @@ public class Segment : ISegment
         return true;
     }
 
-    public bool SetCompositeElement(string value, int dataElementIndex, int compositeElementIndex = 0, bool create = true)
+    public bool SetCompositeElement(string value, int dataElementIndex, int compositeElementIndex = 0,
+        bool create = true)
     {
         if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
             while (dataElementIndex >= Elements.Count)
@@ -163,7 +162,7 @@ public class Segment : ISegment
         return this.WriteToStringBuilder(separators: separators).ToString();
     }
 
-    public void Assign(ISegment other, Separators? separators = null, ILoop? parent = null)
+    public void Assign(Segment other, Separators? separators = null, ILoop? parent = null)
     {
         Elements = other.Elements.Select(e => new Element(e)).ToList();
 
@@ -171,12 +170,47 @@ public class Segment : ISegment
             Separators = separators;
 
         // if (parent is not null)
-            // Parent = parent;
+        // Parent = parent;
     }
 
-    public ISegment Copy(Separators? separators = null, ILoop? parent = null)
+    public Segment Copy(Separators? separators = null, ILoop? parent = null)
     {
         var elements = Elements.Select(e => new Element(e)).ToList();
-        return new Segment(elements, separators ?? Separators);//, parent ?? Parent);
+        return new Segment(elements, separators ?? Separators); //, parent ?? Parent);
+    }
+}
+
+public partial class Segment
+{
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Segment segment) return false;
+        return Equals(segment);
+    }
+
+    public bool Equals(Segment other)
+    {
+        if (other.Elements.Count != Elements.Count) return false;
+        
+        foreach (var (e, x) in other.Elements.Zip(Elements, (s, s1) => (s, s1)))
+            if (!e.Equals(x))
+                return false;
+
+        return true;
+    }
+
+    public static bool operator ==(Segment left, Segment right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Segment element1, Segment element2)
+    {
+        return !(element1 == element2);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(this);
     }
 }

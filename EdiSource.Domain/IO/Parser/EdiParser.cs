@@ -15,13 +15,13 @@ public sealed class EdiParser<T> : IEdiParser<T> where T : class, ILoopInitializ
         if (typeof(T) == typeof(InterchangeEnvelope))
             separators ??= await Separators.CreateFromISA(streamReader);
 
-        var channel = Channel.CreateUnbounded<ISegment>();
+        var channel = Channel.CreateUnbounded<Segment>();
 
         var loopInitializer = T.InitializeAsync(channel.Reader, null);
 
         await Task.WhenAll(
             new EdiReader.EdiReader()
-                .ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer, separators, cancellationToken),
+                .ReadEdSegmentsIntoChannelAsync(streamReader, channel.Writer, separators, cancellationToken),
             loopInitializer);
 
         return loopInitializer.Result;

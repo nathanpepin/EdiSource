@@ -11,7 +11,7 @@ public static partial class LoopExtensions
     /// <param name="it">The loop instance on which to perform the operation.</param>
     /// <param name="action">The action to apply to each segment.</param>
     /// <param name="recursive">Indicates whether to recursively apply the action to child segments. Default is true.</param>
-    public static void SegmentAction<T>(this T it, Action<ISegment> action, bool recursive = true)
+    public static void SegmentAction<T>(this T it, Action<Segment> action, bool recursive = true)
         where T : ILoop
     {
         EdiAction(it,
