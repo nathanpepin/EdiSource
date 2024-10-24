@@ -25,6 +25,7 @@ public interface ISegmentIdentifier<T> : ISegmentIdentifier
     /// <returns></returns>
     public static bool Matches(Segment segment)
     {
+        var TEdiId = T.EdiId;
         return T.EdiId.MatchesSegment(segment);
     }
 

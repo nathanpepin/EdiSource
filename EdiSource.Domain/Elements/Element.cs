@@ -13,7 +13,7 @@ namespace EdiSource.Domain.Elements;
 /// <param name="values"></param>
 public sealed partial class Element(IEnumerable<string>? values = null) : List<string>
 {
-    private readonly List<string> _compositeElements = values?.ToList() ?? [];
+    private readonly IList<string> _compositeElements = values?.ToList() ?? [];
 
     public static implicit operator Element(string[] values)
     {

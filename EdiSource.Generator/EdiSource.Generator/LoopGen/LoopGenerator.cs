@@ -20,23 +20,23 @@ public partial class LoopGenerator : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.LoopAttribute), LoopSourceGenAttributes.LoopAttribute);
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.LoopGeneratorAttribute),
-        //     LoopSourceGenAttributes.LoopGeneratorAttribute);
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.LoopListAttribute),
-        //     LoopSourceGenAttributes.LoopListAttribute);
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.OptionalSegmentFooterAttribute),
-        //     LoopSourceGenAttributes.OptionalSegmentFooterAttribute);
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentAttribute),
-        //     LoopSourceGenAttributes.SegmentAttribute);
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentFooterAttribute),
-        //     LoopSourceGenAttributes.SegmentFooterAttribute);
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentGeneratorAttributes),
-        //     LoopSourceGenAttributes.SegmentGeneratorAttributes);
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentHeaderAttribute),
-        //     LoopSourceGenAttributes.SegmentHeaderAttribute);
-        // AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentListAttribute),
-        //     LoopSourceGenAttributes.SegmentListAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.LoopAttribute), LoopSourceGenAttributes.LoopAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.LoopGeneratorAttribute),
+            LoopSourceGenAttributes.LoopGeneratorAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.LoopListAttribute),
+            LoopSourceGenAttributes.LoopListAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.OptionalSegmentFooterAttribute),
+            LoopSourceGenAttributes.OptionalSegmentFooterAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentAttribute),
+            LoopSourceGenAttributes.SegmentAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentFooterAttribute),
+            LoopSourceGenAttributes.SegmentFooterAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentGeneratorAttributes),
+            LoopSourceGenAttributes.SegmentGeneratorAttributes);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentHeaderAttribute),
+            LoopSourceGenAttributes.SegmentHeaderAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentListAttribute),
+            LoopSourceGenAttributes.SegmentListAttribute);
 
         var classDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(

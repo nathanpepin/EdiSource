@@ -26,27 +26,14 @@ var input =
     """;
 ;
 //;
+
+var ediId = new EdiId("Hi");
+
 InterchangeEnvelope.TransactionSetDefinitions.Add(_834.Definition);
 
+var env = await EdiCommon.ParseEdi<InterchangeEnvelope>(input);
 
-var a = new Segment("SE*123~");
-Segment b = new Segment("SE*123~");
+Console.WriteLine(EdiCommon.PrettyPrint(env));
 
-Console.WriteLine(b == a);
-
-//
-// var env = await EdiCommon.ParseEdi<InterchangeEnvelope>(input);
-// // var text = EdiCommon.WriteEdiToString(env);
-// // var prety = EdiCommon.PrettyPrint(env);
-// // var validation = EdiCommon.Validate(env);
-//
-// var v = EdiCommon.Validate(env);
-//
-// var vf = IUserValidation<TS_DTP>.UserValidations;
-//
-// ;
-//
-// Console.WriteLine(EdiCommon.PrettyPrint(env));
-
-// ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(v.ValidationMessages);
+ValidationMessageTablePrinter.PrintColorCodedValidationMessagesTable(EdiCommon.Validate(env));
 ;

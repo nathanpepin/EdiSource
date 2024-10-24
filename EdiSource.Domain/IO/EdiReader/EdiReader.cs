@@ -87,9 +87,10 @@ public sealed class EdiReader : IEdiReader
 
                 for (var i = 0; i < BufferSize; i++)
                 {
-                    if (buffer[i] is '\r' or '\n' or '\0') continue;
+                    var c = buffer[i];
+                    if (c is '\r' or '\n' or '\0') continue;
 
-                    if (buffer[i] == separators.SegmentSeparator)
+                    if (c == separators.SegmentSeparator)
                     {
                         segmentBuffer
                             .Elements
@@ -106,7 +107,7 @@ public sealed class EdiReader : IEdiReader
                             Separators = separators
                         };
                     }
-                    else if (buffer[i] == separators.DataElementSeparator)
+                    else if (c == separators.DataElementSeparator)
                     {
                         segmentBuffer
                             .Elements
@@ -117,7 +118,7 @@ public sealed class EdiReader : IEdiReader
 
                         segmentBuffer.Elements.Add([]);
                     }
-                    else if (buffer[i] == separators.CompositeElementSeparator)
+                    else if (c == separators.CompositeElementSeparator)
                     {
                         segmentBuffer
                             .Elements
@@ -131,7 +132,7 @@ public sealed class EdiReader : IEdiReader
                         if (segmentBuffer.Elements.Count == 0)
                             segmentBuffer.Elements.Add([]);
 
-                        stringBuffer.Append(buffer[i]);
+                        stringBuffer.Append(c);
                     }
                 }
             }

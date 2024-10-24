@@ -45,7 +45,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning restore CS9113 // Parameter is unread.
             where TParent : ILoop
             where TSelf : ILoop
-            where TId : Segment, ISegment<TSelf>, ISegmentIdentifier<TId>, IEdi<TParent>;
+            where TId : Segment, IEdi<TSelf>, ISegmentIdentifier<TId>;
         """;
 
     public const string LoopListAttribute =

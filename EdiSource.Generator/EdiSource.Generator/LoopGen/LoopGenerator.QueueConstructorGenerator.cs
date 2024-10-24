@@ -24,13 +24,13 @@ public partial class LoopGenerator
             {
                 using (cw.StartClass(className, []))
                 {
-                    cw.AppendLine($"public {className}(IEnumerable<ISegment> segments, TransactionSet? parent = null)");
-                    cw.AppendLine(": this(new Queue<ISegment>(segments), parent)");
+                    cw.AppendLine($"public {className}(IEnumerable<Segment> segments, TransactionSet? parent = null)");
+                    cw.AppendLine(": this(new Queue<Segment>(segments), parent)");
                     cw.AppendLine("{}");
                     cw.AppendLine();
 
                     using (cw.StartConstructor(className,
-                               arguments: ["Queue<ISegment> segments", $"{parent}? parent = null"]))
+                               arguments: ["Queue<Segment> segments", $"{parent}? parent = null"]))
                     {
                         if (className != parent)
                         {
