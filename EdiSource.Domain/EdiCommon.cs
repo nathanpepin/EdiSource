@@ -1,8 +1,12 @@
+using System.Text;
 using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.IO.EdiReader;
 using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
+using EdiSource.Domain.Segments;
 using EdiSource.Domain.Separator;
+using EdiSource.Domain.Standard.Loops.ISA;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.IO;
 using EdiSource.Domain.Validation.Validator;
@@ -45,6 +49,14 @@ public static class EdiCommon
         where T : class, ILoopInitialize<T>, new()
     {
         return new EdiParser<T>().ParseEdi(fileInfo, separators, cancellationToken);
+    }
+
+    public static async Task<List<Segment>> ParseIntoSegments(string text, Separators? separators = null,
+        CancellationToken cancellationToken = default)
+    {
+        using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(text));
+        using var streamReader = new StreamReader(memoryStream);
+        return await new EdiReader().ReadEdSegmentsAsync(streamReader, separators, cancellationToken);
     }
 
     /// <summary>

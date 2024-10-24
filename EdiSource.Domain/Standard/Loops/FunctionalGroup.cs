@@ -71,7 +71,7 @@ public sealed class FunctionalGroup : IEdi<InterchangeEnvelope>, ISegmentIdentif
             return true;
         }
 
-        var generic = GenericTransactionSet.Definition(segment);
+        var generic = GTS.Definition(segment);
         if (generic is null) return false;
 
         loop.TransactionSets.Add(await generic(segmentReader, loop));

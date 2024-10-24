@@ -1,5 +1,5 @@
 ﻿using EdiSource.Domain;
-using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.Identifiers;using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.Standard.Loops.ISA;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Loops;
@@ -22,7 +22,14 @@ var input =
 ;
 //;
 
-var ediId = new EdiId("Hi");
+var ediId = new EdiId("NO");
+
+var j = (await EdiCommon.ParseIntoSegments(input)).ToArray();
+var isa = j[0];
+var k = isa.ToString();
+
+var jjj = ediId.MatchesSegment(isa);
+
 
 InterchangeEnvelope.TransactionSetDefinitions.Add(_834.Definition);
 

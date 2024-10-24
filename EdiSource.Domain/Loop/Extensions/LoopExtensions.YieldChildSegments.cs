@@ -1,3 +1,4 @@
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.Loop.Extensions;

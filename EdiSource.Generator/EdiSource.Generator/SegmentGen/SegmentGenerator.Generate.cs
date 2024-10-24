@@ -20,7 +20,10 @@ public partial class SegmentGenerator
 
             using (cw.StartClass(className, implementations))
             {
-                cw.AppendLine($"public {parent}? Parent {{ get; set; }}");
+                cw.AppendLine(subType is not null
+                    ? $"public new {parent}? Parent {{ get; set; }}"
+                    : $"public {parent}? Parent {{ get; set; }}");
+
                 cw.AppendLine(
                     $"public static EdiId EdiId => new ({string.Join(", ", args)});");
             }

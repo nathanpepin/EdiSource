@@ -4,7 +4,7 @@ using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public sealed class GenericSegment : Segment, IEdi<GenericTransactionSet>
+public sealed class GenericSegment<T> : Segment, IEdi<T> where T : IEdi
 {
-    public GenericTransactionSet? Parent { get; set; }
+    public T? Parent { get; set; }
 }

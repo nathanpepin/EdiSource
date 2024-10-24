@@ -52,7 +52,7 @@ public interface IEdiReader
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IEnumerable<Segment>> ReadEdSegmentsAsync(StreamReader streamReader, Separators? separators = null,
+    Task<List<Segment>> ReadEdSegmentsAsync(StreamReader streamReader, Separators? separators = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>

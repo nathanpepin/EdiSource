@@ -44,7 +44,7 @@ public sealed class EdiReader : IEdiReader
         return new BasicEdi(segments.ToArray(), separators);
     }
 
-    public async Task<IEnumerable<Segment>> ReadEdSegmentsAsync(StreamReader streamReader,
+    public async Task<List<Segment>> ReadEdSegmentsAsync(StreamReader streamReader,
         Separators? separators = null,
         CancellationToken cancellationToken = default)
     {

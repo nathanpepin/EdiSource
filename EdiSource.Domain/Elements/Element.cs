@@ -11,9 +11,9 @@ namespace EdiSource.Domain.Elements;
 ///     Element element2 = ["20230101", "20240101"];
 /// </summary>
 /// <param name="values"></param>
-public sealed partial class Element(IEnumerable<string>? values = null) : List<string>
+public sealed partial class Element(IEnumerable<string>? values = null) : IList<string>
 {
-    private readonly IList<string> _compositeElements = values?.ToList() ?? [];
+    private readonly List<string> _compositeElements = values?.ToList() ?? [];
 
     public static implicit operator Element(string[] values)
     {

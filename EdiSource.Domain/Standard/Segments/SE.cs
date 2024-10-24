@@ -1,17 +1,14 @@
 using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Segments;
+using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public class Generic_SE : SE, IEdi<GenericTransactionSet>, ISegmentIdentifier<Generic_SE>
+public abstract class SE<T> : Segment, IEdi<T>, IRefresh, ISegmentIdentifier<SE<T>> where T : IEdi
 {
-    public new GenericTransactionSet? Parent { get; set; }
-}
-
-public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
-{
-    public ITransactionSet? Parent { get; set; }
+    public T? Parent { get; set; }
 
     /// <summary>
     ///     If the parent exists then it will count the segments in the
@@ -20,17 +17,16 @@ public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
     /// </summary>
     public int E01NumberOfIncludedSegments
     {
-        get => 0;
-        // if (Parent is null)
-        // return this.GetIntRequired(1);
-        // var count = Parent.YieldChildSegments().Count();
-        // this.SetInt(count, 1);
-        // return count;
-        set
+        get
         {
-            // if (Parent is null)
-            //     this.SetInt(value, 1);
+            if (Parent is not ITransactionSet ts)
+                return this.GetIntRequired(1);
+
+            var count = ts.GetTransactionSetSegmentCount();
+            this.SetInt(count, 1);
+            return count;
         }
+        set => this.SetInt(value, 1);
     }
 
     /// <summary>
@@ -39,8 +35,16 @@ public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
     /// </summary>
     public string E02TransactionSetControlNumber
     {
-        get => "";
-        set { }
+        get
+        {
+            if (Parent is not ITransactionSet ts)
+                return GetCompositeElement(0, 2);
+
+            var controlNumber = ts.GetTransactionSetControlNumber();
+            SetCompositeElement(controlNumber, 0, 2);
+            return controlNumber;
+        }
+        set => SetCompositeElement(value, 0, 2);
     }
 
     public void Refresh()
