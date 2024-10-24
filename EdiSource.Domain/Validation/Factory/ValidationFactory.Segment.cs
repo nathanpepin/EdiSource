@@ -1,4 +1,3 @@
-using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Validation.Data;
 
@@ -14,7 +13,7 @@ public static partial class ValidationFactory
             Severity = validationSeverity,
             Subject = ValidationSubject.Segment,
             Message = message,
-            Loop = null,// segment.Parent ? parent.Parent?.GetType().Name : null,
+            Loop = null, // segment.Parent ? parent.Parent?.GetType().Name : null,
             Segment = segment.ToString(),
             DataElement = dataElement,
             CompositeElement = compositeElement,

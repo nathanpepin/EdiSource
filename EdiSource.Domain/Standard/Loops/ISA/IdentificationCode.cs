@@ -1,7 +1,7 @@
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.SourceGeneration;
 
-namespace EdiSource.Domain.Standard.Loops;
+namespace EdiSource.Domain.Standard.Loops.ISA;
 
 public enum IdentificationCode
 {
@@ -147,7 +147,7 @@ public static class IdentificationCodeExtensions
             _ => null
         };
     }
-    
+
     public static IsOneOfValuesAttribute CreateIdentificationCodeAttribute()
     {
         var validCodes = Enum.GetValues(typeof(IdentificationCode))

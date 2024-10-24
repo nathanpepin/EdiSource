@@ -31,7 +31,7 @@ public static class SegmentLoopFactory<T, TLoop>
         var segment = await segmentReader.ReadAsync();
 
         var t = new T { Elements = segment.Elements, Separators = segment.Separators };
-        if (t is IEdi<TLoop> e) 
+        if (t is IEdi<TLoop> e)
             e.Parent = parent;
         return t;
     }

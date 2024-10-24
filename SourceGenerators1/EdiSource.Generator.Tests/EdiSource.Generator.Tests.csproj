@@ -32,6 +32,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="SegmentGenerator\SegmentGeneratorTests.TestA#Test_INS.Implementation.g.received.cs" />
+        <None Remove="SegmentGenerator\SegmentGeneratorTests.TestA#Test_INS.Implementation.g.received.cs"/>
     </ItemGroup>
 </Project>

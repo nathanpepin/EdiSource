@@ -1,6 +1,6 @@
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
-using EdiSource.Domain.Standard.Loops;
+using EdiSource.Domain.Standard.Loops.ISA;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.SourceGeneration;
 
@@ -9,8 +9,8 @@ namespace EdiSource.Domain.Standard.Segments;
 public sealed class ISA : Segment, IEdi<InterchangeEnvelope>, ISegmentIdentifier<ISA>, ISourceGeneratorValidatable
 {
     public InterchangeEnvelope? Parent { get; set; }
-    public static EdiId EdiId { get; } = new ("ISA");
-    
+    public static EdiId EdiId { get; } = new("ISA");
+
     public List<IIndirectValidatable> SourceGenValidations { get; } =
     [
         new RequiredDataElementsAttribute(ValidationSeverity.Critical,
@@ -31,12 +31,12 @@ public sealed class ISA : Segment, IEdi<InterchangeEnvelope>, ISegmentIdentifier
         new ElementLengthAttribute(ValidationSeverity.Critical, 9, 6),
         new BeDateAttribute(ValidationSeverity.Critical, 9, 0, "yyMMdd"),
         new ElementLengthAttribute(ValidationSeverity.Critical, 10, 4),
-        new BeTimeAttribute(ValidationSeverity.Critical, 10, 4, "HHmm"),
+        new BeTimeAttribute(ValidationSeverity.Critical, 10, 4),
         new ElementLengthAttribute(ValidationSeverity.Critical, 11, 1),
         new ElementLengthAttribute(ValidationSeverity.Critical, 12, 5),
         new ElementLengthAttribute(ValidationSeverity.Critical, 13, 9),
         new ElementLengthAttribute(ValidationSeverity.Critical, 14, 1),
         new ElementLengthAttribute(ValidationSeverity.Critical, 15, 1),
-        new ElementLengthAttribute(ValidationSeverity.Critical, 16, 1),
+        new ElementLengthAttribute(ValidationSeverity.Critical, 16, 1)
     ];
 }

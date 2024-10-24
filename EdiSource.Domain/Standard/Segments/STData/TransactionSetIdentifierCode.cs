@@ -323,5 +323,5 @@ public enum TransactionSetIdentifierCode
     _996,
     _997,
     _998,
-    _999,
+    _999
 }

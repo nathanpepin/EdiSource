@@ -8,7 +8,7 @@ namespace EdiSource.Domain.Segments;
 /// <summary>
 ///     A basic implementation of Segment
 /// </summary>
-public partial class Segment
+public class Segment
 {
     private Separators? _separators;
 
@@ -41,8 +41,14 @@ public partial class Segment
         get => GetCompositeElement(dataElement, compositeElement);
         set => SetCompositeElement(value, dataElement, compositeElement);
     }
-    
+
     public IList<Element> Elements { get; set; }
+
+    public Separators Separators
+    {
+        get => _separators ?? Separators.DefaultSeparators;
+        set => _separators = value;
+    }
 
     public Element GetElement(int elementIndex)
     {
@@ -117,12 +123,6 @@ public partial class Segment
         return Elements.InsideBounds(dataElementIndex)
                && Elements[dataElementIndex].InsideBounds(compositeElementIndex)
                && Elements[dataElementIndex][compositeElementIndex].Length > 0;
-    }
-
-    public Separators Separators
-    {
-        get => _separators ?? Separators.DefaultSeparators;
-        set => _separators = value;
     }
 
     public static IEnumerable<Segment> ReadMultipleSegment(string segmentText, Separators? separators = null)

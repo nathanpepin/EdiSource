@@ -32,12 +32,6 @@ public class ValidationGenerator : IIncrementalGenerator
         return node is ClassDeclarationSyntax { AttributeLists.Count: > 0 };
     }
 
-    private sealed class ValidationContext
-    {
-        public required ClassDeclarationSyntax ClassDeclarationSyntax { get; set; }
-        public required TypeSyntax? SubType { get; set; }
-    }
-
     private static ValidationContext? GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
     {
         var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
@@ -54,13 +48,11 @@ public class ValidationGenerator : IIncrementalGenerator
                 x.Definition is "EdiSource.Domain.SourceGeneration.LoopGeneratorAttribute<TParent, TSelf, TId>");
 
         if (target is not null)
-        {
             return new ValidationContext
             {
                 ClassDeclarationSyntax = classDeclarationSyntax,
                 SubType = GetSegmentGeneratorSubType(context)
             };
-        }
 
         return null;
     }
@@ -119,10 +111,7 @@ public class ValidationGenerator : IIncrementalGenerator
                         : "new public List<IIndirectValidatable> SourceGenValidations => [");
 
                     cw.IncreaseIndent();
-                    if (subType != null)
-                    {
-                        cw.AppendLine("..base.SourceGenValidations, ");
-                    }
+                    if (subType != null) cw.AppendLine("..base.SourceGenValidations, ");
 
                     ProcessAttributes(classDeclaration, cw, semanticModel);
                     cw.DecreaseIndent();
@@ -152,5 +141,11 @@ public class ValidationGenerator : IIncrementalGenerator
             cw.Append(attribute.ArgumentList?.Arguments.ToString() ?? string.Empty);
             cw.AppendLine("),");
         }
+    }
+
+    private sealed class ValidationContext
+    {
+        public required ClassDeclarationSyntax ClassDeclarationSyntax { get; set; }
+        public required TypeSyntax? SubType { get; set; }
     }
 }

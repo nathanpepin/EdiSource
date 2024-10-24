@@ -11,13 +11,6 @@ public readonly record struct S(string Name, string Value);
 [Generator]
 public partial class LoopGenerator : IIncrementalGenerator
 {
-    private static void AddAttribute(IncrementalGeneratorInitializationContext context, string name, string text)
-    {
-        context.RegisterPostInitializationOutput(x =>
-            x.AddSource($"{name}.g.cs",
-                SourceText.From(text, Encoding.UTF8)));
-    }
-
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         AddAttribute(context, nameof(LoopSourceGenAttributes.LoopAttribute), LoopSourceGenAttributes.LoopAttribute);
@@ -48,6 +41,13 @@ public partial class LoopGenerator : IIncrementalGenerator
 
         context.RegisterSourceOutput(compilationAndClasses,
             static (spc, source) => Execute(source.Item1, source.Right, spc));
+    }
+
+    private static void AddAttribute(IncrementalGeneratorInitializationContext context, string name, string text)
+    {
+        context.RegisterPostInitializationOutput(x =>
+            x.AddSource($"{name}.g.cs",
+                SourceText.From(text, Encoding.UTF8)));
     }
 
     private static void Execute(Compilation compilation, ImmutableArray<LoopMeta> classes,

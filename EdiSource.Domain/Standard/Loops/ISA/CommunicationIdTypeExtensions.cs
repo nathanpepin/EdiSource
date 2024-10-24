@@ -1,4 +1,4 @@
-namespace EdiSource.Domain.Standard.Loops;
+namespace EdiSource.Domain.Standard.Loops.ISA;
 
 public static class CommunicationIdTypeExtensions
 {

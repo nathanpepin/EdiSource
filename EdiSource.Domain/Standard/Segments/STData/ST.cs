@@ -8,13 +8,13 @@ using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Domain.Standard.Segments.STData;
 
-public partial class Generic_ST : ST, IEdi<GenericTransactionSet>, ISegmentIdentifier<Generic_ST>
+public class Generic_ST : ST, IEdi<GenericTransactionSet>, ISegmentIdentifier<Generic_ST>
 {
     public GenericTransactionSet? Parent { get; set; }
     public static EdiId EdiId { get; } = new("ST");
 }
 
-public partial class ST : Segment, ISourceGeneratorValidatable
+public class ST : Segment, ISourceGeneratorValidatable
 {
     public TransactionSetIdentifierCode TransactionSetIdentifierCode
     {

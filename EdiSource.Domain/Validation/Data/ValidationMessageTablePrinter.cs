@@ -9,7 +9,7 @@ public static class ValidationMessageTablePrinter
     private const int DataElementWidth = 15;
     private const int ValueWidth = 20;
     private const int MessageWidth = 60;
-    
+
     private static string _separator = string.Empty;
 
     public static void PrintColorCodedValidationMessagesTable(EdiValidationResult validationResult,
@@ -37,10 +37,7 @@ public static class ValidationMessageTablePrinter
 
         PrintHeader();
 
-        foreach (var message in messages)
-        {
-            PrintRow(message);
-        }
+        foreach (var message in messages) PrintRow(message);
 
         PrintSeparator();
     }
@@ -49,7 +46,7 @@ public static class ValidationMessageTablePrinter
     {
         PrintSeparator();
         Console.ForegroundColor = ConsoleColor.Cyan;
-       
+
         var headerText = $"| {"Severity".Adjust(SeverityWidth)} " +
                          $"| {"Subject".Adjust(SubjectWidth)} " +
                          $"| {"Loop".Adjust(LoopWidth)} " +
@@ -57,12 +54,9 @@ public static class ValidationMessageTablePrinter
                          $"| {"Value".Adjust(ValueWidth)} " +
                          $"| {"Message".Adjust(MessageWidth)} " +
                          $"| {"Segment".Adjust(SegmentWidth)} |";
-        
-        if (_separator.Length == 0)
-        {
-            _separator = new string('-', headerText.Length);
-        }
-        
+
+        if (_separator.Length == 0) _separator = new string('-', headerText.Length);
+
         Console.WriteLine(headerText);
         Console.ResetColor();
         PrintSeparator();
@@ -87,10 +81,7 @@ public static class ValidationMessageTablePrinter
     {
         var needsTrimming = value.Length > width;
 
-        if (!needsTrimming)
-        {
-            return value.PadRight(width, ' ');
-        }
+        if (!needsTrimming) return value.PadRight(width, ' ');
 
         return value[..(width - 3)] + "...";
     }

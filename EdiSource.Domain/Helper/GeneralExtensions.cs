@@ -1,7 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
-
 namespace EdiSource.Domain.Helper;
 
 internal static class GeneralExtensions
@@ -10,7 +6,7 @@ internal static class GeneralExtensions
     {
         return fun(it);
     }
-    
+
     public static T ApplyIf<T>(this T it, Func<T, T> fun, bool condition)
     {
         return condition ? fun(it) : it;
@@ -21,11 +17,11 @@ internal static class GeneralExtensions
         action(it);
         return it;
     }
-    
+
     public static T DoIf<T>(this T it, Action<T> action, bool condition)
     {
         if (condition) return it;
-        
+
         action(it);
         return it;
     }

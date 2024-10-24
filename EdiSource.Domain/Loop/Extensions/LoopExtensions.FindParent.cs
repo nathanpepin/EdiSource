@@ -1,6 +1,5 @@
 using EdiSource.Domain.Exceptions;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Standard.Loops;
+using EdiSource.Domain.Helper;
 
 namespace EdiSource.Domain.Loop.Extensions;
 

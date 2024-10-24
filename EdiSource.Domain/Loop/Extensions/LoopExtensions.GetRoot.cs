@@ -1,6 +1,6 @@
 using EdiSource.Domain.Exceptions;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Standard.Loops;
+using EdiSource.Domain.Helper;
+using EdiSource.Domain.Standard.Loops.ISA;
 
 namespace EdiSource.Domain.Loop.Extensions;
 
@@ -24,7 +24,7 @@ public static partial class LoopExtensions
         int maxIterations = 1_000)
     {
         if (loop is InterchangeEnvelope e) return e;
-        
+
         var l = loop.GetParentGeneric();
 
         var iterations = 0;

@@ -29,9 +29,7 @@ public sealed class BeDateTimeAttribute(
 
         foreach (var _ in formats
                      .Where(f => DateOnly.TryParseExact(value, format, null, DateTimeStyles.None, out _)))
-        {
             yield break;
-        }
 
         yield return ValidationFactory.Create(
             segment,

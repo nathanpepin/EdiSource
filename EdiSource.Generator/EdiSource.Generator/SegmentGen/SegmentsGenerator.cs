@@ -42,7 +42,8 @@ public partial class SegmentGenerator : IIncrementalGenerator
                 .OfType<string>()
                 .ToImmutableArray();
 
-            var implementationCode = Generate(className, namespaceName, [..classUsings, ..Usings], parent, args, subType);
+            var implementationCode =
+                Generate(className, namespaceName, [..classUsings, ..Usings], parent, args, subType);
             context.AddSource($"{className}.Implementation.g.cs", SourceText.From(implementationCode, Encoding.UTF8));
         }
     }

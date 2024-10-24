@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using EdiSource.Generator.LoopGen.Data;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace EdiSource.Generator.Helper;
@@ -120,13 +119,13 @@ public static class HelperFunctions
         var attribute = GetAttributeSyntax(classDeclarationSyntax, [.. LoopAggregation.SegmentGeneratorNames]);
 
         if (attribute is null) return null;
-        
+
         var typeArgumentListSyntaxes = attribute
             .DescendantNodes().OfType<TypeArgumentListSyntax>().ToArray();
 
         if (typeArgumentListSyntaxes.Length == 0)
             return null;
-        
+
         return
             typeArgumentListSyntaxes[0].Arguments.Count == 2
                 ? typeArgumentListSyntaxes[0].Arguments[1]

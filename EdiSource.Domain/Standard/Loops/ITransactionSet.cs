@@ -1,6 +1,5 @@
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Segments;
 using EdiSource.Domain.Standard.Segments.STData;
 

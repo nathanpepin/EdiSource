@@ -1,13 +1,8 @@
 ﻿using EdiSource.Domain;
 using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop.Extensions;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Standard.Loops;
-using EdiSource.Domain.Standard.Segments.STData;
+using EdiSource.Domain.Standard.Loops.ISA;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Loops;
-using EdiSource.Segments;
-
 
 var input =
     """

@@ -15,12 +15,12 @@ public sealed class GenericTransactionSet :
     ISegmentIdentifier<GenericTransactionSet>,
     ITransactionSet<GenericTransactionSet, Generic_ST, Generic_SE>
 {
+    public SegmentList<Segment> Segments { get; set; } = [];
+    public static EdiId EdiId => Generic_ST.EdiId;
     public Generic_ST ST { get; set; } = default!;
     SE ITransactionSet.SE => SE;
-    public SegmentList<Segment> Segments { get; set; } = [];
     ST ITransactionSet.ST => ST;
     public Generic_SE SE { get; set; } = default!;
-    public static EdiId EdiId => Generic_ST.EdiId;
 
     public static Task<GenericTransactionSet> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
     {

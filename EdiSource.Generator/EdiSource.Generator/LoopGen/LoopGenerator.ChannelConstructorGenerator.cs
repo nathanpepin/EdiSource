@@ -133,7 +133,9 @@ public partial class LoopGenerator
                         ? named[0]
                         : property.Type;
 
-                    using var _ = cw.AddIf($"await ISegmentIdentifier<{typeName.ToString().Replace("?", "")}>.MatchesAsync(segmentReader)");
+                    using var _ =
+                        cw.AddIf(
+                            $"await ISegmentIdentifier<{typeName.ToString().Replace("?", "")}>.MatchesAsync(segmentReader)");
 
                     cw.AppendLine(attribute switch
                     {

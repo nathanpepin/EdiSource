@@ -3,17 +3,15 @@ using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Segments;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.SourceGeneration;
 
-namespace EdiSource.Domain.Standard.Loops;
+namespace EdiSource.Domain.Standard.Loops.ISA;
 
 public sealed class InterchangeEnvelope : IEdi<InterchangeEnvelope>, ISegmentIdentifier<InterchangeEnvelope>,
-    ISegmentIdentifier<ISA>, ILoopInitialize<InterchangeEnvelope, InterchangeEnvelope>
+    ISegmentIdentifier<Segments.ISA>, ILoopInitialize<InterchangeEnvelope, InterchangeEnvelope>
 {
     public static List<TransactionSetDefinition> TransactionSetDefinitions = [];
 
-    public ISA ISA { get; set; } = default!;
+    public Segments.ISA ISA { get; set; } = default!;
 
     public LoopList<FunctionalGroup> FunctionalGroups { get; } = [];
 
@@ -42,7 +40,7 @@ public sealed class InterchangeEnvelope : IEdi<InterchangeEnvelope>, ISegmentIde
     {
         var loop = new InterchangeEnvelope();
 
-        loop.ISA = await SegmentLoopFactory<ISA, InterchangeEnvelope>.CreateAsync(segmentReader, loop);
+        loop.ISA = await SegmentLoopFactory<Segments.ISA, InterchangeEnvelope>.CreateAsync(segmentReader, loop);
 
         while (await segmentReader.WaitToReadAsync())
         {
@@ -60,5 +58,5 @@ public sealed class InterchangeEnvelope : IEdi<InterchangeEnvelope>, ISegmentIde
         return loop;
     }
 
-    public static EdiId EdiId => ISA.EdiId;
+    public static EdiId EdiId => Segments.ISA.EdiId;
 }

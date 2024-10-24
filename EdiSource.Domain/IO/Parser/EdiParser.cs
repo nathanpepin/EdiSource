@@ -3,7 +3,7 @@ using System.Threading.Channels;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Separator;
-using EdiSource.Domain.Standard.Loops;
+using EdiSource.Domain.Standard.Loops.ISA;
 
 namespace EdiSource.Domain.IO.Parser;
 

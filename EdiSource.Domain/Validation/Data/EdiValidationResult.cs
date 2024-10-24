@@ -39,10 +39,7 @@ public class EdiValidationResult
     {
         StringBuilder output = new();
 
-        foreach (var message in ValidationMessages)
-        {
-            output.AppendLine(message.ToString());
-        }
+        foreach (var message in ValidationMessages) output.AppendLine(message.ToString());
 
         return output.ToString();
     }

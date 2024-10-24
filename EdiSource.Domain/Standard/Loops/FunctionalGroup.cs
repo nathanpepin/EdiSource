@@ -2,16 +2,16 @@ using System.Threading.Channels;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
+using EdiSource.Domain.Standard.Loops.ISA;
 using EdiSource.Domain.Standard.Segments;
-using EdiSource.Domain.Standard.Segments.STData;
 
 namespace EdiSource.Domain.Standard.Loops;
 
 public sealed class FunctionalGroup : IEdi<InterchangeEnvelope>, ISegmentIdentifier<FunctionalGroup>,
     ISegmentIdentifier<GS>, ILoopInitialize<InterchangeEnvelope, FunctionalGroup>
 {
-    private static readonly EdiId _st = new ("ST");
-    
+    private static readonly EdiId _st = new("ST");
+
     public GS GS { get; set; } = default!;
 
     public LoopList<ILoop> TransactionSets { get; } = [];

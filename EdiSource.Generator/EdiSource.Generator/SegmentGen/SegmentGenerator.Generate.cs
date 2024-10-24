@@ -9,7 +9,7 @@ public partial class SegmentGenerator
         ImmutableArray<string> args, string? subType)
     {
         var cw = new CodeWriter();
-        
+
         foreach (var @using in usings) cw.AddUsing(@using);
 
         cw.AppendLine();

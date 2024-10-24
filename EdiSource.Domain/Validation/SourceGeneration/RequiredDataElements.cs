@@ -15,7 +15,7 @@ public sealed class RequiredDataElementsAttribute(ValidationSeverity validationS
             throw new ArgumentException("Element must be a segment", nameof(element));
 
         foreach (var dataElement in dataElements)
-            if (segment.GetCompositeElementOrNull(dataElement, 0) is null)
+            if (segment.GetCompositeElementOrNull(dataElement) is null)
                 yield return ValidationFactory.Create(
                     segment,
                     validationSeverity,

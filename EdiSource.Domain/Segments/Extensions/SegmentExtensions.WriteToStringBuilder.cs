@@ -11,7 +11,7 @@ public static partial class SegmentExtensions
     {
         stringBuilder ??= new StringBuilder();
         separators ??= Separators.DefaultSeparators;
-        
+
         if (segment.Elements.Count == 0)
             return stringBuilder;
 

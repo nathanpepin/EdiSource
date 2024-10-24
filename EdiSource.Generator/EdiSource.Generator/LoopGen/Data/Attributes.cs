@@ -10,7 +10,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         namespace EdiSource.Domain.SourceGeneration;
 
         /// <summary>
@@ -29,7 +29,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         using EdiSource.Domain.Identifiers;
         using EdiSource.Domain.Loop;
         using EdiSource.Domain.Segments;
@@ -56,7 +56,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         namespace EdiSource.Domain.SourceGeneration;
 
         /// <summary>
@@ -75,7 +75,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         namespace EdiSource.Domain.SourceGeneration;
 
         /// <summary>
@@ -95,7 +95,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         namespace EdiSource.Domain.SourceGeneration;
 
         /// <summary>
@@ -114,7 +114,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         namespace EdiSource.Domain.SourceGeneration;
 
         /// <summary>
@@ -135,7 +135,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         using EdiSource.Domain.Loop;
         using EdiSource.Domain.Segments;
 
@@ -162,7 +162,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         namespace EdiSource.Domain.SourceGeneration;
 
         /// <summary>
@@ -182,7 +182,7 @@ internal static class LoopSourceGenAttributes
         #pragma warning disable CS0164 // Unreferenced label
         #pragma warning disable CS0219 // Variable assigned but never used
         #pragma warning disable CS9113 // Parameter is unread.
-        
+
         namespace EdiSource.Domain.SourceGeneration;
 
         /// <summary>
