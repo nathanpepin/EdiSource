@@ -20,7 +20,7 @@ public sealed class IEA : Segment, IEdi<InterchangeEnvelope>, ISegmentIdentifier
     {
         get => Parent is null
             ? GetCompositeElement(2)
-            : Parent.ISA.GetCompositeElement(13)
+            : Parent.ISA.InterchangeControlNumber
                 .Do(x => SetCompositeElement(x, 2));
         set => SetCompositeElement(value, 2);
     }
