@@ -4,6 +4,7 @@ using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Loops.ISA;
 using EdiSource.Domain.Standard.Segments;
+using EdiSource.Domain.Structure.GenericTransactionSetData;
 
 namespace EdiSource.Domain.Standard.Loops;
 
@@ -71,7 +72,7 @@ public sealed class FunctionalGroup : IEdi<InterchangeEnvelope>, ISegmentIdentif
             return true;
         }
 
-        var generic = GTS.Definition(segment);
+        var generic = GenericTransactionSet.Definition(segment);
         if (generic is null) return false;
 
         loop.TransactionSets.Add(await generic(segmentReader, loop));

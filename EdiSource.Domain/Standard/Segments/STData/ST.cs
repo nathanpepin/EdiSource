@@ -7,10 +7,10 @@ using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Domain.Standard.Segments.STData;
 
-public abstract class ST<T> : Segment, IEdi<T>, ISourceGeneratorValidatable, ISegmentIdentifier<ST<T>>
+public abstract class ST<T> : Segment, IEdi<T>, ISourceGeneratorValidatable
     where T : IEdi
 {
-    public T? Parent { get; set; }
+    public abstract T? Parent { get; set; }
 
     public TransactionSetIdentifierCode TransactionSetIdentifierCode
     {
@@ -37,6 +37,4 @@ public abstract class ST<T> : Segment, IEdi<T>, ISourceGeneratorValidatable, ISe
         new IsOneOfValuesAttribute(ValidationSeverity.Critical, 1, 0,
             EnumExtensions.EnumToStringArray<TransactionSetIdentifierCode>())
     ];
-
-    public static EdiId EdiId { get; } = new("ST");
 }

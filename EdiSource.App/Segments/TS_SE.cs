@@ -1,3 +1,4 @@
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.SourceGeneration;
 using EdiSource.Domain.Standard.Segments;
 using EdiSource.Domain.Validation.Data;
@@ -7,12 +8,8 @@ using EdiSource.Loops;
 
 namespace EdiSource.Segments;
 
-[SegmentGenerator<_834, SE>("SE")]
-[ElementLength(0, 1, 3, 3)]
-public partial class TS_SE : IValidatable
+public class TS_SE : SE<_834>, ISegmentIdentifier<TS_SE>
 {
-    public IEnumerable<ValidationMessage> Validate()
-    {
-        yield return ValidationFactory.Create(this, ValidationSeverity.Warning, "No");
-    }
+    public override _834? Parent { get; set; }
+    public static EdiId EdiId { get; } = new("SE");
 }

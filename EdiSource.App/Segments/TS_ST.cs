@@ -1,8 +1,14 @@
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.SourceGeneration;
+using EdiSource.Domain.Standard.Loops;
 using EdiSource.Domain.Standard.Segments.STData;
 using EdiSource.Loops;
 
 namespace EdiSource.Segments;
 
-[SegmentGenerator<_834, ST>("ST", "834")]
-public partial class TS_ST : ST;
+public class TS_ST : ST<_834>, ISegmentIdentifier<TS_ST>
+{
+    public override _834? Parent { get; set; }
+
+    public static EdiId EdiId { get; } = new("ST", "834");
+}

@@ -3,29 +3,27 @@ using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Segments;
+using EdiSource.Domain.Standard.Loops;
 using EdiSource.Domain.Standard.Segments;
 using EdiSource.Domain.Standard.Segments.STData;
 
-namespace EdiSource.Domain.Standard.Loops;
-
-public sealed class GTS_ST : ST<GTS>, ISegmentIdentifier<GTS_ST>;
-
-public sealed class GTS_SE : SE<GTS>, ISegmentIdentifier<GTS_SE>;
+namespace EdiSource.Domain.Structure.GenericTransactionSetData;
 
 /// <summary>
 ///     Used to serialize any transaction set.
 ///     This definition will be used if there are no other matching definitions.
 /// </summary>
-public sealed class GTS : ILoop, IEdi<FunctionalGroup>, ISegmentIdentifier<GTS>, ISegmentIdentifier<ST<GTS>>,
-    ITransactionSet
+public sealed class GenericTransactionSet : IEdi<FunctionalGroup>, ISegmentIdentifier<GenericTransactionSet>,
+    ISegmentIdentifier<Generic_ST>,
+    ITransactionSet<GenericTransactionSet>, ILoopInitialize<FunctionalGroup, GenericTransactionSet>
 {
-    public GTS_ST ST { get; set; } = default!;
+    public Generic_ST ST { get; set; } = default!;
 
     public SegmentList<Segment> Segments { get; set; } = [];
 
-    public GTS_SE SE { get; set; } = default!;
+    public Generic_SE SE { get; set; } = default!;
 
-    public static Task<GTS> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
+    public static Task<GenericTransactionSet> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
     {
         if (parent is null) return InitializeAsync(segmentReader, null);
 
@@ -35,19 +33,19 @@ public sealed class GTS : ILoop, IEdi<FunctionalGroup>, ISegmentIdentifier<GTS>,
         return InitializeAsync(segmentReader, typedParent);
     }
 
-    public static async Task<GTS> InitializeAsync(ChannelReader<Segment> segmentReader,
+    public static async Task<GenericTransactionSet> InitializeAsync(ChannelReader<Segment> segmentReader,
         FunctionalGroup? parent)
     {
-        var loop = new GTS
+        var loop = new GenericTransactionSet
         {
             Parent = parent
         };
 
-        loop.ST = await SegmentLoopFactory<GTS_ST, GTS>.CreateAsync(segmentReader, loop);
+        loop.ST = await SegmentLoopFactory<Generic_ST, GenericTransactionSet>.CreateAsync(segmentReader, loop);
 
         while (await segmentReader.WaitToReadAsync())
         {
-            if (!await ISegmentIdentifier<SE<GTS>>.MatchesAsync(segmentReader))
+            if (!await ISegmentIdentifier<Generic_SE>.MatchesAsync(segmentReader))
             {
                 loop.Segments.Add(await segmentReader.ReadAsync());
                 continue;
@@ -56,17 +54,13 @@ public sealed class GTS : ILoop, IEdi<FunctionalGroup>, ISegmentIdentifier<GTS>,
             break;
         }
 
-        loop.SE = await SegmentLoopFactory<GTS_SE, GTS>.CreateAsync(segmentReader, loop);
+        loop.SE = await SegmentLoopFactory<Generic_SE, GenericTransactionSet>.CreateAsync(segmentReader, loop);
 
         return loop;
     }
 
-    public static TransactionSetDefinition Definition { get; } = id =>
-    {
-        if (EdiId.MatchesSegment(id)) return null;
-
-        return (segmentReader, parent) => InitializeAsync(segmentReader, parent).ContinueWith(ILoop (x) => x.Result);
-    };
+    public static TransactionSetDefinition Definition { get; } =
+        TransactionSetDefinitionsFactory<GenericTransactionSet>.CreateDefinition();
 
     public int GetTransactionSetSegmentCount()
     {

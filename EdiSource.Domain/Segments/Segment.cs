@@ -8,7 +8,7 @@ namespace EdiSource.Domain.Segments;
 /// <summary>
 ///     A basic implementation of Segment
 /// </summary>
-public class Segment
+public partial class Segment
 {
     private Separators? _separators;
 

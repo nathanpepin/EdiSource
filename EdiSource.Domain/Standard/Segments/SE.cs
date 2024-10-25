@@ -1,4 +1,6 @@
+using System.Reflection.Emit;
 using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.Loop;
 using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Extensions;
@@ -6,9 +8,9 @@ using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public abstract class SE<T> : Segment, IEdi<T>, IRefresh, ISegmentIdentifier<SE<T>> where T : IEdi
+public abstract class SE<T> : Segment, IEdi<T>, IRefresh where T : ITransactionSet<T>, IEdi<FunctionalGroup>, ILoopInitialize<FunctionalGroup, T>, ISegmentIdentifier<T>
 {
-    public T? Parent { get; set; }
+    public abstract T? Parent { get; set; }
 
     /// <summary>
     ///     If the parent exists then it will count the segments in the
@@ -19,7 +21,7 @@ public abstract class SE<T> : Segment, IEdi<T>, IRefresh, ISegmentIdentifier<SE<
     {
         get
         {
-            if (Parent is not ITransactionSet ts)
+            if (Parent is not ITransactionSet<T> ts)
                 return this.GetIntRequired(1);
 
             var count = ts.GetTransactionSetSegmentCount();
@@ -37,14 +39,14 @@ public abstract class SE<T> : Segment, IEdi<T>, IRefresh, ISegmentIdentifier<SE<
     {
         get
         {
-            if (Parent is not ITransactionSet ts)
-                return GetCompositeElement(0, 2);
+            if (Parent is not ITransactionSet<T> ts)
+                return GetCompositeElement(2);
 
             var controlNumber = ts.GetTransactionSetControlNumber();
-            SetCompositeElement(controlNumber, 0, 2);
+            SetCompositeElement(controlNumber, 2);
             return controlNumber;
         }
-        set => SetCompositeElement(value, 0, 2);
+        set => SetCompositeElement(value, 2);
     }
 
     public void Refresh()
@@ -52,6 +54,17 @@ public abstract class SE<T> : Segment, IEdi<T>, IRefresh, ISegmentIdentifier<SE<
         _ = E01NumberOfIncludedSegments;
         _ = E02TransactionSetControlNumber;
     }
+}
 
-    public static EdiId EdiId { get; } = new("SE");
+public static class ParentHelper
+{
+    public static T? GetParent<T>(this T segment) where T : IEdi
+    {
+        
+        
+        if (segment is IEdi<T> se)
+         return se.Parent;
+
+        return default;
+    }
 }
