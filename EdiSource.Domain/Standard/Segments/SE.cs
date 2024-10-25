@@ -8,7 +8,8 @@ using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public abstract class SE<T> : Segment, IEdi<T>, IRefresh where T : ITransactionSet<T>, IEdi<FunctionalGroup>, ILoopInitialize<FunctionalGroup, T>, ISegmentIdentifier<T>
+public abstract class SE<T> : Segment, IEdi<T>, IRefresh
+    where T : ITransactionSet<T>, IEdi<FunctionalGroup>, ILoopInitialize<FunctionalGroup, T>, ISegmentIdentifier<T>
 {
     public abstract T? Parent { get; set; }
 
@@ -37,15 +38,10 @@ public abstract class SE<T> : Segment, IEdi<T>, IRefresh where T : ITransactionS
     /// </summary>
     public string E02TransactionSetControlNumber
     {
-        get
-        {
-            if (Parent is not ITransactionSet<T> ts)
-                return GetCompositeElement(2);
-
-            var controlNumber = ts.GetTransactionSetControlNumber();
-            SetCompositeElement(controlNumber, 2);
-            return controlNumber;
-        }
+        get => Parent is not ITransactionSet<T> ts
+            ? GetCompositeElement(2)
+            : ts.GetTransactionSetControlNumber()
+                .Do(x => SetCompositeElement(x, 2));
         set => SetCompositeElement(value, 2);
     }
 
@@ -53,18 +49,5 @@ public abstract class SE<T> : Segment, IEdi<T>, IRefresh where T : ITransactionS
     {
         _ = E01NumberOfIncludedSegments;
         _ = E02TransactionSetControlNumber;
-    }
-}
-
-public static class ParentHelper
-{
-    public static T? GetParent<T>(this T segment) where T : IEdi
-    {
-        
-        
-        if (segment is IEdi<T> se)
-         return se.Parent;
-
-        return default;
     }
 }
