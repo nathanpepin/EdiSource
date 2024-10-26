@@ -20,6 +20,11 @@ public partial class SegmentGenerator
 
             using (cw.StartClass(className, implementations))
             {
+                using (cw.StartConstructor(className))
+                {
+                    cw.AppendLine("EdiId.CopyIdElementsToSegment(this);");
+                }
+                
                 cw.AppendLine(subType is not null
                     ? $"public new {parent}? Parent {{ get; set; }}"
                     : $"public {parent}? Parent {{ get; set; }}");

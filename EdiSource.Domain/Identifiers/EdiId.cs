@@ -59,6 +59,26 @@ public readonly struct EdiId(params Element?[] ids)
         return true;
     }
 
+    /// <summary>
+    /// Copies elements from an EdiId to a segment.
+    /// Useful in cases where you want to create a segment subtype without having to specify the element values. 
+    /// </summary>
+    /// <param name="segment"></param>
+    public void CopyIdElementsToSegment(Segment segment)
+    {
+        for (var dei = 0; dei < Ids.Length; dei++)
+        {
+            var de = Ids[dei];
+            if (de is null) continue;
+
+            for (var cei = 0; cei < de.Count; cei++)
+            {
+                var ce = de[cei];
+                segment.SetCompositeElement(ce, dei, cei);
+            }
+        }
+    }
+
     public override string ToString()
     {
         StringBuilder output = new();

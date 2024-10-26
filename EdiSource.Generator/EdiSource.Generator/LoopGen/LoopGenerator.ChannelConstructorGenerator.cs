@@ -31,6 +31,7 @@ public partial class LoopGenerator
                                   """);
                     using (cw.StartConstructor(className))
                     {
+                        cw.AppendLine("this.SegmentAction(x => EdiId.CopyIdElementsToSegment(x), false);");
                     }
 
                     cw.AppendLine();
