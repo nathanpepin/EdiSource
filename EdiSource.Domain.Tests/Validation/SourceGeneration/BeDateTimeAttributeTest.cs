@@ -15,7 +15,7 @@ public class BeDateTimeAttributeTest
     {
         // Arrange
         var attribute = new BeDateTimeAttribute(ValidationSeverity.Critical, 1, 0);
-        var segment = new Segment("TEST*20240101T120000");
+        var segment = new Segment("TEST*202401011200");
 
         // Act
         var result = attribute.Validate(segment);
