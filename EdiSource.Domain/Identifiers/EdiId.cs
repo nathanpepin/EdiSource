@@ -69,7 +69,7 @@ public readonly struct EdiId(params Element?[] ids)
         for (var dei = 0; dei < Ids.Length; dei++)
         {
             var de = Ids[dei];
-            if (de is null) continue;
+            if (de is not { Count: > 0}) continue;
 
             for (var cei = 0; cei < de.Count; cei++)
             {
