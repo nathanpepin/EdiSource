@@ -6,7 +6,7 @@ using EdiSource.Loops;
 
 var input =
     """
-    ISA*i0*          *00*          *ZZ*SENDER         *ZZ*RECEIVER       *200901*1319*^*00501*000000905*0*P*:~
+    ISA*00*          *00*          *ZZ*SENDER         *ZZ*RECEIVER       *200901*1319*^*00501*000000905*0*P*:~
     GS*09*343*343*333*343*3*3*3*34~
     ST*834*ABCD~
     REF*A~

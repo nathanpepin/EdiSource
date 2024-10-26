@@ -10,6 +10,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Generator.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Domain.Tests", "EdiSource.Domain.Tests\EdiSource.Domain.Tests.csproj", "{B9714AB2-33F4-4E2E-8ED4-F500018B5184}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{BA975AEA-2B12-4956-BD34-FB15EAAB34E8}"
+	ProjectSection(SolutionItems) = preProject
+		EdiSource.sln.DotSettings.user = EdiSource.sln.DotSettings.user
+		repopack.config.json = repopack.config.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

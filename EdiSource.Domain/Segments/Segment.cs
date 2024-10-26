@@ -1,4 +1,5 @@
 using EdiSource.Domain.Elements;
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Separator;
@@ -8,7 +9,7 @@ namespace EdiSource.Domain.Segments;
 /// <summary>
 ///     A basic implementation of Segment
 /// </summary>
-public partial class Segment
+public partial class Segment : IEdi
 {
     private Separators? _separators;
 

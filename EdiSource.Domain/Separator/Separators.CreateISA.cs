@@ -33,6 +33,6 @@ public partial class Separators
     /// <returns></returns>
     public static Separators CreateFromISA(ReadOnlySpan<char> ediText)
     {
-        return new Separators(ediText[3], ediText[104], ediText[105]);
+        return new Separators(ediText[105], ediText[3], ediText[104]);
     }
 }
