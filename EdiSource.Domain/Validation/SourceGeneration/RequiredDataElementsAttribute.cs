@@ -6,7 +6,7 @@ using EdiSource.Domain.Validation.Factory;
 namespace EdiSource.Domain.Validation.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class RequiredDataElementsAttribute(ValidationSeverity validationSeverity, int[] dataElements)
+public sealed partial class RequiredDataElementsAttribute(ValidationSeverity validationSeverity, int[] dataElements)
     : Attribute, IIndirectValidatable
 {
     public IEnumerable<ValidationMessage> Validate(IEdi element)
