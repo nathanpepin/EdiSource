@@ -2,15 +2,15 @@ namespace EdiSource.Domain.Helper;
 
 public static class EnumExtensions
 {
-    private static readonly Dictionary<Type, string[]> EnumLookup = new();
+    private static readonly Dictionary<(Type, bool), string[]> EnumLookup = new();
 
     public static string[] EnumToStringArray<T>(bool removeUnderscoreFromStart = true) where T : Enum
     {
         var type = typeof(T);
 
-        return EnumLookup.TryGetValue(type, out var result)
+        return EnumLookup.TryGetValue((type, removeUnderscoreFromStart), out var result)
             ? result
-            : EnumLookup[type] = Enum.GetValues(typeof(T))
+            : EnumLookup[(type, removeUnderscoreFromStart)] = Enum.GetValues(typeof(T))
                 .Cast<T>()
                 .Select(code => code
                     .ToString()

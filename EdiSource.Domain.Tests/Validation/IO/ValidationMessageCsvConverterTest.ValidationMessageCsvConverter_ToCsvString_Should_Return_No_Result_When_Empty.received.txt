@@ -1,1 +1,0 @@
-﻿ValidationSeverity,Message,Subject,LoopLine,SegmentLine,Loop,Segment,DataElement,CompositeElement

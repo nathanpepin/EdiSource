@@ -24,7 +24,7 @@ public class EdiSerializerTest
         """;
 
     [Fact]
-    public Task LoopPrinter_Should_Print_Loop_Correctly()
+    public Task WriteToPrettyString_Should_PrintLoopCorrectly()
     {
         //Arrange
         var serializer = new EdiSerializer();
