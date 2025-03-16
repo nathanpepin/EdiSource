@@ -77,18 +77,17 @@ public static class DateFormatMapper
         foreach (var formatTuple in _formatMap.Values)
             if (TryParseDateTime(dateString, formatTuple.Item1, out startDate))
             {
-                if (endDateString != null && formatTuple.Item2 != null)
+                if (endDateString == null || formatTuple.Item2 == null) return (startDate, endDate);
+
+                if (TryParseDateTime(endDateString, formatTuple.Item2, out var parsedEndDate))
                 {
-                    if (TryParseDateTime(endDateString, formatTuple.Item2, out var parsedEndDate))
-                    {
+                    endDate = parsedEndDate;
+                }
+                else
+                {
+                    // If end date doesn't parse with the matching format, try parsing it with the start format
+                    if (TryParseDateTime(endDateString, formatTuple.Item1, out parsedEndDate))
                         endDate = parsedEndDate;
-                    }
-                    else
-                    {
-                        // If end date doesn't parse with the matching format, try parsing it with the start format
-                        if (TryParseDateTime(endDateString, formatTuple.Item1, out parsedEndDate))
-                            endDate = parsedEndDate;
-                    }
                 }
 
                 return (startDate, endDate);

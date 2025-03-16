@@ -12,7 +12,6 @@ public interface IValidateEdi
     ///     Enacts validation on an IEdi item
     /// </summary>
     /// <param name="ediItem"></param>
-    /// <param name="additionalValidations"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     EdiValidationResult Validate<T>(T ediItem)

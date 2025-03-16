@@ -11,13 +11,13 @@ namespace EdiSource.Domain.Standard.Loops;
 public sealed class FunctionalGroup : IEdi<InterchangeEnvelope>, ISegmentIdentifier<FunctionalGroup>,
     ISegmentIdentifier<GS>, ILoopInitialize<InterchangeEnvelope, FunctionalGroup>
 {
-    private static readonly EdiId _st = new("ST");
+    private static readonly EdiId St = new("ST");
 
-    public GS GS { get; set; } = default!;
+    public GS GS { get; set; } = null!;
 
     public LoopList<ILoop> TransactionSets { get; } = [];
 
-    public GE GE { get; set; } = default!;
+    public GE GE { get; set; } = null!;
 
     public InterchangeEnvelope? Parent { get; set; }
     public List<IEdi?> EdiItems => [GS, TransactionSets, GE];
@@ -46,7 +46,7 @@ public sealed class FunctionalGroup : IEdi<InterchangeEnvelope>, ISegmentIdentif
         {
             if (!segmentReader.TryPeek(out var segment)) break;
 
-            if (!_st.MatchesSegment(segment)) break;
+            if (!St.MatchesSegment(segment)) break;
 
             if (await CreateTransactionSet(segmentReader, segment, loop)) continue;
 

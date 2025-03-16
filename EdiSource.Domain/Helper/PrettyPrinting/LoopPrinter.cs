@@ -7,8 +7,7 @@ namespace EdiSource.Domain.Helper.PrettyPrinting;
 /// </summary>
 public sealed class LoopPrinter : ILoopPrinter
 {
-    private const string Indent =
-        "                                                                                                                                ";
+    private const string Indent = "                                                                                                                                ";
 
     private readonly StringBuilder _builder = new();
     private int _indentLevel;

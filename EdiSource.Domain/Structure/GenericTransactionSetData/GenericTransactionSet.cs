@@ -14,14 +14,14 @@ namespace EdiSource.Domain.Structure.GenericTransactionSetData;
 ///     This definition will be used if there are no other matching definitions.
 /// </summary>
 public sealed class GenericTransactionSet : IEdi<FunctionalGroup>, ISegmentIdentifier<GenericTransactionSet>,
-    ISegmentIdentifier<Generic_ST>,
+    ISegmentIdentifier<GenericST>,
     ITransactionSet<GenericTransactionSet>, ILoopInitialize<FunctionalGroup, GenericTransactionSet>
 {
-    public Generic_ST ST { get; set; } = default!;
+    public GenericST ST { get; set; } = default!;
 
     public SegmentList<Segment> Segments { get; set; } = [];
 
-    public Generic_SE SE { get; set; } = default!;
+    public GenericSE SE { get; set; } = default!;
 
     public static Task<GenericTransactionSet> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
     {
@@ -41,11 +41,11 @@ public sealed class GenericTransactionSet : IEdi<FunctionalGroup>, ISegmentIdent
             Parent = parent
         };
 
-        loop.ST = await SegmentLoopFactory<Generic_ST, GenericTransactionSet>.CreateAsync(segmentReader, loop);
+        loop.ST = await SegmentLoopFactory<GenericST, GenericTransactionSet>.CreateAsync(segmentReader, loop);
 
         while (await segmentReader.WaitToReadAsync())
         {
-            if (!await ISegmentIdentifier<Generic_SE>.MatchesAsync(segmentReader))
+            if (!await ISegmentIdentifier<GenericSE>.MatchesAsync(segmentReader))
             {
                 loop.Segments.Add(await segmentReader.ReadAsync());
                 continue;
@@ -54,7 +54,7 @@ public sealed class GenericTransactionSet : IEdi<FunctionalGroup>, ISegmentIdent
             break;
         }
 
-        loop.SE = await SegmentLoopFactory<Generic_SE, GenericTransactionSet>.CreateAsync(segmentReader, loop);
+        loop.SE = await SegmentLoopFactory<GenericSE, GenericTransactionSet>.CreateAsync(segmentReader, loop);
 
         return loop;
     }
