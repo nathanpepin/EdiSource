@@ -1,0 +1,57 @@
+1. Element Tests (Enhance Existing)
+
+Test all data type conversion methods (GetDate, GetInt, GetDecimal, etc.)
+Add edge case tests for invalid formats and empty values
+Test composite element handling
+
+2. Segment Tests (Expand)
+
+Test segment creation from different input formats
+Test element accessors and modifiers with different data types
+Test segment equality comparison
+
+EDI Processing Tests
+3. Parser Tests
+
+Test parsing different transaction sets (834, 835, etc.)
+Test handling of custom separators
+Test error handling for malformed input
+Test asynchronous parsing with cancellation tokens
+
+4. Serialization Tests
+
+Test round-trip operations (parse → modify → serialize → parse)
+Test pretty printing
+Test writing to different outputs (string, file, stream)
+
+Validation Tests
+5. EDI Validation Tests
+
+Test validation rules for standard segments
+Test custom validation rules
+Test validation reporting and severity levels
+Test validation message CSV output
+
+Source Generator Tests
+6. Loop Generator Tests
+
+Test generated implementations of loop structures
+Test channel constructors for async parsing
+Test transaction set generation
+
+7. Segment Generator Tests
+
+Test generated segment implementations
+Test segment identifiers and EdiId generation
+
+Integration Tests
+8. Transaction Set Tests (Most Important)
+
+Test complete workflows for common X12 transaction sets (834, 835)
+Test with real-world examples
+Test modifications and additions to transaction sets
+
+9. Performance Tests (Optional)
+
+Test parsing speed with larger documents
+Test memory usage patterns

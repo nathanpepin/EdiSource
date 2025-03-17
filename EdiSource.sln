@@ -13,7 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{BA975AEA-2B12-4956-BD34-FB15EAAB34E8}"
 	ProjectSection(SolutionItems) = preProject
 		EdiSource.sln.DotSettings.user = EdiSource.sln.DotSettings.user
-		repopack.config.json = repopack.config.json
+		Tests to create.txt = Tests to create.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{32698B02-40A1-4D06-9BDF-14054D10A985}"

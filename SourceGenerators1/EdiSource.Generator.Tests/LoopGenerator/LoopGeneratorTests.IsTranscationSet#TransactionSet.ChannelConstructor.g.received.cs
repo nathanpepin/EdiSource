@@ -22,7 +22,6 @@ namespace Test
         [SuppressMessage("CodeQuality", "IDE0060:Remove unused parameter", Justification = "Empty constructor is required")]
         public TransactionSet()
         {
-            this.SegmentAction(x => EdiId.CopyIdElementsToSegment(x), false);
         }
 
         public TransactionSet(ChannelReader<Segment> segmentReader, TransactionSet? parent = null)
