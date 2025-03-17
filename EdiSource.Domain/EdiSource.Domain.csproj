@@ -7,5 +7,4 @@
         <WarningsAsErrors>true</WarningsAsErrors>
         <LangVersion>preview</LangVersion>
     </PropertyGroup>
-
 </Project>

@@ -124,7 +124,7 @@ public class ElementEdgeCaseTests
     {
         // Arrange
         var separators = new Separators();
-        
+
         // Act
         var elements = Element.FromString("", separators);
 
@@ -139,7 +139,7 @@ public class ElementEdgeCaseTests
     {
         // Arrange
         var separators = new Separators('~', '*', ':');
-        
+
         // Act
         var elements = Element.FromString("*****", separators);
 

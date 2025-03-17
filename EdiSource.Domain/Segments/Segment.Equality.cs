@@ -1,15 +1,18 @@
+using System.Text;
+
 namespace EdiSource.Domain.Segments;
 
 public partial class Segment
 {
     public override bool Equals(object? obj)
     {
-        if (obj is not Segment segment) return false;
-        return Equals(segment);
+        return obj is Segment segment && Equals(segment);
     }
 
     public bool Equals(Segment other)
     {
+        if (other == null!) return false;
+
         if (other.Elements.Count != Elements.Count) return false;
 
         foreach (var (e, x) in other.Elements.Zip(Elements, (s, s1) => (s, s1)))
@@ -31,7 +34,6 @@ public partial class Segment
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(this);
+        return HashCode.Combine(ToString());
     }
 }
-

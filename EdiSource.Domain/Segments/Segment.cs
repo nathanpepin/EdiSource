@@ -15,11 +15,13 @@ public partial class Segment : IEdi
 
     public Segment(Segment segment, ILoop? parent = null)
     {
-        Elements = segment.Elements;
         Separators = segment.Separators;
+
+        var copy = segment.Copy(separators: Separators, parent: parent);
+        Elements = copy.Elements;
     }
 
-    public Segment(IEnumerable<Element>? elements = null, Separators? separators = default, ILoop? parent = null)
+    public Segment(IEnumerable<Element>? elements = null, Separators? separators = null, ILoop? parent = null)
     {
         Elements = elements?.ToList() ?? [];
         Separators = separators ?? Separators.DefaultSeparators;
@@ -43,7 +45,17 @@ public partial class Segment : IEdi
         set => SetCompositeElement(value, dataElement, compositeElement);
     }
 
-    public IList<Element> Elements { get; set; }
+    public IList<Element> Elements
+    {
+        get => _elements;
+        set
+        {
+            _elements.Clear();
+            _elements.AddRange(value);
+        }
+    }
+
+    private readonly List<Element> _elements = [];
 
     public Separators Separators
     {
