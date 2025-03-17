@@ -78,7 +78,7 @@ public class EdiParserTests
         var invalidInput = "Invalid EDI content";
 
         // Act & Assert
-        await Assert.ThrowsAsync<EdiReaderException>(() => parser.ParseEdi(invalidInput));
+        await Assert.ThrowsAsync<EmptySegmentException>(() => parser.ParseEdi(invalidInput));
     }
 
     [Fact]

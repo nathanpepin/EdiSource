@@ -102,7 +102,7 @@ public static partial class SegmentExtensions
         where TEnum : struct, Enum
     {
         var text = value.ToString().AsSpan();
-        if (tryRemoveUnderscore && text[0] != '_') text = text[1..];
+        if (tryRemoveUnderscore && text[0] == '_') text = text[1..];
 
         return it.SetCompositeElement(text.ToString(), dataElement, compositeElement, create);
     }
