@@ -1,6 +1,3 @@
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.Tests.Segments;
 
 [TestSubject(typeof(Segment))]

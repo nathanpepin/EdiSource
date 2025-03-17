@@ -1,7 +1,3 @@
-using System.Globalization;
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.Tests.Elements;
 
 [TestSubject(typeof(Element))]
@@ -11,7 +7,7 @@ public class ElementEdgeCaseTests
     public void Element_WithNullValues_ShouldCreateEmptyElement()
     {
         // Arrange & Act
-        var element = new Element(null);
+        var element = new Element();
 
         // Assert
         element.Should().BeEmpty();
@@ -85,7 +81,7 @@ public class ElementEdgeCaseTests
         Element element = "20240315";
 
         // Act
-        var result = element.GetDate(compositeElement: 1);
+        var result = element.GetDate(1);
 
         // Assert
         result.Should().BeNull();

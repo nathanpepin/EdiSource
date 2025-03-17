@@ -1,4 +1,3 @@
-using EdiSource.Domain.Exceptions;
 using EdiSource.Domain.Segments.Extensions;
 
 namespace EdiSource.Domain.Tests.Segments;
@@ -376,11 +375,11 @@ public class SegmentExtensionsTests
     {
         // Arrange
         var segment = new Segment("ST*835*000000001");
-        
+
         // Act
         var builder = segment.WriteToStringBuilder();
         var result = builder.ToString();
-        
+
         // Assert
         result.Should().Be("ST*835*000000001~");
     }

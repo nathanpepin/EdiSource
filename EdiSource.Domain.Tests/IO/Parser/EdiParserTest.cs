@@ -1,11 +1,3 @@
-using FluentAssertions;
-using EdiSource.Domain.IO.Parser;
-using EdiSource.Domain.Standard.Loops.ISA;
-using System.Text;
-using EdiSource.Domain.Exceptions;
-using EdiSource.Domain.Separator;
-using JetBrains.Annotations;
-
 namespace EdiSource.Domain.Tests.IO.Parser;
 
 [TestSubject(typeof(EdiParser<>))]
@@ -78,7 +70,7 @@ public class EdiParserTests
         var invalidInput = "Invalid EDI content";
 
         // Act & Assert
-        await Assert.ThrowsAsync<EmptySegmentException>(() => parser.ParseEdi(invalidInput));
+        await Assert.ThrowsAsync<InvalidISAException>(() => parser.ParseEdi(invalidInput));
     }
 
     [Fact]

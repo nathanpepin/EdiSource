@@ -38,6 +38,7 @@ public interface IEdiParser<T> where T : class, ILoopInitialize<T>, new()
     ///     If null, Separators.DefaultSeparators will be used,
     ///     or a value will be inferred is an Interchange Envelope
     /// </param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<T> ParseEdi(string ediText, Separators? separators = null);
+    Task<T> ParseEdi(string ediText, Separators? separators = null, CancellationToken cancellationToken = default);
 }

@@ -90,8 +90,10 @@ public partial class Segment : IEdi
     public bool SetDataElement(int elementIndex, bool create = true, params string[] values)
     {
         if (create && !ElementExists(elementIndex))
+        {
             while (elementIndex >= Elements.Count)
                 Elements.Add([]);
+        }
         else if (!ElementExists(elementIndex)) return false;
 
         var element = GetElement(elementIndex);
@@ -107,13 +109,20 @@ public partial class Segment : IEdi
     public bool SetCompositeElement(string value, int dataElementIndex, int compositeElementIndex = 0,
         bool create = true)
     {
-        if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
+        if (create && !ElementExists(dataElementIndex))
+        {
             while (dataElementIndex >= Elements.Count)
-                if (dataElementIndex == Elements.Count - 1)
-                    for (var i = 0; i < compositeElementIndex; i++)
-                        Elements[dataElementIndex].Add(string.Empty);
-                else
-                    Elements.Add([string.Empty]);
+                Elements.Add([]);
+        }
+        else if (!ElementExists(dataElementIndex)) return false;
+
+        if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
+        {
+            while (!CompositeElementExists(dataElementIndex, compositeElementIndex))
+            {
+                Elements[dataElementIndex].Add(string.Empty);
+            }
+        }
         else if (!CompositeElementExists(dataElementIndex, compositeElementIndex)) return false;
 
         Elements[dataElementIndex][compositeElementIndex] = value;

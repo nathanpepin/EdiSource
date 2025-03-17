@@ -1,8 +1,3 @@
-using EdiSource.Domain.Standard.Loops.ISA;
-using EdiSource.Domain.Validation.Factory;
-using EdiSource.Domain.Validation.IO;
-using EdiSource.Domain.Validation.Validator;
-
 namespace EdiSource.Domain.Tests.Validation.IO;
 
 [TestSubject(typeof(ValidationMessageCsvConverter))]

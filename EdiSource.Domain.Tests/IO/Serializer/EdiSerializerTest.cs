@@ -1,7 +1,3 @@
-using EdiSource.Domain.IO.Serializer;
-using EdiSource.Domain.Standard.Loops.ISA;
-using JetBrains.Annotations;
-
 namespace EdiSource.Domain.Tests.IO.Serializer;
 
 [TestSubject(typeof(EdiSerializer))]
@@ -32,7 +28,7 @@ public class EdiSerializerTest
         //Act
         var envelope = EdiCommon.ParseEdi<InterchangeEnvelope>(Source)
             .ContinueWith(x => serializer.WriteToPrettyString(x.Result));
-        
+
         return Verify(envelope);
     }
 }

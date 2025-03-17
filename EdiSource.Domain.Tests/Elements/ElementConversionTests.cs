@@ -1,10 +1,22 @@
-using EdiSource.Domain.Elements;
-
 namespace EdiSource.Domain.Tests.Elements;
 
 [TestSubject(typeof(Element))]
 public class ElementConversionTests
 {
+    // Test enums for testing
+    public enum TestEnum
+    {
+        Value1,
+        Value2,
+        Value3
+    }
+
+    public enum TestEnumWithUnderscore
+    {
+        _Abc,
+        _Def
+    }
+
     [Fact]
     public void GetDate_WithValidFormat_ShouldReturnCorrectDate()
     {
@@ -53,7 +65,7 @@ public class ElementConversionTests
         var element = new Element(["NotADate", "20240315"]);
 
         // Act
-        var result = element.GetDate(compositeElement: 1);
+        var result = element.GetDate(1);
 
         // Assert
         result.Should().NotBeNull();
@@ -94,7 +106,7 @@ public class ElementConversionTests
         var element = new Element(["Not-A-Number", "12345"]);
 
         // Act
-        var result = element.GetInt(compositeElement: 1);
+        var result = element.GetInt(1);
 
         // Assert
         result.Should().NotBeNull();
@@ -135,7 +147,7 @@ public class ElementConversionTests
         var element = new Element(["Not-A-Decimal", "123.45"]);
 
         // Act
-        var result = element.GetDecimal(compositeElement: 1);
+        var result = element.GetDecimal(1);
 
         // Assert
         result.Should().NotBeNull();
@@ -204,7 +216,7 @@ public class ElementConversionTests
         var element = new Element(["X", "Y"]);
 
         // Act
-        var result = element.GetBool("Y", compositeElement: 1);
+        var result = element.GetBool("Y", 1);
 
         // Assert
         result.Should().NotBeNull();
@@ -334,19 +346,5 @@ public class ElementConversionTests
         // Assert
         result.Should().NotBeNull();
         result.Should().Be(new TimeOnly(14, 30, 45));
-    }
-
-    // Test enums for testing
-    public enum TestEnum
-    {
-        Value1,
-        Value2,
-        Value3
-    }
-
-    public enum TestEnumWithUnderscore
-    {
-        _Abc,
-        _Def
     }
 }

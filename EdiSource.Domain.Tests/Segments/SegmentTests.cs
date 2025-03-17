@@ -1,9 +1,3 @@
-using FluentAssertions;
-using EdiSource.Domain.IO.Parser;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Separator;
-using JetBrains.Annotations;
-
 namespace EdiSource.Domain.Tests.Segments;
 
 [TestSubject(typeof(Segment))]

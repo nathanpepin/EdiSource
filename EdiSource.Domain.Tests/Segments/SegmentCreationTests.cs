@@ -1,13 +1,10 @@
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.Tests.Segments;
 
 [TestSubject(typeof(Segment))]
 public class SegmentCreationTests
 {
-    private readonly Separators _defaultSeparators = new();
     private readonly Separators _customSeparators = new('|', '+', '/');
+    private readonly Separators _defaultSeparators = new();
 
     [Fact]
     public void Constructor_WithString_ShouldCreateSegmentCorrectly()

@@ -1,13 +1,14 @@
-using FluentAssertions;
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Separator;
-using JetBrains.Annotations;
-
 namespace EdiSource.Domain.Tests.Elements;
 
 [TestSubject(typeof(Element))]
 public class ElementTests
 {
+    public enum TestEnum
+    {
+        Success,
+        Failure
+    }
+
     private readonly Separators _separators = new()
     {
         SegmentSeparator = '~',
@@ -143,11 +144,5 @@ public class ElementTests
 
         // Assert
         result.Should().Be(expected);
-    }
-
-    public enum TestEnum
-    {
-        Success,
-        Failure
     }
 }
