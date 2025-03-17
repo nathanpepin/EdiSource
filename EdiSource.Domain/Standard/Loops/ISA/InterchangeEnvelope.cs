@@ -3,19 +3,20 @@ using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Segments;
+// ReSharper disable All
 
 namespace EdiSource.Domain.Standard.Loops.ISA;
 
 public sealed class InterchangeEnvelope : IEdi<InterchangeEnvelope>, ISegmentIdentifier<InterchangeEnvelope>,
     ISegmentIdentifier<Segments.ISA>, ILoopInitialize<InterchangeEnvelope, InterchangeEnvelope>
 {
-    public static List<TransactionSetDefinition> TransactionSetDefinitions = [];
+    public static List<TransactionSetDefinition> TransactionSetDefinitions { get; } = [];
 
-    public Segments.ISA ISA { get; set; } = default!;
+    public Segments.ISA ISA { get; set; } = null!;
 
-    public LoopList<FunctionalGroup> FunctionalGroups { get; } = [];
+    public LoopList<FunctionalGroup> FunctionalGroups { get; set; } = [];
 
-    public IEA IEA { get; set; } = default!;
+    public IEA IEA { get; set; } = null!;
 
     public InterchangeEnvelope? Parent
     {

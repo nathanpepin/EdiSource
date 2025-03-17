@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.App", "EdiSource.App\EdiSource.App.csproj", "{66440C03-89CD-4E3F-B4C8-5DA339270924}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.SampleApp", "EdiSource.SampleApp\EdiSource.SampleApp.csproj", "{66440C03-89CD-4E3F-B4C8-5DA339270924}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Domain", "EdiSource.Domain\EdiSource.Domain.csproj", "{32968A93-4806-4596-9115-804CA34D0598}"
 EndProject

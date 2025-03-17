@@ -15,7 +15,7 @@ public sealed class FunctionalGroup : IEdi<InterchangeEnvelope>, ISegmentIdentif
 
     public GS GS { get; set; } = null!;
 
-    public LoopList<ILoop> TransactionSets { get; } = [];
+    public LoopList<ILoop> TransactionSets { get; set; } = [];
 
     public GE GE { get; set; } = null!;
 

@@ -92,40 +92,71 @@ public sealed class EdiReader : IEdiReader
 
                     if (c == separators.SegmentSeparator)
                     {
-                        segmentBuffer
-                            .Elements
-                            .Last()
-                            .Add(stringBuffer.ToString());
-
-                        stringBuffer.Clear();
-
-                        await channelWriter.WriteAsync(segmentBuffer, cancellationToken);
-                        segmentsCreated++;
-
-                        segmentBuffer = new Segment([])
+                        try
                         {
-                            Separators = separators
-                        };
+                            if (segmentBuffer.Elements.Count == 0)
+                            {
+                                throw new EmptySegmentException(separators.SegmentSeparator, segmentsCreated);
+                            }
+
+                            segmentBuffer
+                                .Elements
+                                .Last()
+                                .Add(stringBuffer.ToString());
+
+                            stringBuffer.Clear();
+
+                            await channelWriter.WriteAsync(segmentBuffer, cancellationToken);
+                            segmentsCreated++;
+
+                            segmentBuffer = new Segment([])
+                            {
+                                Separators = separators
+                            };
+                        }
+                        catch (EmptySegmentException)
+                        {
+                            throw;
+                        }
+                        catch (Exception exception)
+                        {
+                            throw new EdiSegmentReaderException(segmentBuffer.ToString(), segmentsCreated, exception);
+                        }
                     }
                     else if (c == separators.DataElementSeparator)
                     {
-                        segmentBuffer
-                            .Elements
-                            .Last()
-                            .Add(stringBuffer.ToString());
+                        try
+                        {
+                            segmentBuffer
+                                .Elements
+                                .Last()
+                                .Add(stringBuffer.ToString());
 
-                        stringBuffer.Clear();
+                            stringBuffer.Clear();
 
-                        segmentBuffer.Elements.Add([]);
+                            segmentBuffer.Elements.Add([]);
+                        }
+                        catch (Exception exception)
+                        {
+                            throw new EdiSegmentReaderException(segmentBuffer.ToString(), segmentsCreated, exception);
+                        }
                     }
+
                     else if (c == separators.CompositeElementSeparator)
                     {
-                        segmentBuffer
-                            .Elements
-                            .Last()
-                            .Add(stringBuffer.ToString());
+                        try
+                        {
+                            segmentBuffer
+                                .Elements
+                                .Last()
+                                .Add(stringBuffer.ToString());
 
-                        stringBuffer.Clear();
+                            stringBuffer.Clear();
+                        }
+                        catch (Exception exception)
+                        {
+                            throw new EdiSegmentReaderException(segmentBuffer.ToString(), segmentsCreated, exception);
+                        }
                     }
                     else
                     {

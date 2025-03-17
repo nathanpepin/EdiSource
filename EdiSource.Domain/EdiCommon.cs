@@ -21,6 +21,47 @@ public static class EdiCommon
     /// <summary>
     ///     Parses an EDI envelope from a StreamReader.
     /// </summary>
+    /// <param name="stream">The StreamReader to read the EDI envelope from.</param>
+    /// <param name="cancellationToken">Optional. A CancellationToken to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous parse operation. The task result contains the parsed object.</returns>
+    public static async Task<(InterchangeEnvelope interchangeEnvelope, Separators separators)> ParseEdiEnvelope(StreamReader stream, CancellationToken cancellationToken = default)
+    {
+        var separators = await Separators.CreateFromISA(stream);
+        var envelope = await new EdiParser<InterchangeEnvelope>().ParseEdi(stream, separators, cancellationToken);
+        return (envelope, separators);
+    }
+
+    /// <summary>
+    ///     Parses an EDI envelope from a StreamReader.
+    /// </summary>
+    /// <param name="fileInfo">The StreamReader to read the EDI envelope from.</param>
+    /// <param name="cancellationToken">Optional. A CancellationToken to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous parse operation. The task result contains the parsed object.</returns>
+    public static async Task<(InterchangeEnvelope interchangeEnvelope, Separators separators)> ParseEdiEnvelope(FileInfo fileInfo, CancellationToken cancellationToken = default)
+    {
+        await using var fileStream = fileInfo.OpenRead();
+        using var streamReader = new StreamReader(fileStream);
+        return await ParseEdiEnvelope(streamReader, cancellationToken);
+    }
+
+    /// <summary>
+    ///     Parses an EDI envelope from a StreamReader.
+    /// </summary>
+    /// <param name="ediText">Edi text</param>
+    /// <param name="cancellationToken">Optional. A CancellationToken to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous parse operation. The task result contains the parsed object.</returns>
+    public static async Task<(InterchangeEnvelope interchangeEnvelope, Separators separators)> ParseEdiEnvelope(string ediText, CancellationToken cancellationToken = default)
+    {
+        using var textStream = new MemoryStream(Encoding.UTF8.GetBytes(ediText));
+        using var streamReader = new StreamReader(textStream);
+        var result = await ParseEdiEnvelope(streamReader, cancellationToken);
+        return result;
+    }
+
+
+    /// <summary>
+    ///     Parses an EDI envelope from a StreamReader.
+    /// </summary>
     /// <typeparam name="T">The type of the object that implements ILoopInitialize.</typeparam>
     /// <param name="stream">The StreamReader to read the EDI envelope from.</param>
     /// <param name="separators">The edi separators, or the default ones from Separators.DefaultSeparators if not provided</param>

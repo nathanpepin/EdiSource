@@ -12,7 +12,7 @@ public sealed class EdiParser<T> : IEdiParser<T> where T : class, ILoopInitializ
     public async Task<T> ParseEdi(StreamReader streamReader, Separators? separators = null,
         CancellationToken cancellationToken = default)
     {
-        if (typeof(T) == typeof(InterchangeEnvelope))
+        if (typeof(T) == typeof(InterchangeEnvelope) && separators is null)
             separators ??= await Separators.CreateFromISA(streamReader);
 
         var channel = Channel.CreateUnbounded<Segment>();
