@@ -1,9 +1,3 @@
-4. Serialization Tests
-
-Test round-trip operations (parse → modify → serialize → parse)
-Test pretty printing
-Test writing to different outputs (string, file, stream)
-
 Validation Tests
 5. EDI Validation Tests
 

@@ -11,15 +11,15 @@ public class REF : Segment, IValidatable, ISourceGeneratorValidatable
 {
     public static EdiId EdiId { get; } = new("REF");
 
-    public string E01Identifier
+    public string? E01Identifier
     {
-        get => GetCompositeElement(1);
-        set => SetCompositeElement(value, 1);
+        get => GetCompositeElementOrNull(1);
+        set => SetCompositeElement(value ?? string.Empty, 1);
     }
 
     public string? E02Identification
     {
-        get => GetCompositeElement(2, 2);
+        get => GetCompositeElementOrNull(2, 2);
         set => value?.Do(x => SetCompositeElement(x, 1));
     }
 

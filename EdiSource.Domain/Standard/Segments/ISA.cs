@@ -73,13 +73,20 @@ public sealed class ISA : Segment, IEdi<InterchangeEnvelope>, ISegmentIdentifier
         }
     }
 
-    private string ValidateAndPadField(string value, int requiredLength, string fieldName)
+    private string ValidateAndPadField(string value, int requiredLength, string fieldName, bool throwIfInvalid = false)
     {
-        if (value.Length > requiredLength)
-            throw new ArgumentException(
-                $"{fieldName} must be {requiredLength} characters or less. Found {value.Length} characters.");
-
-        return value.PadRight(requiredLength);
+        if (value.Length <= requiredLength) return value.PadRight(requiredLength);
+        
+        if (!throwIfInvalid)
+        {
+            var trimmedValue = value.Trim();
+            return trimmedValue.Length <= requiredLength 
+                ? trimmedValue.PadRight(requiredLength) 
+                : value[..requiredLength];
+        }
+            
+        throw new ArgumentException(
+            $"{fieldName} must be {requiredLength} characters or less. Found {value.Length} characters.");
     }
 
     // ISA-01: Authorization Information Qualifier (I01)
