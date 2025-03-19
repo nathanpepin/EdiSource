@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using EdiSource.Domain.Elements;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
@@ -12,6 +13,49 @@ namespace EdiSource.Domain.Segments;
 public partial class Segment : IEdi
 {
     private Separators? _separators;
+
+    private static readonly ConcurrentDictionary<Type, Func<EdiId?>> EdiIdGetters = new();
+
+    protected Segment()
+    {
+        Separators = Separators.DefaultSeparators;
+
+        var type = this.GetType();
+        if (EdiIdGetters.TryGetValue(type, out var getEdiId))
+        {
+            var ediId = getEdiId();
+            ediId?.CopyIdElementsToSegment(this);
+        }
+        else
+        {
+            var segmentIdentifierInterface = type.GetInterfaces()
+                .FirstOrDefault(i => i.IsGenericType &&
+                                     i.GetGenericTypeDefinition() == typeof(ISegmentIdentifier<>));
+
+            if (segmentIdentifierInterface != null)
+            {
+                var ediIdProperty = type.GetProperty("EdiId",
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+
+                if (ediIdProperty != null)
+                {
+                    EdiId? Getter() => ediIdProperty.GetValue(null) as EdiId?;
+                    EdiIdGetters.TryAdd(type, Getter);
+
+                    var ediId = Getter();
+                    ediId?.CopyIdElementsToSegment(this);
+                }
+                else
+                {
+                    EdiIdGetters.TryAdd(type, () => null);
+                }
+            }
+            else
+            {
+                EdiIdGetters.TryAdd(type, () => null);
+            }
+        }
+    }
 
     public Segment(Segment segment, ILoop? parent = null)
     {

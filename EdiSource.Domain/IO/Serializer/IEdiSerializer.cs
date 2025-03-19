@@ -15,7 +15,7 @@ public interface IEdiSerializer
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task WriteToStream(ILoop loop, Stream stream, Separators? separators = null,
-        bool includeNewLine = true, CancellationToken cancellationToken = default);
+        bool includeNewLine = true, bool leaveOpen = true, CancellationToken cancellationToken = default);
 
 
     /// <summary>

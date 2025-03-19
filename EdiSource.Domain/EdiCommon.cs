@@ -127,11 +127,11 @@ public static class EdiCommon
     /// <param name="includeNewLine">Indicates whether to include new lines in the EDI output.</param>
     /// <param name="cancellationToken">Optional cancellation token to cancel the operation.</param>
     /// <returns>A task representing the asynchronous write operation.</returns>
-    public static Task WriteEdi<T>(T loop, Stream stream, Separators? separators = null, bool includeNewLine = true,
+    public static Task WriteEdi<T>(T loop, Stream stream, Separators? separators = null, bool includeNewLine = true, bool leaveOpen = true,
         CancellationToken cancellationToken = default)
         where T : class, ILoop
     {
-        return new EdiSerializer().WriteToStream(loop, stream, separators, includeNewLine, cancellationToken);
+        return new EdiSerializer().WriteToStream(loop, stream, separators, includeNewLine, leaveOpen, cancellationToken);
     }
 
     /// <summary>

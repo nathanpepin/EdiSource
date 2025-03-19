@@ -6,6 +6,11 @@ namespace EdiSource.Domain.Standard.Segments;
 
 public sealed class GS : Segment, IEdi<FunctionalGroup>, ISegmentIdentifier<GS>
 {
+    public GS()
+    {
+        EdiId.CopyIdElementsToSegment(this);
+    }
+
     public string E06GroupControlNumber
     {
         get => GetCompositeElement(6);
