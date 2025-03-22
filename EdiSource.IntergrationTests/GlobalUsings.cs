@@ -1,0 +1,13 @@
+global using EdiSource.Domain.Identifiers;
+global using EdiSource.Domain.Loop;
+global using EdiSource.Domain.Loop.Extensions;
+global using EdiSource.Domain.Segments;
+global using EdiSource.Domain.Segments.Extensions;
+global using EdiSource.Domain.SourceGeneration;
+global using EdiSource.Domain.Standard.Loops;
+global using EdiSource.Domain;
+global using EdiSource.Domain.IO.Serializer;
+global using EdiSource.Domain.Standard.Loops.ISA;
+global using EdiSource.Domain.Validation.Data;
+global using EdiSource.Domain.Validation.Validator;
+global using FluentAssertions;

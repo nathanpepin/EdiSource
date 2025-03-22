@@ -1,10 +1,6 @@
-using EdiSource.Domain.SourceGeneration;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.SourceGeneration;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops.Loop2000>("INS")]
+[SegmentGenerator<Loop2000>("INS")]
 [IsOneOfValues(ValidationSeverity.Critical, 1, 0, "Y", "N")]
 public partial class Loop2000_INS
 {

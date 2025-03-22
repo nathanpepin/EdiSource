@@ -1,0 +1,11 @@
+global using Xunit;
+global using System.Threading.Tasks;
+global using EdiSource.Generator.Tests.Utils;
+global using EdiSource.Generator.ValidationGen;
+global using VerifyXunit;
+global using System;
+global using EdiSource.Domain.Identifiers;
+global using Microsoft.CodeAnalysis;
+global using Microsoft.CodeAnalysis.CSharp;
+global using VerifyTests;
+global using System.Runtime.CompilerServices;

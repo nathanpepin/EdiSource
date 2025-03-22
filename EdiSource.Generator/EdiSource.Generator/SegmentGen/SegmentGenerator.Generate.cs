@@ -1,6 +1,3 @@
-using System.Collections.Immutable;
-using EdiSource.Generator.Helper;
-
 namespace EdiSource.Generator.SegmentGen;
 
 public partial class SegmentGenerator
@@ -24,7 +21,7 @@ public partial class SegmentGenerator
                 {
                     cw.AppendLine("EdiId.CopyIdElementsToSegment(this);");
                 }
-                
+
                 cw.AppendLine(subType is not null
                     ? $"public new {parent}? Parent {{ get; set; }}"
                     : $"public {parent}? Parent {{ get; set; }}");

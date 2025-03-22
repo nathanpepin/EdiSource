@@ -1,25 +1,4 @@
-﻿using EdiSource.Domain;
-using EdiSource.Domain.Standard.Loops;
-using EdiSource.Domain.Standard.Loops.ISA;
-using EdiSource.Domain.Standard.Segments;
-using EdiSource.Domain.Validation.Data;
-using _834 = EdiSource.Loops._834;
-using Loop2000 = EdiSource.Loops.Loop2000;
-using Loop2000_DTP = EdiSource.Segments.Loop2000_DTP;
-using Loop2000_INS = EdiSource.Segments.Loop2000_INS;
-using Loop2000_REF = EdiSource.Segments.Loop2000_REF;
-using Loop2100 = EdiSource.Loops.Loop2100;
-using Loop2100_DMG = EdiSource.Segments.Loop2100_DMG;
-using Loop2100_N3 = EdiSource.Segments.Loop2100_N3;
-using Loop2100_N4 = EdiSource.Segments.Loop2100_N4;
-using Loop2100_NM1 = EdiSource.Segments.Loop2100_NM1;
-using Loop2100_PER = EdiSource.Segments.Loop2100_PER;
-using TS_DTP = EdiSource.Segments.TS_DTP;
-using TS_REF = EdiSource.Segments.TS_REF;
-using TS_SE = EdiSource.Segments.TS_SE;
-using TS_ST = EdiSource.Segments.TS_ST;
-
-Console.WriteLine("=============================================");
+﻿Console.WriteLine("=============================================");
 Console.WriteLine("EDI 834 BENEFIT ENROLLMENT PROCESSING DEMO");
 Console.WriteLine("=============================================");
 
@@ -84,16 +63,10 @@ if (transaction != null)
     if (transaction.REFs.Count > 0)
     {
         Console.WriteLine("References:");
-        foreach (var reference in transaction.REFs)
-        {
-            Console.WriteLine($"  {reference.ReferenceQualifier}: {reference.ReferenceId}");
-        }
+        foreach (var reference in transaction.REFs) Console.WriteLine($"  {reference.ReferenceQualifier}: {reference.ReferenceId}");
     }
 
-    if (transaction.DTP != null)
-    {
-        Console.WriteLine($"Transaction Date ({transaction.DTP.DateQualifier}): {transaction.DTP.Date:yyyy-MM-dd}");
-    }
+    if (transaction.DTP != null) Console.WriteLine($"Transaction Date ({transaction.DTP.DateQualifier}): {transaction.DTP.Date:yyyy-MM-dd}");
 
     // 6. Access the 2000 loop (insured information)
     Console.WriteLine("\n--- INSURED LOOP (2000) DATA ---");
@@ -104,26 +77,20 @@ if (transaction != null)
     if (insured.REFs.Count > 0)
     {
         Console.WriteLine("Insured References:");
-        foreach (var reference in insured.REFs)
-        {
-            Console.WriteLine($"  {reference.ReferenceQualifier}: {reference.ReferenceId}");
-        }
+        foreach (var reference in insured.REFs) Console.WriteLine($"  {reference.ReferenceQualifier}: {reference.ReferenceId}");
     }
 
     if (insured.DTPs.Count > 0)
     {
         Console.WriteLine("Insured Dates:");
-        foreach (var date in insured.DTPs)
-        {
-            Console.WriteLine($"  {date.DateQualifier}: {date.Date:yyyy-MM-dd}");
-        }
+        foreach (var date in insured.DTPs) Console.WriteLine($"  {date.DateQualifier}: {date.Date:yyyy-MM-dd}");
     }
 
     // 7. Access the 2100 loops (member information)
     Console.WriteLine("\n--- MEMBER LOOPS (2100) DATA ---");
     Console.WriteLine($"Total members: {transaction.Loop2100s.Count}");
 
-    int memberCount = 0;
+    var memberCount = 0;
     foreach (var member in transaction.Loop2100s)
     {
         memberCount++;
@@ -141,10 +108,7 @@ if (transaction != null)
         {
             var address = member.Addresses[0];
             Console.WriteLine($"  Address: {address.AddressLine1}");
-            if (!string.IsNullOrEmpty(address.AddressLine2))
-            {
-                Console.WriteLine($"           {address.AddressLine2}");
-            }
+            if (!string.IsNullOrEmpty(address.AddressLine2)) Console.WriteLine($"           {address.AddressLine2}");
         }
 
         if (member.CityStateZips.Count > 0)
@@ -157,16 +121,13 @@ if (transaction != null)
         {
             var contact = member.ContactInfo[0];
             Console.WriteLine($"  Contact: {contact.ContactName} ({contact.ContactFunction})");
-            if (!string.IsNullOrEmpty(contact.CommunicationNumber1))
-            {
-                Console.WriteLine($"  {contact.CommunicationQualifier1}: {contact.CommunicationNumber1}");
-            }
+            if (!string.IsNullOrEmpty(contact.CommunicationNumber1)) Console.WriteLine($"  {contact.CommunicationQualifier1}: {contact.CommunicationNumber1}");
         }
     }
 
     // 8. Validate the document
     Console.WriteLine("\n--- VALIDATING 834 DOCUMENT ---");
-    EdiValidationResult validationResult = EdiCommon.Validate(envelope);
+    var validationResult = EdiCommon.Validate(envelope);
     if (validationResult.IsValid)
     {
         Console.WriteLine("Validation passed successfully.");
@@ -174,10 +135,7 @@ if (transaction != null)
     else
     {
         Console.WriteLine("Validation failed with the following issues:");
-        foreach (var message in validationResult.ValidationMessages)
-        {
-            Console.WriteLine($"  {message.Severity}: {message.Message}");
-        }
+        foreach (var message in validationResult.ValidationMessages) Console.WriteLine($"  {message.Severity}: {message.Message}");
     }
 
     // 9. Create a new 834 document programmatically
@@ -186,12 +144,11 @@ if (transaction != null)
     var newEnvelope = new InterchangeEnvelope
     {
         ISA = ISA.CreateDefault(
-            senderQualifier: "ZZ",
-            senderId: "NEWSENDER      ",
-            receiverQualifier: "ZZ",
-            receiverId: "NEWRECEIVER    ",
-            controlNumber: 12345,
-            usageIndicator: "P"
+            "ZZ",
+            "NEWSENDER      ",
+            "ZZ",
+            "NEWRECEIVER    ",
+            12345
         ),
         FunctionalGroups =
         [
@@ -355,7 +312,7 @@ if (transaction != null)
             ]
         });
 
-        Console.WriteLine($"Added new member: ALICE ADDISON");
+        Console.WriteLine("Added new member: ALICE ADDISON");
         Console.WriteLine($"New member count: {transaction.Loop2100s.Count}");
     }
 

@@ -1,5 +1,3 @@
-using EdiSource.Generator.Helper;
-
 namespace EdiSource.Generator.LoopGen;
 
 public partial class LoopGenerator

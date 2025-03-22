@@ -1,8 +1,3 @@
-using System.Threading.Tasks;
-using EdiSource.Generator.Tests.Utils;
-using VerifyXunit;
-using Xunit;
-
 namespace EdiSource.Generator.Tests.SegmentGenerator;
 
 public class SegmentGeneratorTests

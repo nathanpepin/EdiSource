@@ -4,19 +4,9 @@ namespace EdiSource.Domain.Tests.Validation;
 
 public sealed class EdiValidationTests
 {
-    private readonly ValidateEdi _validator = new();
-    private readonly ValidationMessageCsvConverter _csvConverter = new();
-
     private readonly Func<TestSegment> _createTestSegment = () => new TestSegment(["TEST", "V1", "OtherValue"]);
-
-    private sealed class TestSegment(IEnumerable<Element>? elements = null, Separators? separators = null) : Segment(elements, separators), ISourceGeneratorValidatable
-    {
-        public List<IIndirectValidatable> SourceGenValidations { get; } =
-        [
-            new RequiredDataElementsAttribute(ValidationSeverity.Critical, [0, 1, 2]),
-            new IsOneOfValuesAttribute(ValidationSeverity.Error, 1, 0, "V1", "V2"),
-        ];
-    }
+    private readonly ValidationMessageCsvConverter _csvConverter = new();
+    private readonly ValidateEdi _validator = new();
 
     [Fact]
     public void StandardSegment_WithValidData_ShouldPassValidation()
@@ -57,7 +47,7 @@ public sealed class EdiValidationTests
         // Arrange
         var segment = new REF
         {
-            E01Identifier = "REF",
+            E01Identifier = "REF"
             // Both E02Identification and E03Description are null, which should trigger validation error
         };
 
@@ -188,10 +178,7 @@ public sealed class EdiValidationTests
         finally
         {
             // Cleanup
-            if (File.Exists(tempFilePath))
-            {
-                File.Delete(tempFilePath);
-            }
+            if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
         }
     }
 
@@ -202,7 +189,7 @@ public sealed class EdiValidationTests
         var dtp = new DTP
         {
             Qualifier = "356",
-            DateFormatCode = DateFormatCode.D8,
+            DateFormatCode = DateFormatCode.D8
         };
 
         // Set an element directly to create invalid state for validation
@@ -228,12 +215,12 @@ public sealed class EdiValidationTests
         var envelope = new InterchangeEnvelope
         {
             ISA = ISA.CreateDefault(
-                senderQualifier: "ZZ",
-                senderId: "SENDER         ",
-                receiverQualifier: "ZZ",
-                receiverId: "RECEIVER       ",
-                controlNumber: 12345,
-                usageIndicator: "X" // Invalid value - should be P or T
+                "ZZ",
+                "SENDER         ",
+                "ZZ",
+                "RECEIVER       ",
+                12345,
+                "X" // Invalid value - should be P or T
             ),
             IEA = new IEA
             {
@@ -248,5 +235,14 @@ public sealed class EdiValidationTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.ValidationMessages.Should().HaveCountGreaterThan(1);
+    }
+
+    private sealed class TestSegment(IEnumerable<Element>? elements = null, Separators? separators = null) : Segment(elements, separators), ISourceGeneratorValidatable
+    {
+        public List<IIndirectValidatable> SourceGenValidations { get; } =
+        [
+            new RequiredDataElementsAttribute(ValidationSeverity.Critical, [0, 1, 2]),
+            new IsOneOfValuesAttribute(ValidationSeverity.Error, 1, 0, "V1", "V2")
+        ];
     }
 }

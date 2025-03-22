@@ -1,8 +1,6 @@
-using EdiSource.Domain.SourceGeneration;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops.Loop2000>("REF")]
+[SegmentGenerator<Loop2000>("REF")]
 public partial class Loop2000_REF
 {
     public string ReferenceQualifier

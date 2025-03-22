@@ -1,10 +1,6 @@
-using EdiSource.Domain.SourceGeneration;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops._834>("ST", "834")]
+[SegmentGenerator<_834>("ST", "834")]
 public partial class TS_ST : IValidatable
 {
     public string TransactionSetControlNumber

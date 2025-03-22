@@ -1,8 +1,3 @@
-using System.Collections.Immutable;
-using EdiSource.Generator.LoopGen.Data;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 namespace EdiSource.Generator.Helper;
 
 public static class HelperFunctions

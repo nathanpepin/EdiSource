@@ -1,8 +1,6 @@
-using EdiSource.Domain.SourceGeneration;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops.Loop2100>("PER")]
+[SegmentGenerator<Loop2100>("PER")]
 public partial class Loop2100_PER
 {
     public string ContactFunction

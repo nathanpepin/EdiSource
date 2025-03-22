@@ -1,4 +1,4 @@
-namespace EdiSource;
+namespace EdiSource.SampleApp;
 
 internal static class GeneralExtensions
 {
@@ -17,7 +17,7 @@ internal static class GeneralExtensions
         action(it);
         return it;
     }
-    
+
     public static T DoIf<T>(this T it, Action<T> action, bool condition)
     {
         if (condition) return it;
@@ -33,7 +33,7 @@ internal static class GeneralExtensions
         action(it);
         return it;
     }
-    
+
     public static T? DoIfNull<T>(this T? it, Action action)
     {
         if (it is not null) return default;

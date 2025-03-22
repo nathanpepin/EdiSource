@@ -1,10 +1,6 @@
-using EdiSource.Domain.SourceGeneration;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.SourceGeneration;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops._834>("REF")]
+[SegmentGenerator<_834>("REF")]
 [ElementLength(ValidationSeverity.Error, 1, 3)]
 public partial class TS_REF
 {
