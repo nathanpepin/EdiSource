@@ -2,20 +2,15 @@ using EdiSource.Domain.Helper;
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.Standard.Loops;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Domain.Standard.Segments.STData;
 
-public partial class Generic_ST : ST, ISegment<GenericTransactionSet>, ISegmentIdentifier<Generic_ST>
+public abstract class ST<T> : Segment, IEdi<T>, ISourceGeneratorValidatable
+    where T : IEdi
 {
-    public new GenericTransactionSet? Parent { get; set; }
-}
-
-public partial class ST : Segment, ISegmentIdentifier<ST>, ISourceGeneratorValidatable
-{
-    public static EdiId EdiId { get; } = new ("ST");
+    public abstract T? Parent { get; set; }
 
     public TransactionSetIdentifierCode TransactionSetIdentifierCode
     {

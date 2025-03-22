@@ -3,28 +3,30 @@ using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Standard.Segments;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.SourceGeneration;
+// ReSharper disable All
 
-namespace EdiSource.Domain.Standard.Loops;
+namespace EdiSource.Domain.Standard.Loops.ISA;
 
-public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentIdentifier<InterchangeEnvelope>,
-    ISegmentIdentifier<ISA>, ILoopInitialize<InterchangeEnvelope, InterchangeEnvelope>
+public sealed class InterchangeEnvelope : IEdi<InterchangeEnvelope>, ISegmentIdentifier<InterchangeEnvelope>,
+    ISegmentIdentifier<Segments.ISA>, ILoopInitialize<InterchangeEnvelope, InterchangeEnvelope>
 {
-    public static List<TransactionSetDefinition> TransactionSetDefinitions = [];
+    public static List<TransactionSetDefinition> TransactionSetDefinitions { get; } = [];
 
-    public ISA ISA { get; set; } = default!;
+    public Segments.ISA ISA { get; set; } = null!;
 
-    public LoopList<FunctionalGroup> FunctionalGroups { get; } = [];
+    public LoopList<FunctionalGroup> FunctionalGroups { get; set; } = [];
 
-    public ISegment IEA { get; set; } = default!;
+    public IEA IEA { get; set; } = null!;
 
-    public InterchangeEnvelope? Parent => null;
+    public InterchangeEnvelope? Parent
+    {
+        get => null;
+        set => _ = value;
+    }
 
-    ILoop? ILoop.Parent => Parent;
     public List<IEdi?> EdiItems => [ISA, FunctionalGroups, IEA];
 
-    public static Task<InterchangeEnvelope> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)
+    public static Task<InterchangeEnvelope> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
     {
         if (parent is null) return InitializeAsync(segmentReader, null);
 
@@ -34,12 +36,12 @@ public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentId
         return InitializeAsync(segmentReader, typedParent);
     }
 
-    public static async Task<InterchangeEnvelope> InitializeAsync(ChannelReader<ISegment> segmentReader,
+    public static async Task<InterchangeEnvelope> InitializeAsync(ChannelReader<Segment> segmentReader,
         InterchangeEnvelope? parent)
     {
         var loop = new InterchangeEnvelope();
 
-        loop.ISA = await SegmentLoopFactory<ISA, InterchangeEnvelope>.CreateAsync(segmentReader, loop);
+        loop.ISA = await SegmentLoopFactory<Segments.ISA, InterchangeEnvelope>.CreateAsync(segmentReader, loop);
 
         while (await segmentReader.WaitToReadAsync())
         {
@@ -57,5 +59,5 @@ public sealed class InterchangeEnvelope : ILoop<InterchangeEnvelope>, ISegmentId
         return loop;
     }
 
-    public static EdiId EdiId => ISA.EdiId;
+    public static EdiId EdiId => Segments.ISA.EdiId;
 }

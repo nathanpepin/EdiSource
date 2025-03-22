@@ -7,7 +7,9 @@ namespace EdiSource.Domain.Validation.Data;
 /// </summary>
 public class EdiValidationResult
 {
-    public bool IsValid => ValidationMessages.Any(x => x.Severity <= ValidationSeverity.Info);
+    public bool IsValid => ValidationMessages.Count == 0 || 
+                           ValidationMessages.All(x => x.Severity <= ValidationSeverity.Info);
+
     public bool HasWarning => ValidationMessages.Any(x => x.Severity >= ValidationSeverity.Warning);
     public bool HasError => ValidationMessages.Any(x => x.Severity >= ValidationSeverity.Error);
     public bool HasCritical => ValidationMessages.Any(x => x.Severity >= ValidationSeverity.Critical);
@@ -39,10 +41,7 @@ public class EdiValidationResult
     {
         StringBuilder output = new();
 
-        foreach (var message in ValidationMessages)
-        {
-            output.AppendLine(message.ToString());
-        }
+        foreach (var message in ValidationMessages) output.AppendLine(message.ToString());
 
         return output.ToString();
     }

@@ -90,7 +90,7 @@ public static partial class LoopExtensions
                 case IEnumerable<T> ts:
                     output.AddRange(ts);
                     return output;
-                case IEnumerable<ISegment> segments:
+                case IEnumerable<Segment> segments:
                     foreach (var segment in segments)
                         if (segment is T t)
                             output.Add(t);

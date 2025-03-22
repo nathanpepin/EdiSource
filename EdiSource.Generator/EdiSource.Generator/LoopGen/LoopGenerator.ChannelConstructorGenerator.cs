@@ -38,7 +38,7 @@ public partial class LoopGenerator
                     using (cw.StartConstructor(className,
                                arguments:
                                [
-                                   "ChannelReader<ISegment> segmentReader", $"{parent}? parent = null"
+                                   "ChannelReader<Segment> segmentReader", $"{parent}? parent = null"
                                ]))
                     {
                         cw.AppendLine("var loop = InitializeAsync(segmentReader, parent).GetAwaiter().GetResult();");
@@ -48,7 +48,7 @@ public partial class LoopGenerator
                     cw.AppendLine();
 
                     using (cw.AppendBlock(
-                               $"public static Task<{className}> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent)"))
+                               $"public static Task<{className}> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)"))
                     {
                         using (var _ = cw.AddIf("parent is null"))
                         {
@@ -70,7 +70,7 @@ public partial class LoopGenerator
 
                     cw.AppendLine();
                     using (cw.AppendBlock(
-                               $"public static async Task<{className}> InitializeAsync(ChannelReader<ISegment> segmentReader, {parent}? parent)"))
+                               $"public static async Task<{className}> InitializeAsync(ChannelReader<Segment> segmentReader, {parent}? parent)"))
                     {
                         cw.AppendLine($"var loop = new {className}();");
                         cw.AppendLine();
@@ -133,7 +133,9 @@ public partial class LoopGenerator
                         ? named[0]
                         : property.Type;
 
-                    using var _ = cw.AddIf($"await ISegmentIdentifier<{typeName.ToString().Replace("?", "")}>.MatchesAsync(segmentReader)");
+                    using var _ =
+                        cw.AddIf(
+                            $"await ISegmentIdentifier<{typeName.ToString().Replace("?", "")}>.MatchesAsync(segmentReader)");
 
                     cw.AppendLine(attribute switch
                     {

@@ -6,7 +6,7 @@ internal static class GeneralExtensions
     {
         return fun(it);
     }
-    
+
     public static T ApplyIf<T>(this T it, Func<T, T> fun, bool condition)
     {
         return condition ? fun(it) : it;
@@ -17,12 +17,28 @@ internal static class GeneralExtensions
         action(it);
         return it;
     }
+    
+    public static T DoIf<T>(this T it, Action<T> action, bool condition)
+    {
+        if (condition) return it;
+
+        action(it);
+        return it;
+    }
 
     public static T? DoIfNotNull<T>(this T? it, Action<T> action)
     {
         if (it is null) return default;
 
         action(it);
+        return it;
+    }
+    
+    public static T? DoIfNull<T>(this T? it, Action action)
+    {
+        if (it is not null) return default;
+
+        action();
         return it;
     }
 
@@ -57,6 +73,4 @@ internal static class GeneralExtensions
     {
         return it.InsideBounds(first) && it[first].InsideBounds(second);
     }
-
-
 }

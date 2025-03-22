@@ -17,7 +17,7 @@ public static partial class SegmentExtensions
     /// </param>
     /// <param name="falseValue">The value expected when false</param>
     /// <returns></returns>
-    public static bool? GetBool(this ISegment it, int dataElement, string trueValue, int compositeElement = 0,
+    public static bool? GetBool(this Segment it, int dataElement, string trueValue, int compositeElement = 0,
         bool implicitFalse = true,
         string falseValue = "N")
     {
@@ -45,7 +45,7 @@ public static partial class SegmentExtensions
     /// </param>
     /// <param name="falseValue">The value expected when false</param>
     /// <returns></returns>
-    public static bool GetBoolRequired(this ISegment it, int dataElement, string trueValue, int compositeElement = 0,
+    public static bool GetBoolRequired(this Segment it, int dataElement, string trueValue, int compositeElement = 0,
         bool implicitFalse = true,
         string falseValue = "N")
     {
@@ -64,7 +64,7 @@ public static partial class SegmentExtensions
     /// <param name="compositeElement"></param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns></returns>
-    public static bool SetBool(this ISegment it, bool value, string trueValue, string falseValue, int dataElement,
+    public static bool SetBool(this Segment it, bool value, string trueValue, string falseValue, int dataElement,
         int compositeElement = 0, bool create = true)
     {
         var text = value ? trueValue : falseValue;
@@ -82,7 +82,7 @@ public static partial class SegmentExtensions
     /// <param name="compositeElement"></param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns></returns>
-    public static bool SetBool(this ISegment it, bool? value, string trueValue, string falseValue, int dataElement,
+    public static bool SetBool(this Segment it, bool? value, string trueValue, string falseValue, int dataElement,
         int compositeElement = 0, bool create = true)
     {
         if (value is null) return false;

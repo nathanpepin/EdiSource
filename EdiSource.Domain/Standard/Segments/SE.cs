@@ -1,4 +1,6 @@
+using System.Reflection.Emit;
 using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.Loop;
 using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Segments;
 using EdiSource.Domain.Segments.Extensions;
@@ -6,57 +8,41 @@ using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public class Generic_SE : SE, ISegment<GenericTransactionSet>, ISegmentIdentifier<Generic_SE>
+public abstract class SE<T> : Segment, IEdi<T>, IRefresh
+    where T : ITransactionSet<T>, IEdi<FunctionalGroup>, ILoopInitialize<FunctionalGroup, T>, ISegmentIdentifier<T>
 {
-    public new GenericTransactionSet? Parent { get; set; }
-}
-
-public class SE : Segment, ISegmentIdentifier<SE>, IRefresh
-{
-    public static EdiId EdiId { get; } = new("SE");
+    public abstract T? Parent { get; set; }
 
     /// <summary>
-    /// If the parent exists then it will count the segments in the
-    /// transaction set, otherwise the value is from the segment itself.
-    ///
-    /// If a parent does exist, the value will not update.
+    ///     If the parent exists then it will count the segments in the
+    ///     transaction set, otherwise the value is from the segment itself.
+    ///     If a parent does exist, the value will not update.
     /// </summary>
     public int E01NumberOfIncludedSegments
     {
         get
         {
-            if (Parent is null)
+            if (Parent is not ITransactionSet<T> ts)
                 return this.GetIntRequired(1);
 
-            var count = Parent.YieldChildSegments().Count();
+            var count = ts.GetTransactionSetSegmentCount();
             this.SetInt(count, 1);
             return count;
         }
-        set
-        {
-            if (Parent is null)
-                this.SetInt(value, 1);
-        }
+        set => this.SetInt(value, 1);
     }
 
     /// <summary>
-    /// If the Parent exists it'll point to the Parent's ST's value,
-    /// otherwise it'll set the value directly on the segment
+    ///     If the Parent exists it'll point to the Parent's ST's value,
+    ///     otherwise it'll set the value directly on the segment
     /// </summary>
     public string E02TransactionSetControlNumber
     {
-        get => Parent is not ITransactionSet ts
+        get => Parent is not ITransactionSet<T> ts
             ? GetCompositeElement(2)
-            : ts.ST.TransactionSetControlNumber;
-        set
-        {
-            if (Parent is ITransactionSet ts)
-            {
-                ts.ST.TransactionSetControlNumber = value;
-            }
-
-            SetCompositeElement(value, 2);
-        }
+            : ts.GetTransactionSetControlNumber()
+                .Do(x => SetCompositeElement(x, 2));
+        set => SetCompositeElement(value, 2);
     }
 
     public void Refresh()

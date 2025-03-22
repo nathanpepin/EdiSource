@@ -9,6 +9,6 @@ public sealed partial class EdiSerializer : IEdiSerializer
         bool includeNewLine = true, CancellationToken cancellationToken = default)
     {
         await using var stream = fileInfo.OpenWrite();
-        await WriteToStream(loop, stream, separators, includeNewLine, cancellationToken);
+        await WriteToStream(loop, stream, separators, includeNewLine, false, cancellationToken);
     }
 }

@@ -1,8 +1,12 @@
+using System.Text;
 using EdiSource.Domain.Identifiers;
+using EdiSource.Domain.IO.EdiReader;
 using EdiSource.Domain.IO.Parser;
 using EdiSource.Domain.IO.Serializer;
 using EdiSource.Domain.Loop;
+using EdiSource.Domain.Segments;
 using EdiSource.Domain.Separator;
+using EdiSource.Domain.Standard.Loops.ISA;
 using EdiSource.Domain.Validation.Data;
 using EdiSource.Domain.Validation.IO;
 using EdiSource.Domain.Validation.Validator;
@@ -14,6 +18,47 @@ namespace EdiSource.Domain;
 /// </summary>
 public static class EdiCommon
 {
+    /// <summary>
+    ///     Parses an EDI envelope from a StreamReader.
+    /// </summary>
+    /// <param name="stream">The StreamReader to read the EDI envelope from.</param>
+    /// <param name="cancellationToken">Optional. A CancellationToken to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous parse operation. The task result contains the parsed object.</returns>
+    public static async Task<(InterchangeEnvelope interchangeEnvelope, Separators separators)> ParseEdiEnvelope(StreamReader stream, CancellationToken cancellationToken = default)
+    {
+        var separators = await Separators.CreateFromISA(stream);
+        var envelope = await new EdiParser<InterchangeEnvelope>().ParseEdi(stream, separators, cancellationToken);
+        return (envelope, separators);
+    }
+
+    /// <summary>
+    ///     Parses an EDI envelope from a StreamReader.
+    /// </summary>
+    /// <param name="fileInfo">The StreamReader to read the EDI envelope from.</param>
+    /// <param name="cancellationToken">Optional. A CancellationToken to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous parse operation. The task result contains the parsed object.</returns>
+    public static async Task<(InterchangeEnvelope interchangeEnvelope, Separators separators)> ParseEdiEnvelope(FileInfo fileInfo, CancellationToken cancellationToken = default)
+    {
+        await using var fileStream = fileInfo.OpenRead();
+        using var streamReader = new StreamReader(fileStream);
+        return await ParseEdiEnvelope(streamReader, cancellationToken);
+    }
+
+    /// <summary>
+    ///     Parses an EDI envelope from a StreamReader.
+    /// </summary>
+    /// <param name="ediText">Edi text</param>
+    /// <param name="cancellationToken">Optional. A CancellationToken to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous parse operation. The task result contains the parsed object.</returns>
+    public static async Task<(InterchangeEnvelope interchangeEnvelope, Separators separators)> ParseEdiEnvelope(string ediText, CancellationToken cancellationToken = default)
+    {
+        using var textStream = new MemoryStream(Encoding.UTF8.GetBytes(ediText));
+        using var streamReader = new StreamReader(textStream);
+        var result = await ParseEdiEnvelope(streamReader, cancellationToken);
+        return result;
+    }
+
+
     /// <summary>
     ///     Parses an EDI envelope from a StreamReader.
     /// </summary>
@@ -47,6 +92,14 @@ public static class EdiCommon
         return new EdiParser<T>().ParseEdi(fileInfo, separators, cancellationToken);
     }
 
+    public static async Task<List<Segment>> ParseIntoSegments(string text, Separators? separators = null,
+        CancellationToken cancellationToken = default)
+    {
+        using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(text));
+        using var streamReader = new StreamReader(memoryStream);
+        return await new EdiReader().ReadEdSegmentsAsync(streamReader, separators, cancellationToken);
+    }
+
     /// <summary>
     ///     Parses an EDI envelope from a stream and returns an object of type T,
     ///     which must be a class implementing ILoopInitialize.
@@ -74,11 +127,11 @@ public static class EdiCommon
     /// <param name="includeNewLine">Indicates whether to include new lines in the EDI output.</param>
     /// <param name="cancellationToken">Optional cancellation token to cancel the operation.</param>
     /// <returns>A task representing the asynchronous write operation.</returns>
-    public static Task WriteEdi<T>(T loop, Stream stream, Separators? separators = null, bool includeNewLine = true,
+    public static Task WriteEdi<T>(T loop, Stream stream, Separators? separators = null, bool includeNewLine = true, bool leaveOpen = true,
         CancellationToken cancellationToken = default)
         where T : class, ILoop
     {
-        return new EdiSerializer().WriteToStream(loop, stream, separators, includeNewLine, cancellationToken);
+        return new EdiSerializer().WriteToStream(loop, stream, separators, includeNewLine, leaveOpen, cancellationToken);
     }
 
     /// <summary>

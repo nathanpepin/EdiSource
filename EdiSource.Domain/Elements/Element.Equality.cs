@@ -16,7 +16,7 @@ public partial class Element
 
     public bool Equals(Element other)
     {
-        return _compositeElements.Equals(other._compositeElements);
+        return other._compositeElements.SequenceEqual(_compositeElements);
     }
 
     public static bool operator ==(Element left, Element right)

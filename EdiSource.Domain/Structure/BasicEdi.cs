@@ -13,16 +13,15 @@ namespace EdiSource.Domain.Structure;
 /// </summary>
 /// <param name="segments"></param>
 /// <param name="separators"></param>
-public sealed class BasicEdi(IEnumerable<ISegment> segments, Separators separators)
+public sealed class BasicEdi(IEnumerable<Segment> segments, Separators separators)
     : ILoop
 {
-    public List<ISegment> Segments { get; } = segments.ToList();
+    public List<Segment> Segments { get; } = segments.ToList();
     public Separators Separators { get; } = separators;
 
-    public ILoop? Parent => null;
-    public List<IEdi?> EdiItems => [.. segments];
+    public List<IEdi?> EdiItems => [..segments.Cast<IEdi?>()];
 
-    public void Deconstruct(out List<ISegment> outSegments, out Separators outSeparators)
+    public void Deconstruct(out List<Segment> outSegments, out Separators outSeparators)
     {
         outSegments = Segments;
         outSeparators = Separators;

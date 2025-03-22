@@ -1,0 +1,31 @@
+Validation Tests
+5. EDI Validation Tests
+
+Test validation rules for standard segments
+Test custom validation rules
+Test validation reporting and severity levels
+Test validation message CSV output
+
+Source Generator Tests
+6. Loop Generator Tests
+
+Test generated implementations of loop structures
+Test channel constructors for async parsing
+Test transaction set generation
+
+7. Segment Generator Tests
+
+Test generated segment implementations
+Test segment identifiers and EdiId generation
+
+Integration Tests
+8. Transaction Set Tests (Most Important)
+
+Test complete workflows for common X12 transaction sets (834, 835)
+Test with real-world examples
+Test modifications and additions to transaction sets
+
+9. Performance Tests (Optional)
+
+Test parsing speed with larger documents
+Test memory usage patterns

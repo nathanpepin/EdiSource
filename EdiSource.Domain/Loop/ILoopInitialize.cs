@@ -10,7 +10,7 @@ namespace EdiSource.Domain.Loop;
 /// <typeparam name="TSelf"></typeparam>
 public interface ILoopInitialize<TSelf> : ILoop where TSelf : ILoop
 {
-    static abstract Task<TSelf> InitializeAsync(ChannelReader<ISegment> segmentReader, ILoop? parent);
+    static abstract Task<TSelf> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent);
 }
 
 /// <summary>
@@ -23,5 +23,5 @@ public interface ILoopInitialize<in TParent, TSelf>
     where TParent : ILoop
     where TSelf : ILoop
 {
-    static abstract Task<TSelf> InitializeAsync(ChannelReader<ISegment> segmentReader, TParent? parent);
+    static abstract Task<TSelf> InitializeAsync(ChannelReader<Segment> segmentReader, TParent? parent);
 }

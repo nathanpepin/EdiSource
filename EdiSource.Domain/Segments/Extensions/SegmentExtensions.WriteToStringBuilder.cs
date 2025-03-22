@@ -7,11 +7,11 @@ public static partial class SegmentExtensions
 {
     public static StringBuilder WriteToStringBuilder<T>(this T segment, StringBuilder? stringBuilder = null,
         Separators? separators = default)
-        where T : ISegment
+        where T : Segment
     {
         stringBuilder ??= new StringBuilder();
         separators ??= Separators.DefaultSeparators;
-        
+
         if (segment.Elements.Count == 0)
             return stringBuilder;
 

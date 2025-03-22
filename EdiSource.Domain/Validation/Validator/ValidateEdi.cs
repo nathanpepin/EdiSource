@@ -28,10 +28,10 @@ public sealed class ValidateEdi : IValidateEdi
         switch (ediItem)
         {
             case null: return validationResult;
-            case ISegment segment:
+            case Segment segment:
                 HandleSegment<T>(validationResult, loopLine, ref segmentLine, segment);
                 break;
-            case IEnumerable<ISegment> segmentList:
+            case IEnumerable<Segment> segmentList:
                 HandleSegmentList<T>(validationResult, loopLine, ref segmentLine, segmentList);
                 break;
             case ILoop loop:
@@ -79,13 +79,13 @@ public sealed class ValidateEdi : IValidateEdi
     }
 
     private static void HandleSegmentList<T>(EdiValidationResult validationResult, int loopLine, ref int segmentLine,
-        IEnumerable<ISegment> segmentList) where T : IEdi
+        IEnumerable<Segment> segmentList) where T : IEdi
     {
         foreach (var segment in segmentList) HandleSegment<T>(validationResult, loopLine, ref segmentLine, segment);
     }
 
     private static void HandleSegment<T>(EdiValidationResult validationResult, int loopLine, ref int segmentLine,
-        ISegment segment) where T : IEdi
+        Segment segment) where T : IEdi
     {
         if (segment is IValidatable v)
             validationResult.AddRange(v
@@ -96,7 +96,7 @@ public sealed class ValidateEdi : IValidateEdi
         if (segment is ISourceGeneratorValidatable v2)
             foreach (var sourceValidation in v2.SourceGenValidations)
                 validationResult.AddRange(sourceValidation
-                    .Validate(segment)
+                    .Validate((IEdi)segment)
                     .UpdateSegmentLine(segmentLine)
                     .UpdateLoopLine(loopLine));
 

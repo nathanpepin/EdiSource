@@ -28,7 +28,8 @@ public sealed class BeDateTimeAttribute(
             : [format];
 
         foreach (var _ in formats
-                     .Where(f => DateOnly.TryParseExact(value, format, null, DateTimeStyles.None, out _)))
+                     .Select(f => DateOnly.TryParseExact(value, f, CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                     .Where(result => result))
         {
             yield break;
         }

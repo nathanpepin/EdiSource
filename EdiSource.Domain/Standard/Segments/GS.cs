@@ -4,9 +4,12 @@ using EdiSource.Domain.Standard.Loops;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public sealed class GS : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<GS>
+public sealed class GS : Segment, IEdi<FunctionalGroup>, ISegmentIdentifier<GS>
 {
-    public new FunctionalGroup? Parent { get; }
+    public GS()
+    {
+        EdiId.CopyIdElementsToSegment(this);
+    }
 
     public string E06GroupControlNumber
     {
@@ -14,5 +17,7 @@ public sealed class GS : Segment, ISegment<FunctionalGroup>, ISegmentIdentifier<
         set => SetCompositeElement(value, 6);
     }
 
-    public static EdiId EdiId { get; } = new ("GS");
+    public FunctionalGroup? Parent { get; set; }
+
+    public static EdiId EdiId { get; } = new("GS");
 }

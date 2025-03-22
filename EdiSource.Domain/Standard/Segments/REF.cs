@@ -7,19 +7,19 @@ using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Domain.Standard.Segments;
 
-public partial class REF : Segment, IValidatable, ISourceGeneratorValidatable
+public class REF : Segment, IValidatable, ISourceGeneratorValidatable
 {
     public static EdiId EdiId { get; } = new("REF");
 
-    public string E01Identifier
+    public string? E01Identifier
     {
-        get => GetCompositeElement(1);
-        set => SetCompositeElement(value, 1);
+        get => GetCompositeElementOrNull(1);
+        set => SetCompositeElement(value ?? string.Empty, 1);
     }
 
     public string? E02Identification
     {
-        get => GetCompositeElement(2, 2);
+        get => GetCompositeElementOrNull(2, 2);
         set => value?.Do(x => SetCompositeElement(x, 1));
     }
 
@@ -29,14 +29,6 @@ public partial class REF : Segment, IValidatable, ISourceGeneratorValidatable
         set => SetDataElement(3, values: [..value?.Select(x => x) ?? []]);
     }
 
-    public IEnumerable<ValidationMessage> Validate()
-    {
-        if (E02Identification is null && E03Description is null)
-        {
-            yield return ValidationFactory.CreateError(this, "REF required either 2 or 3 elements");
-        }
-    }
-
     public List<IIndirectValidatable> SourceGenValidations { get; } =
     [
         new RequiredDataElementsAttribute(ValidationSeverity.Critical, [0, 1]),
@@ -44,6 +36,12 @@ public partial class REF : Segment, IValidatable, ISourceGeneratorValidatable
         new ElementLengthAttribute(ValidationSeverity.Critical, 1, 80),
         new ElementLengthAttribute(ValidationSeverity.Critical, 2, 80),
         new ElementLengthAttribute(ValidationSeverity.Critical, 2, 80),
-        new ElementLengthAttribute(ValidationSeverity.Critical, 3, 80),
+        new ElementLengthAttribute(ValidationSeverity.Critical, 3, 80)
     ];
+
+    public IEnumerable<ValidationMessage> Validate()
+    {
+        if (E02Identification is null && E03Description is null)
+            yield return ValidationFactory.CreateError(this, "REF required either 2 or 3 elements");
+    }
 }

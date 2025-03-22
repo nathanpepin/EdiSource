@@ -108,15 +108,18 @@ public static class ElementExtensions
             ? it[compositeElement]
             : null;
 
-        return element is null
-            ? null
-            : Enum.TryParse<TEnum>(element, out var value)
-                ? value
-                : tryAddUnderscore
-                    ? Enum.TryParse($"_{element}", out value)
-                        ? value
-                        : null
-                    : null;
+        if (element is null) return null;
+        
+        if (Enum.TryParse<TEnum>(element, out var value))
+        {
+            return value;
+        }
+
+        if (!tryAddUnderscore) return null;
+
+        return Enum.TryParse($"_{element}", out value)
+            ? value
+            : null;
     }
 
     /// <summary>

@@ -1,4 +1,6 @@
+using System.Collections.Concurrent;
 using EdiSource.Domain.Elements;
+using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
 using EdiSource.Domain.Segments.Extensions;
 using EdiSource.Domain.Separator;
@@ -6,31 +8,73 @@ using EdiSource.Domain.Separator;
 namespace EdiSource.Domain.Segments;
 
 /// <summary>
-///     A basic implementation of ISegment
+///     A basic implementation of Segment
 /// </summary>
-public class Segment : ISegment
+public partial class Segment : IEdi
 {
     private Separators? _separators;
 
-    public Segment(ISegment segment, ILoop? parent = null)
+    private static readonly ConcurrentDictionary<Type, Func<EdiId?>> EdiIdGetters = new();
+
+    protected Segment()
     {
-        Elements = segment.Elements;
-        Separators = segment.Separators;
-        Parent = parent;
+        Separators = Separators.DefaultSeparators;
+
+        var type = this.GetType();
+        if (EdiIdGetters.TryGetValue(type, out var getEdiId))
+        {
+            var ediId = getEdiId();
+            ediId?.CopyIdElementsToSegment(this);
+        }
+        else
+        {
+            var segmentIdentifierInterface = type.GetInterfaces()
+                .FirstOrDefault(i => i.IsGenericType &&
+                                     i.GetGenericTypeDefinition() == typeof(ISegmentIdentifier<>));
+
+            if (segmentIdentifierInterface != null)
+            {
+                var ediIdProperty = type.GetProperty("EdiId",
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+
+                if (ediIdProperty != null)
+                {
+                    EdiId? Getter() => ediIdProperty.GetValue(null) as EdiId?;
+                    EdiIdGetters.TryAdd(type, Getter);
+
+                    var ediId = Getter();
+                    ediId?.CopyIdElementsToSegment(this);
+                }
+                else
+                {
+                    EdiIdGetters.TryAdd(type, () => null);
+                }
+            }
+            else
+            {
+                EdiIdGetters.TryAdd(type, () => null);
+            }
+        }
     }
 
-    public Segment(IEnumerable<Element>? elements = null, Separators? separators = default, ILoop? parent = null)
+    public Segment(Segment segment, ILoop? parent = null)
+    {
+        Separators = segment.Separators;
+
+        var copy = segment.Copy(separators: Separators, parent: parent);
+        Elements = copy.Elements;
+    }
+
+    public Segment(IEnumerable<Element>? elements = null, Separators? separators = null, ILoop? parent = null)
     {
         Elements = elements?.ToList() ?? [];
         Separators = separators ?? Separators.DefaultSeparators;
-        Parent = parent;
     }
 
     public Segment(string segmentText, Separators? separators = null, ILoop? parent = null)
     {
         Elements = ReadElements(segmentText, separators).ToList();
         Separators = separators ?? Separators.DefaultSeparators;
-        Parent = parent;
     }
 
     public string this[int index]
@@ -45,9 +89,23 @@ public class Segment : ISegment
         set => SetCompositeElement(value, dataElement, compositeElement);
     }
 
-    public ILoop? Parent { get; set; }
+    public IList<Element> Elements
+    {
+        get => _elements;
+        set
+        {
+            _elements.Clear();
+            _elements.AddRange(value);
+        }
+    }
 
-    public IList<Element> Elements { get; set; }
+    private readonly List<Element> _elements = [];
+
+    public Separators Separators
+    {
+        get => _separators ?? Separators.DefaultSeparators;
+        set => _separators = value;
+    }
 
     public Element GetElement(int elementIndex)
     {
@@ -76,8 +134,10 @@ public class Segment : ISegment
     public bool SetDataElement(int elementIndex, bool create = true, params string[] values)
     {
         if (create && !ElementExists(elementIndex))
+        {
             while (elementIndex >= Elements.Count)
                 Elements.Add([]);
+        }
         else if (!ElementExists(elementIndex)) return false;
 
         var element = GetElement(elementIndex);
@@ -90,15 +150,23 @@ public class Segment : ISegment
         return true;
     }
 
-    public bool SetCompositeElement(string value, int dataElementIndex, int compositeElementIndex = 0, bool create = true)
+    public bool SetCompositeElement(string value, int dataElementIndex, int compositeElementIndex = 0,
+        bool create = true)
     {
-        if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
+        if (create && !ElementExists(dataElementIndex))
+        {
             while (dataElementIndex >= Elements.Count)
-                if (dataElementIndex == Elements.Count - 1)
-                    for (var i = 0; i < compositeElementIndex; i++)
-                        Elements[dataElementIndex].Add(string.Empty);
-                else
-                    Elements.Add([string.Empty]);
+                Elements.Add([]);
+        }
+        else if (!ElementExists(dataElementIndex)) return false;
+
+        if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
+        {
+            while (!CompositeElementExists(dataElementIndex, compositeElementIndex))
+            {
+                Elements[dataElementIndex].Add(string.Empty);
+            }
+        }
         else if (!CompositeElementExists(dataElementIndex, compositeElementIndex)) return false;
 
         Elements[dataElementIndex][compositeElementIndex] = value;
@@ -121,12 +189,6 @@ public class Segment : ISegment
         return Elements.InsideBounds(dataElementIndex)
                && Elements[dataElementIndex].InsideBounds(compositeElementIndex)
                && Elements[dataElementIndex][compositeElementIndex].Length > 0;
-    }
-
-    public Separators Separators
-    {
-        get => _separators ?? Separators.DefaultSeparators;
-        set => _separators = value;
     }
 
     public static IEnumerable<Segment> ReadMultipleSegment(string segmentText, Separators? separators = null)
@@ -161,20 +223,17 @@ public class Segment : ISegment
         return this.WriteToStringBuilder(separators: separators).ToString();
     }
 
-    public void Assign(ISegment other, Separators? separators = null, ILoop? parent = null)
+    public void Assign(Segment other, Separators? separators = null, ILoop? parent = null)
     {
         Elements = other.Elements.Select(e => new Element(e)).ToList();
 
         if (separators is not null)
             Separators = separators;
-
-        if (parent is not null)
-            Parent = parent;
     }
 
-    public ISegment Copy(Separators? separators = null, ILoop? parent = null)
+    public Segment Copy(Separators? separators = null, ILoop? parent = null)
     {
         var elements = Elements.Select(e => new Element(e)).ToList();
-        return new Segment(elements, separators ?? Separators, parent ?? Parent);
+        return new Segment(elements, separators ?? Separators);
     }
 }

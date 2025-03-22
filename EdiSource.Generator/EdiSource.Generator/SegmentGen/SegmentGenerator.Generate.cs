@@ -10,19 +10,25 @@ public partial class SegmentGenerator
     {
         var cw = new CodeWriter();
 
-        cw.AppendLine("#nullable enable");
-
         foreach (var @using in usings) cw.AddUsing(@using);
 
         cw.AppendLine();
         using (cw.StartNamespace(namespaceName))
         {
             ReadOnlySpan<string> implementations =
-                [subType ?? "Segment", $"ISegment<{parent}>", $"ISegmentIdentifier<{className}>"];
+                [subType ?? "Segment", $"IEdi<{parent}>", $"ISegmentIdentifier<{className}>"];
 
             using (cw.StartClass(className, implementations))
             {
-                cw.AppendLine($"public new {parent}? Parent => base.Parent as {parent};");
+                using (cw.StartConstructor(className))
+                {
+                    cw.AppendLine("EdiId.CopyIdElementsToSegment(this);");
+                }
+                
+                cw.AppendLine(subType is not null
+                    ? $"public new {parent}? Parent {{ get; set; }}"
+                    : $"public {parent}? Parent {{ get; set; }}");
+
                 cw.AppendLine(
                     $"public static EdiId EdiId => new ({string.Join(", ", args)});");
             }

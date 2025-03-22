@@ -13,7 +13,11 @@ namespace EdiSource.Domain.Elements;
 /// <param name="values"></param>
 public sealed partial class Element(IEnumerable<string>? values = null) : IList<string>
 {
-    private readonly IList<string> _compositeElements = values?.ToList() ?? [];
+    private readonly List<string> _compositeElements = values?.ToList() is not { } valueList
+        ? []
+        : valueList.Any(x => x == null!)
+            ? throw new ArgumentNullException(nameof(values), "Element values cannot be null")
+            : valueList;
 
     public static implicit operator Element(string[] values)
     {

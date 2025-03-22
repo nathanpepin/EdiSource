@@ -5,34 +5,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
 namespace EdiSource.Generator.LoopGen;
-//
-// [Generator]
-// public sealed class TLoopGenerator : IIncrementalGenerator
-// {
-//     private const string AttributeMetaDataName = "";
-//
-//     public void Initialize(IncrementalGeneratorInitializationContext context) 
-//     {
-//         GeneratorWithAttributeHelper<S>.Initialize(context, AttributeMetaDataName, Predicate, Transform,
-//             CreateOutput);
-//     }
-//
-//
-//     public static bool Predicate(SyntaxNode node, CancellationToken ct)
-//     {
-//         return true;
-//     }
-//
-//     public static S? Transform(GeneratorAttributeSyntaxContext context, CancellationToken ct)
-//     {
-//         return default;
-//     }
-//
-//     public static void CreateOutput(SourceProductionContext context, ImmutableArray<S> source)
-//     {
-//         throw new NotImplementedException();
-//     }
-// }
 
 public readonly record struct S(string Name, string Value);
 
@@ -41,6 +13,24 @@ public partial class LoopGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+        AddAttribute(context, nameof(LoopSourceGenAttributes.LoopAttribute), LoopSourceGenAttributes.LoopAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.LoopGeneratorAttribute),
+            LoopSourceGenAttributes.LoopGeneratorAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.LoopListAttribute),
+            LoopSourceGenAttributes.LoopListAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.OptionalSegmentFooterAttribute),
+            LoopSourceGenAttributes.OptionalSegmentFooterAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentAttribute),
+            LoopSourceGenAttributes.SegmentAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentFooterAttribute),
+            LoopSourceGenAttributes.SegmentFooterAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentGeneratorAttributes),
+            LoopSourceGenAttributes.SegmentGeneratorAttributes);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentHeaderAttribute),
+            LoopSourceGenAttributes.SegmentHeaderAttribute);
+        AddAttribute(context, nameof(LoopSourceGenAttributes.SegmentListAttribute),
+            LoopSourceGenAttributes.SegmentListAttribute);
+
         var classDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(
                 static (s, _) => IsSyntaxTargetForGeneration(s, LoopAggregation.LoopGeneratorNames),
@@ -51,6 +41,13 @@ public partial class LoopGenerator : IIncrementalGenerator
 
         context.RegisterSourceOutput(compilationAndClasses,
             static (spc, source) => Execute(source.Item1, source.Right, spc));
+    }
+
+    private static void AddAttribute(IncrementalGeneratorInitializationContext context, string name, string text)
+    {
+        context.RegisterPostInitializationOutput(x =>
+            x.AddSource($"{name}.g.cs",
+                SourceText.From(text, Encoding.UTF8)));
     }
 
     private static void Execute(Compilation compilation, ImmutableArray<LoopMeta> classes,

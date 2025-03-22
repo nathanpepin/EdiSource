@@ -15,7 +15,7 @@ public static partial class SegmentExtensions
     /// <param name="tryAddUnderscore"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    public static TEnum? GetEnum<TEnum>(this ISegment it, int dataElement, int compositeElement = 0,
+    public static TEnum? GetEnum<TEnum>(this Segment it, int dataElement, int compositeElement = 0,
         bool tryAddUnderscore = true)
         where TEnum : struct, Enum
     {
@@ -39,7 +39,7 @@ public static partial class SegmentExtensions
     /// <param name="compositeElement"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    public static TEnum? GetEnum<TEnum>(this ISegment it, Func<string, TEnum> fun, int dataElement,
+    public static TEnum? GetEnum<TEnum>(this Segment it, Func<string, TEnum> fun, int dataElement,
         int compositeElement = 0)
         where TEnum : struct, Enum
     {
@@ -57,7 +57,7 @@ public static partial class SegmentExtensions
     /// <param name="compositeElement"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    public static TEnum GetEnumRequired<TEnum>(this ISegment it, Func<string, TEnum> fun, int dataElement,
+    public static TEnum GetEnumRequired<TEnum>(this Segment it, Func<string, TEnum> fun, int dataElement,
         int compositeElement = 0)
         where TEnum : struct, Enum
     {
@@ -77,7 +77,7 @@ public static partial class SegmentExtensions
     /// <param name="tryAddUnderscore"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    public static TEnum GetEnumRequired<TEnum>(this ISegment it, int dataElement, int compositeElement = 0,
+    public static TEnum GetEnumRequired<TEnum>(this Segment it, int dataElement, int compositeElement = 0,
         bool tryAddUnderscore = true)
         where TEnum : struct, Enum
     {
@@ -97,12 +97,12 @@ public static partial class SegmentExtensions
     /// <param name="tryRemoveUnderscore"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    public static bool SetEnum<TEnum>(this ISegment it, TEnum value, int dataElement, int compositeElement = 0,
+    public static bool SetEnum<TEnum>(this Segment it, TEnum value, int dataElement, int compositeElement = 0,
         bool create = true, bool tryRemoveUnderscore = true)
         where TEnum : struct, Enum
     {
         var text = value.ToString().AsSpan();
-        if (tryRemoveUnderscore && text[0] != '_') text = text[1..];
+        if (tryRemoveUnderscore && text[0] == '_') text = text[1..];
 
         return it.SetCompositeElement(text.ToString(), dataElement, compositeElement, create);
     }
@@ -119,7 +119,7 @@ public static partial class SegmentExtensions
     /// <param name="tryRemoveUnderscore"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    public static bool SetEnum<TEnum>(this ISegment it, TEnum? value, int dataElement, int compositeElement = 0,
+    public static bool SetEnum<TEnum>(this Segment it, TEnum? value, int dataElement, int compositeElement = 0,
         bool create = true, bool tryRemoveUnderscore = true)
         where TEnum : struct, Enum
     {
@@ -142,7 +142,7 @@ public static partial class SegmentExtensions
     /// <param name="create"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    public static bool SetEnum<TEnum>(this ISegment it, TEnum value, Func<TEnum, string> fun, int dataElement,
+    public static bool SetEnum<TEnum>(this Segment it, TEnum value, Func<TEnum, string> fun, int dataElement,
         int compositeElement = 0,
         bool create = true)
         where TEnum : struct, Enum
@@ -161,7 +161,7 @@ public static partial class SegmentExtensions
     /// <param name="create"></param>
     /// <typeparam name="TEnum"></typeparam>
     /// <returns></returns>
-    public static bool SetEnum<TEnum>(this ISegment it, TEnum? value, Func<TEnum, string> fun, int dataElement,
+    public static bool SetEnum<TEnum>(this Segment it, TEnum? value, Func<TEnum, string> fun, int dataElement,
         int compositeElement = 0,
         bool create = true)
         where TEnum : struct, Enum

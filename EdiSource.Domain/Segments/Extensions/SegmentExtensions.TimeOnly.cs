@@ -13,7 +13,7 @@ public static partial class SegmentExtensions
     /// <param name="compositeElement"></param>
     /// <param name="format"></param>
     /// <returns></returns>
-    public static TimeOnly? GetTimeOnly(this ISegment it, int dataElement, int compositeElement = 0,
+    public static TimeOnly? GetTimeOnly(this Segment it, int dataElement, int compositeElement = 0,
         string format = "HHmm")
     {
         if (it.GetCompositeElementOrNull(dataElement, compositeElement) is not { } element) return null;
@@ -31,7 +31,7 @@ public static partial class SegmentExtensions
     /// <param name="compositeElement"></param>
     /// <param name="format"></param>
     /// <returns></returns>
-    public static TimeOnly GetTimeOnlyRequired(this ISegment it, int dataElement, int compositeElement = 0,
+    public static TimeOnly GetTimeOnlyRequired(this Segment it, int dataElement, int compositeElement = 0,
         string format = "HHmm")
     {
         return GetTimeOnly(it, dataElement, compositeElement, format) ??
@@ -48,7 +48,7 @@ public static partial class SegmentExtensions
     /// <param name="format"></param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns></returns>
-    public static bool SetTimeOnly(this ISegment it, TimeOnly value, int dataElement,
+    public static bool SetTimeOnly(this Segment it, TimeOnly value, int dataElement,
         int compositeElement = 0, string format = "HHmm", bool create = true)
     {
         return it.SetCompositeElement(value.ToString(format), dataElement, compositeElement, create);
@@ -64,7 +64,7 @@ public static partial class SegmentExtensions
     /// <param name="format"></param>
     /// <param name="create">Will create the preceding composite data elements and composite elements if needed</param>
     /// <returns></returns>
-    public static bool SetTimeOnly(this ISegment it, TimeOnly? value, int dataElement,
+    public static bool SetTimeOnly(this Segment it, TimeOnly? value, int dataElement,
         int compositeElement = 0, string format = "HHmm", bool create = true)
     {
         return value is not null &&

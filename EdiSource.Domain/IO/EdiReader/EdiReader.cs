@@ -19,11 +19,11 @@ public sealed class EdiReader : IEdiReader
         return ReadBasicEdi(streamReader);
     }
 
-    public IEnumerable<ISegment> ReadEdiSegments(string ediString, Separators? separators = null)
+    public IEnumerable<Segment> ReadEdSegments(string ediString, Separators? separators = null)
     {
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(ediString));
         using var streamReader = new StreamReader(memoryStream);
-        return ReadEdiSegments(streamReader, separators ?? Separators.DefaultSeparators);
+        return ReadEdSegments(streamReader, separators ?? Separators.DefaultSeparators);
     }
 
     public BasicEdi ReadBasicEdi(StreamReader streamReader)
@@ -31,29 +31,29 @@ public sealed class EdiReader : IEdiReader
         return ReadBasicEdiAsync(streamReader).GetAwaiter().GetResult();
     }
 
-    public IEnumerable<ISegment> ReadEdiSegments(StreamReader streamReader, Separators? separators = null)
+    public IEnumerable<Segment> ReadEdSegments(StreamReader streamReader, Separators? separators = null)
     {
-        return ReadEdiSegmentsAsync(streamReader, separators ?? Separators.DefaultSeparators).GetAwaiter().GetResult();
+        return ReadEdSegmentsAsync(streamReader, separators ?? Separators.DefaultSeparators).GetAwaiter().GetResult();
     }
 
     public async Task<BasicEdi> ReadBasicEdiAsync(StreamReader streamReader,
         CancellationToken cancellationToken = default)
     {
         var separators = await Separators.CreateFromISA(streamReader);
-        var segments = await ReadEdiSegmentsAsync(streamReader, separators, cancellationToken);
+        var segments = await ReadEdSegmentsAsync(streamReader, separators, cancellationToken);
         return new BasicEdi(segments.ToArray(), separators);
     }
 
-    public async Task<IEnumerable<ISegment>> ReadEdiSegmentsAsync(StreamReader streamReader,
+    public async Task<List<Segment>> ReadEdSegmentsAsync(StreamReader streamReader,
         Separators? separators = null,
         CancellationToken cancellationToken = default)
     {
-        var channel = Channel.CreateBounded<ISegment>(1);
+        var channel = Channel.CreateBounded<Segment>(1);
 
-        List<ISegment> segments = [];
+        List<Segment> segments = [];
 
         _ = Task.Run(
-            async () => await ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer, separators,
+            async () => await ReadEdSegmentsIntoChannelAsync(streamReader, channel.Writer, separators,
                 cancellationToken), cancellationToken);
 
         await foreach (var segment in channel.Reader.ReadAllAsync(cancellationToken)) segments.Add(segment);
@@ -61,8 +61,8 @@ public sealed class EdiReader : IEdiReader
         return segments;
     }
 
-    public async Task ReadEdiSegmentsIntoChannelAsync(StreamReader streamReader,
-        ChannelWriter<ISegment> channelWriter,
+    public async Task ReadEdSegmentsIntoChannelAsync(StreamReader streamReader,
+        ChannelWriter<Segment> channelWriter,
         Separators? separators = null,
         CancellationToken cancellationToken = default)
     {
@@ -87,10 +87,16 @@ public sealed class EdiReader : IEdiReader
 
                 for (var i = 0; i < BufferSize; i++)
                 {
-                    if (buffer[i] is '\r' or '\n' or '\0') continue;
+                    var c = buffer[i];
+                    if (c is '\r' or '\n' or '\0') continue;
 
-                    if (buffer[i] == separators.SegmentSeparator)
+                    if (c == separators.SegmentSeparator)
                     {
+                        if (segmentBuffer.Elements.Count == 0)
+                        {
+                            throw new EmptySegmentException(separators.SegmentSeparator, segmentsCreated);
+                        }
+
                         segmentBuffer
                             .Elements
                             .Last()
@@ -106,7 +112,7 @@ public sealed class EdiReader : IEdiReader
                             Separators = separators
                         };
                     }
-                    else if (buffer[i] == separators.DataElementSeparator)
+                    else if (c == separators.DataElementSeparator)
                     {
                         segmentBuffer
                             .Elements
@@ -117,7 +123,7 @@ public sealed class EdiReader : IEdiReader
 
                         segmentBuffer.Elements.Add([]);
                     }
-                    else if (buffer[i] == separators.CompositeElementSeparator)
+                    else if (c == separators.CompositeElementSeparator)
                     {
                         segmentBuffer
                             .Elements
@@ -131,7 +137,7 @@ public sealed class EdiReader : IEdiReader
                         if (segmentBuffer.Elements.Count == 0)
                             segmentBuffer.Elements.Add([]);
 
-                        stringBuffer.Append(buffer[i]);
+                        stringBuffer.Append(c);
                     }
                 }
             }

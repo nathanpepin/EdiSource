@@ -6,12 +6,12 @@ using EdiSource.Domain.Validation.SourceGeneration;
 
 namespace EdiSource.Domain.Standard.Segments.DTPData;
 
-public partial class DTP : Segment, IValidatable, ISourceGeneratorValidatable
+public class DTP : Segment, IValidatable, ISourceGeneratorValidatable
 {
     public string Qualifier
     {
-        get => GetCompositeElement(1, 0);
-        set => SetCompositeElement(value, 1, 0);
+        get => GetCompositeElement(1);
+        set => SetCompositeElement(value, 1);
     }
 
     public DateFormatCode DateFormatCode
@@ -36,11 +36,6 @@ public partial class DTP : Segment, IValidatable, ISourceGeneratorValidatable
             .Map(format => this.SetDate(value, 3, 1, format));
     }
 
-    public IEnumerable<ValidationMessage> Validate()
-    {
-        return [ValidationFactory.CreateCritical(this, "Fuck")];
-    }
-
     public List<IIndirectValidatable> SourceGenValidations { get; } =
     [
         new IsOneOfValuesAttribute(ValidationSeverity.Critical, 0, 0, "DTP"),
@@ -51,4 +46,9 @@ public partial class DTP : Segment, IValidatable, ISourceGeneratorValidatable
         new ElementLengthAttribute(ValidationSeverity.Critical, 2, 3),
         new ElementLengthAttribute(ValidationSeverity.Critical, 3, 35)
     ];
+
+    public IEnumerable<ValidationMessage> Validate()
+    {
+        return [ValidationFactory.CreateCritical(this, "Fuck")];
+    }
 }

@@ -1,27 +1,32 @@
 using EdiSource.Domain.Identifiers;
 using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
+using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Standard.Segments;
 using EdiSource.Domain.Standard.Segments.STData;
 
 namespace EdiSource.Domain.Standard.Loops;
 
-public interface ITransactionSet
-    : ILoop
+public interface ITransactionSet<TSelf> : ILoop
+    where TSelf : ITransactionSet<TSelf>,
+    IEdi<FunctionalGroup>,
+    ILoopInitialize<FunctionalGroup, TSelf>,
+    ISegmentIdentifier<TSelf>
 {
-    ST ST { get; }
-    SE SE { get;  }
-    static abstract TransactionSetDefinition Definition { get; }
-}
+    static TransactionSetDefinition Definition =>
+        TransactionSetDefinitionsFactory<TSelf>.CreateDefinition();
 
-public interface ITransactionSet<TSelf, TST, TSE> :
-    ITransactionSet,
-    ILoop<FunctionalGroup>, ISegmentIdentifier<TST>,
-    ILoopInitialize<FunctionalGroup, TSelf>
-    where TST : ST, ISegmentIdentifier<TST>
-    where TSE : SE
-    where TSelf : ILoop
-{
-    new TST ST { get; }
-    new TSE SE { get;  }
+    public int GetTransactionSetSegmentCount()
+    {
+        return this.CountSegments();
+    }
+
+    public string GetTransactionSetControlNumber()
+    {
+        var segment = EdiItems.FirstOrDefault(x => x is ST<TSelf>) as ST<TSelf>;
+
+        if (segment is null)
+            throw new NotSupportedException("Must have ST segment");
+
+        return segment.TransactionSetControlNumber;
+    }
 }

@@ -4,11 +4,16 @@ using EdiSource.Domain.Segments;
 
 namespace EdiSource.Domain.Identifiers;
 
+/// <summary>
+///     Represents an ID of a segment.
+///     If a value in the elements is null, it is ignored for matching.
+/// </summary>
+/// <param name="ids"></param>
 public readonly struct EdiId(params Element?[] ids)
 {
     private Element?[] Ids { get; } = ids;
 
-    public bool MatchesSegment(ISegment segment)
+    public bool MatchesSegment(Segment segment)
     {
         for (var deI = 0; deI < Ids.Length; deI++)
         {
@@ -54,6 +59,25 @@ public readonly struct EdiId(params Element?[] ids)
         return true;
     }
 
+    /// <summary>
+    /// Copies elements from an EdiId to a segment.
+    /// Useful in cases where you want to create a segment subtype without having to specify the element values. 
+    /// </summary>
+    /// <param name="segment"></param>
+    public void CopyIdElementsToSegment(Segment segment)
+    {
+        for (var dei = 0; dei < Ids.Length; dei++)
+        {
+            var de = Ids[dei];
+            if (de is not { Count: > 0 }) continue;
+
+            for (var cei = 0; cei < de.Count; cei++)
+            {
+                var ce = de[cei];
+                segment.SetCompositeElement(ce, dei, cei);
+            }
+        }
+    }
 
     public override string ToString()
     {
@@ -61,8 +85,8 @@ public readonly struct EdiId(params Element?[] ids)
 
         foreach (var de in Ids)
         {
-            output.Append(de is null ? "" : string.Join(":", de));
-            output.Append("*");
+            output.Append(de is null ? "" : string.Join(":", de.Cast<string>()));
+            output.Append('*');
         }
 
         return output.ToString().TrimEnd('*');

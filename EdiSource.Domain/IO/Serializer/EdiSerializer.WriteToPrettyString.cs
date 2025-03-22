@@ -57,8 +57,8 @@ public sealed partial class EdiSerializer
                     foreach (var loopL in loopList)
                     {
                         if (loopL is IRefresh refresh)
-                            refresh.Refresh();  
-                        
+                            refresh.Refresh();
+
                         var loopText = loopL.GetType().Name;
                         using var d = loopPrinter.AppendLoop(loopText);
                         PrettyPrintToStringBuilder(loopL, loopPrinter, separators, false);
