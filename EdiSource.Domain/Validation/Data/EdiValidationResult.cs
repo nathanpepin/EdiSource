@@ -7,7 +7,8 @@ namespace EdiSource.Domain.Validation.Data;
 /// </summary>
 public class EdiValidationResult
 {
-    public bool IsValid => ValidationMessages.Count == 0 || ValidationMessages.Any(x => x.Severity <= ValidationSeverity.Info);
+    public bool IsValid => ValidationMessages.Count == 0 || 
+                           ValidationMessages.All(x => x.Severity <= ValidationSeverity.Info);
 
     public bool HasWarning => ValidationMessages.Any(x => x.Severity >= ValidationSeverity.Warning);
     public bool HasError => ValidationMessages.Any(x => x.Severity >= ValidationSeverity.Error);

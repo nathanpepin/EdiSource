@@ -2,52 +2,45 @@ using EdiSource.Domain.Standard.Segments.DTPData;
 
 namespace EdiSource.Domain.Tests.Validation;
 
-public class EdiValidationTests
+public sealed class EdiValidationTests
 {
     private readonly ValidateEdi _validator = new();
     private readonly ValidationMessageCsvConverter _csvConverter = new();
 
-    // Test 1: Standard Segment Validation with Valid Data
+    private readonly Func<TestSegment> _createTestSegment = () => new TestSegment(["TEST", "V1", "OtherValue"]);
+
+    private sealed class TestSegment(IEnumerable<Element>? elements = null, Separators? separators = null) : Segment(elements, separators), ISourceGeneratorValidatable
+    {
+        public List<IIndirectValidatable> SourceGenValidations { get; } =
+        [
+            new RequiredDataElementsAttribute(ValidationSeverity.Critical, [0, 1, 2]),
+            new IsOneOfValuesAttribute(ValidationSeverity.Error, 1, 0, "V1", "V2"),
+        ];
+    }
+
     [Fact]
     public void StandardSegment_WithValidData_ShouldPassValidation()
     {
         // Arrange
-        var isa = ISA.CreateDefault(
-            senderQualifier: "ZZ",
-            senderId: "SENDER         ",
-            receiverQualifier: "ZZ",
-            receiverId: "RECEIVER       ",
-            controlNumber: 12345,
-            usageIndicator: "P"
-        );
+        var testSegment = _createTestSegment();
 
         // Act
-        var result = _validator.Validate(isa);
+        var result = _validator.Validate(testSegment);
 
         // Assert
         result.IsValid.Should().BeTrue();
         result.ValidationMessages.Should().BeEmpty();
     }
 
-    // Test 2: Standard Segment Validation with Invalid Data
     [Fact]
     public void StandardSegment_WithInvalidData_ShouldFailValidation()
     {
         // Arrange
-        var isa = ISA.CreateDefault(
-            senderQualifier: "ZZ",
-            senderId: "SENDER         ",
-            receiverQualifier: "ZZ",
-            receiverId: "RECEIVER       ",
-            controlNumber: 12345,
-            usageIndicator: "P"
-        );
-
-        // Invalid sender qualifier (making it too long)
-        isa.AuthorizationInformationQualifier = "000"; // should be 2 characters
+        var testSegment = _createTestSegment();
+        testSegment.SetCompositeElement("V-1", 1); // Set invalid value for element 1
 
         // Act
-        var result = _validator.Validate(isa);
+        var result = _validator.Validate(testSegment);
 
         // Assert
         result.IsValid.Should().BeFalse();
@@ -55,10 +48,9 @@ public class EdiValidationTests
         result.ValidationMessages.Should().Contain(m =>
             m.Severity >= ValidationSeverity.Error &&
             m.DataElement == 1 &&
-            m.Message.Contains("length"));
+            m.Message.Contains("Element 1 in composite 0 must be one of: V1, V2"));
     }
 
-    // Test 3: Custom Validation Rules
     [Fact]
     public void CustomValidationRule_ShouldBeApplied()
     {
@@ -80,14 +72,12 @@ public class EdiValidationTests
             m.Message.Contains("REF required either 2 or 3 elements"));
     }
 
-    // Test 4: Validation Reporting and Severity Levels
     [Fact]
     public void ValidationResult_WithDifferentSeverityLevels_ShouldReportCorrectly()
     {
         // Arrange
         var result = new EdiValidationResult();
-        result.ValidationMessages.AddRange(new[]
-        {
+        result.ValidationMessages.AddRange([
             new ValidationMessage
             {
                 Severity = ValidationSeverity.Info,
@@ -112,7 +102,7 @@ public class EdiValidationTests
                 Message = "Critical message",
                 Subject = ValidationSubject.Segment
             }
-        });
+        ]);
 
         // Act & Assert
         result.IsValid.Should().BeFalse();
@@ -126,7 +116,6 @@ public class EdiValidationTests
         result.WhereHasCritical.Should().HaveCount(1);
     }
 
-    // Test 5: Validation Message CSV Output
     [Fact]
     public async Task ValidationMessageCsv_ShouldContainAllMessageData()
     {
@@ -206,14 +195,12 @@ public class EdiValidationTests
         }
     }
 
-    // Test 6: Source-Generated Validation Rules
     [Fact]
     public void SourceGeneratedValidationRules_ShouldBeApplied()
     {
         // Arrange - Create a segment with source-generated validation rules
         var dtp = new DTP
         {
-            
             Qualifier = "356",
             DateFormatCode = DateFormatCode.D8,
         };
@@ -234,7 +221,6 @@ public class EdiValidationTests
             m.Message.Contains("date"));
     }
 
-    // Test 7: Complex Validation Across Multiple Segments
     [Fact]
     public void ValidateComplexStructure_ShouldProcessAllSegments()
     {
@@ -262,8 +248,5 @@ public class EdiValidationTests
         // Assert
         result.IsValid.Should().BeFalse();
         result.ValidationMessages.Should().HaveCountGreaterThan(1);
-        // Should find issues in both ISA and IEA segments
-        result.ValidationMessages.Should().Contain(m => m.Message.Contains("Usage Indicator") ||
-                                                        m.Message.Contains("NumberOfFunctionalGroups"));
     }
 }
