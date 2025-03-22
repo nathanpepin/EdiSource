@@ -1,16 +1,3 @@
-using System.Text;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.IO.EdiReader;
-using EdiSource.Domain.IO.Parser;
-using EdiSource.Domain.IO.Serializer;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Separator;
-using EdiSource.Domain.Standard.Loops.ISA;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.IO;
-using EdiSource.Domain.Validation.Validator;
-
 namespace EdiSource.Domain;
 
 /// <summary>

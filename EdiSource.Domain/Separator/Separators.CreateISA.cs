@@ -1,15 +1,10 @@
-using EdiSource.Domain.Exceptions;
-
 namespace EdiSource.Domain.Separator;
 
 public partial class Separators
 {
     public static Task<InvalidISAException?> IsInvalidISA(StreamReader streamReader)
     {
-        if (streamReader.BaseStream.Length < 106)
-        {
-            return Task.FromResult<InvalidISAException?>(new InvalidISAException("ISA is too short, must be at least 106 characters long."));
-        }
+        if (streamReader.BaseStream.Length < 106) return Task.FromResult<InvalidISAException?>(new InvalidISAException("ISA is too short, must be at least 106 characters long."));
 
         streamReader.BaseStream.Position = 0;
 
@@ -17,9 +12,7 @@ public partial class Separators
         var isa = streamReader.Read(isaBuffer);
 
         if (isa != 3 || isaBuffer[0] != 'I' || isaBuffer[1] != 'S' || isaBuffer[2] != 'A')
-        {
             return Task.FromResult<InvalidISAException?>(new InvalidISAException("ISA is too short, must be at least 106 characters long."));
-        }
 
         streamReader.DiscardBufferedData();
         streamReader.BaseStream.Position = 0;

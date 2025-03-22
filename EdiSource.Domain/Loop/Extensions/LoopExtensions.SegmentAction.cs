@@ -1,6 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
-
 namespace EdiSource.Domain.Loop.Extensions;
 
 public static partial class LoopExtensions
@@ -41,27 +38,17 @@ public static partial class LoopExtensions
                 yield return segment;
                 break;
             case IEnumerable<Segment> segments:
-                foreach (var segment in segments)
-                {
-                    yield return segment;
-                }
+                foreach (var segment in segments) yield return segment;
 
                 break;
             case ILoop loop:
-                foreach (var segment in loop.YieldChildSegments())
-                {
-                    yield return segment;
-                }
+                foreach (var segment in loop.YieldChildSegments()) yield return segment;
 
                 break;
             case IEnumerable<ILoop> loopList:
                 foreach (var loop in loopList)
-                {
-                    foreach (var segment in loop.YieldChildSegments())
-                    {
-                        yield return segment;
-                    }
-                }
+                foreach (var segment in loop.YieldChildSegments())
+                    yield return segment;
 
                 break;
         }

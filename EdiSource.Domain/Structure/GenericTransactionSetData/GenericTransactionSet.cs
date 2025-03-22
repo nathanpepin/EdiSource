@@ -1,12 +1,3 @@
-using System.Threading.Channels;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Loop.Extensions;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Standard.Loops;
-using EdiSource.Domain.Standard.Segments;
-using EdiSource.Domain.Standard.Segments.STData;
-
 namespace EdiSource.Domain.Structure.GenericTransactionSetData;
 
 /// <summary>
@@ -22,6 +13,7 @@ public sealed class GenericTransactionSet : IEdi<FunctionalGroup>, ISegmentIdent
     public SegmentList<Segment> Segments { get; set; } = [];
 
     public GenericSE SE { get; set; } = default!;
+    public FunctionalGroup? Parent { get; set; }
 
     public static Task<GenericTransactionSet> InitializeAsync(ChannelReader<Segment> segmentReader, ILoop? parent)
     {
@@ -59,6 +51,8 @@ public sealed class GenericTransactionSet : IEdi<FunctionalGroup>, ISegmentIdent
         return loop;
     }
 
+    public static EdiId EdiId { get; } = new("ST");
+
     public static TransactionSetDefinition Definition { get; } =
         TransactionSetDefinitionsFactory<GenericTransactionSet>.CreateDefinition();
 
@@ -73,7 +67,4 @@ public sealed class GenericTransactionSet : IEdi<FunctionalGroup>, ISegmentIdent
     }
 
     public List<IEdi?> EdiItems => [ST, Segments, SE];
-
-    public static EdiId EdiId { get; } = new("ST");
-    public FunctionalGroup? Parent { get; set; }
 }

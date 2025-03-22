@@ -1,7 +1,3 @@
-using System.Text;
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Segments;
-
 namespace EdiSource.Domain.Identifiers;
 
 /// <summary>
@@ -60,8 +56,8 @@ public readonly struct EdiId(params Element?[] ids)
     }
 
     /// <summary>
-    /// Copies elements from an EdiId to a segment.
-    /// Useful in cases where you want to create a segment subtype without having to specify the element values. 
+    ///     Copies elements from an EdiId to a segment.
+    ///     Useful in cases where you want to create a segment subtype without having to specify the element values.
     /// </summary>
     /// <param name="segment"></param>
     public void CopyIdElementsToSegment(Segment segment)

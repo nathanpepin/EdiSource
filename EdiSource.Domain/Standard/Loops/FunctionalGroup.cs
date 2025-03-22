@@ -1,11 +1,3 @@
-using System.Threading.Channels;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Standard.Loops.ISA;
-using EdiSource.Domain.Standard.Segments;
-using EdiSource.Domain.Structure.GenericTransactionSetData;
-
 namespace EdiSource.Domain.Standard.Loops;
 
 public sealed class FunctionalGroup : IEdi<InterchangeEnvelope>, ISegmentIdentifier<FunctionalGroup>,

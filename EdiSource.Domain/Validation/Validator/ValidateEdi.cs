@@ -1,8 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Validation.Data;
-
 namespace EdiSource.Domain.Validation.Validator;
 
 public sealed class ValidateEdi : IValidateEdi
@@ -96,7 +91,7 @@ public sealed class ValidateEdi : IValidateEdi
         if (segment is ISourceGeneratorValidatable v2)
             foreach (var sourceValidation in v2.SourceGenValidations)
                 validationResult.AddRange(sourceValidation
-                    .Validate((IEdi)segment)
+                    .Validate(segment)
                     .UpdateSegmentLine(segmentLine)
                     .UpdateLoopLine(loopLine));
 

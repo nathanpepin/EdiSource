@@ -1,18 +1,8 @@
-using System.Reflection.Emit;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Loop.Extensions;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.Standard.Loops;
-
 namespace EdiSource.Domain.Standard.Segments;
 
 public abstract class SE<T> : Segment, IEdi<T>, IRefresh
     where T : ITransactionSet<T>, IEdi<FunctionalGroup>, ILoopInitialize<FunctionalGroup, T>, ISegmentIdentifier<T>
 {
-    public abstract T? Parent { get; set; }
-
     /// <summary>
     ///     If the parent exists then it will count the segments in the
     ///     transaction set, otherwise the value is from the segment itself.
@@ -44,6 +34,8 @@ public abstract class SE<T> : Segment, IEdi<T>, IRefresh
                 .Do(x => SetCompositeElement(x, 2));
         set => SetCompositeElement(value, 2);
     }
+
+    public abstract T? Parent { get; set; }
 
     public void Refresh()
     {

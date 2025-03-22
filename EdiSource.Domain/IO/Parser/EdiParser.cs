@@ -1,11 +1,3 @@
-using System.Text;
-using System.Threading.Channels;
-using EdiSource.Domain.Exceptions;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Separator;
-using EdiSource.Domain.Standard.Loops.ISA;
-
 namespace EdiSource.Domain.IO.Parser;
 
 public sealed class EdiParser<T> : IEdiParser<T> where T : class, ILoopInitialize<T>, new()
@@ -15,10 +7,7 @@ public sealed class EdiParser<T> : IEdiParser<T> where T : class, ILoopInitializ
     {
         if (typeof(T) == typeof(InterchangeEnvelope) && separators is null)
         {
-            if (await Separators.IsInvalidISA(streamReader) is { } exception)
-            {
-                throw exception;
-            }
+            if (await Separators.IsInvalidISA(streamReader) is { } exception) throw exception;
 
             separators ??= await Separators.CreateFromISA(streamReader);
         }

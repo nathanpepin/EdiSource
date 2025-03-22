@@ -1,8 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.Structure;
 
 /// <summary>

@@ -1,6 +1,3 @@
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.IO.Serializer;
 
 public interface IEdiSerializer

@@ -1,6 +1,3 @@
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.IO.Parser;
 
 public interface IEdiParser<T> where T : class, ILoopInitialize<T>, new()

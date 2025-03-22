@@ -1,9 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Loop.Extensions;
-using EdiSource.Domain.Standard.Segments;
-using EdiSource.Domain.Standard.Segments.STData;
-
 namespace EdiSource.Domain.Standard.Loops;
 
 public interface ITransactionSet<TSelf> : ILoop

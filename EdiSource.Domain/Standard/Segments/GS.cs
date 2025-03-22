@@ -1,7 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Standard.Loops;
-
 namespace EdiSource.Domain.Standard.Segments;
 
 public sealed class GS : Segment, IEdi<FunctionalGroup>, ISegmentIdentifier<GS>

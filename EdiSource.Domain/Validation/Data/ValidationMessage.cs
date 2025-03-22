@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace EdiSource.Domain.Validation.Data;
 
 public sealed class ValidationMessage

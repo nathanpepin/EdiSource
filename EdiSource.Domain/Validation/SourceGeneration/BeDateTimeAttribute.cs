@@ -1,10 +1,3 @@
-using System.Globalization;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Standard.Date;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
-
 namespace EdiSource.Domain.Validation.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
@@ -30,9 +23,7 @@ public sealed class BeDateTimeAttribute(
         foreach (var _ in formats
                      .Select(f => DateOnly.TryParseExact(value, f, CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
                      .Where(result => result))
-        {
             yield break;
-        }
 
         yield return ValidationFactory.Create(
             segment,

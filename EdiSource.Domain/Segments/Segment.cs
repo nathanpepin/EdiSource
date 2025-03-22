@@ -1,10 +1,3 @@
-using System.Collections.Concurrent;
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.Segments;
 
 /// <summary>
@@ -12,15 +5,16 @@ namespace EdiSource.Domain.Segments;
 /// </summary>
 public partial class Segment : IEdi
 {
-    private Separators? _separators;
-
     private static readonly ConcurrentDictionary<Type, Func<EdiId?>> EdiIdGetters = new();
+
+    private readonly List<Element> _elements = [];
+    private Separators? _separators;
 
     protected Segment()
     {
         Separators = Separators.DefaultSeparators;
 
-        var type = this.GetType();
+        var type = GetType();
         if (EdiIdGetters.TryGetValue(type, out var getEdiId))
         {
             var ediId = getEdiId();
@@ -35,11 +29,15 @@ public partial class Segment : IEdi
             if (segmentIdentifierInterface != null)
             {
                 var ediIdProperty = type.GetProperty("EdiId",
-                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+                    BindingFlags.Public | BindingFlags.Static);
 
                 if (ediIdProperty != null)
                 {
-                    EdiId? Getter() => ediIdProperty.GetValue(null) as EdiId?;
+                    EdiId? Getter()
+                    {
+                        return ediIdProperty.GetValue(null) as EdiId?;
+                    }
+
                     EdiIdGetters.TryAdd(type, Getter);
 
                     var ediId = Getter();
@@ -61,7 +59,7 @@ public partial class Segment : IEdi
     {
         Separators = segment.Separators;
 
-        var copy = segment.Copy(separators: Separators, parent: parent);
+        var copy = segment.Copy(Separators, parent);
         Elements = copy.Elements;
     }
 
@@ -99,8 +97,6 @@ public partial class Segment : IEdi
         }
     }
 
-    private readonly List<Element> _elements = [];
-
     public Separators Separators
     {
         get => _separators ?? Separators.DefaultSeparators;
@@ -134,10 +130,8 @@ public partial class Segment : IEdi
     public bool SetDataElement(int elementIndex, bool create = true, params string[] values)
     {
         if (create && !ElementExists(elementIndex))
-        {
             while (elementIndex >= Elements.Count)
                 Elements.Add([]);
-        }
         else if (!ElementExists(elementIndex)) return false;
 
         var element = GetElement(elementIndex);
@@ -154,19 +148,13 @@ public partial class Segment : IEdi
         bool create = true)
     {
         if (create && !ElementExists(dataElementIndex))
-        {
             while (dataElementIndex >= Elements.Count)
                 Elements.Add([]);
-        }
         else if (!ElementExists(dataElementIndex)) return false;
 
         if (create && !CompositeElementExists(dataElementIndex, compositeElementIndex))
-        {
             while (!CompositeElementExists(dataElementIndex, compositeElementIndex))
-            {
                 Elements[dataElementIndex].Add(string.Empty);
-            }
-        }
         else if (!CompositeElementExists(dataElementIndex, compositeElementIndex)) return false;
 
         Elements[dataElementIndex][compositeElementIndex] = value;

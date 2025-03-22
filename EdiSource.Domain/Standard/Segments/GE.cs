@@ -1,8 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.Standard.Loops;
-
 namespace EdiSource.Domain.Standard.Segments;
 
 public sealed class GE : Segment, IEdi<FunctionalGroup>, ISegmentIdentifier<GE>, IRefresh

@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace EdiSource.Domain.Segments;
 
 public partial class Segment

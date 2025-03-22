@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace EdiSource.Domain.Validation.Data;
 
 /// <summary>
@@ -7,7 +5,7 @@ namespace EdiSource.Domain.Validation.Data;
 /// </summary>
 public class EdiValidationResult
 {
-    public bool IsValid => ValidationMessages.Count == 0 || 
+    public bool IsValid => ValidationMessages.Count == 0 ||
                            ValidationMessages.All(x => x.Severity <= ValidationSeverity.Info);
 
     public bool HasWarning => ValidationMessages.Any(x => x.Severity >= ValidationSeverity.Warning);
