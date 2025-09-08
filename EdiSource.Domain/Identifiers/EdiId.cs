@@ -7,6 +7,8 @@ namespace EdiSource.Domain.Identifiers;
 /// <param name="ids"></param>
 public readonly struct EdiId(params Element?[] ids)
 {
+    public const string S = "|";
+
     private Element?[] Ids { get; } = ids;
 
     public bool MatchesSegment(Segment segment)
@@ -19,8 +21,9 @@ public readonly struct EdiId(params Element?[] ids)
             for (var ceI = 0; ceI < de.Count; ceI++)
             {
                 var ce = de[ceI];
+                var values = ce.Split(S);
 
-                if (segment.GetCompositeElementOrNull(deI, ceI) is not { } value || value != ce)
+                if (segment.GetCompositeElementOrNull(deI, ceI) is not { } value || !values.Contains(value))
                     return false;
             }
         }
