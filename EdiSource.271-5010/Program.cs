@@ -38,7 +38,7 @@ var (envelope, separators) = await EdiCommon.ParseEdiEnvelope(ediContent);
 
 // 3. Write the interchange envelope to a string
 Console.WriteLine("Writing 271 EDI content to string...");
-var ediString = EdiCommon.WriteEdiToString(envelope, separators);
+var ediString = EdiCommon.PrettyPrint(envelope);
 
 Console.WriteLine("--------------------");
 Console.WriteLine(ediString);
