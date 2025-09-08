@@ -1,10 +1,3 @@
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
-using EdiSource.Domain.Validation.SourceGeneration;
-
 namespace EdiSource.Domain.Standard.Segments;
 
 public class REF : Segment, IValidatable, ISourceGeneratorValidatable

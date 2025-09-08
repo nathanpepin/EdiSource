@@ -1,12 +1,7 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
-
 namespace EdiSource.Domain.Validation.SourceGeneration;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed partial class RequiredDataElementsAttribute(ValidationSeverity validationSeverity, int[] dataElements)
+public sealed class RequiredDataElementsAttribute(ValidationSeverity validationSeverity, int[] dataElements)
     : Attribute, IIndirectValidatable
 {
     public IEnumerable<ValidationMessage> Validate(IEdi element)

@@ -1,11 +1,3 @@
-using System.Buffers;
-using System.Text;
-using System.Threading.Channels;
-using EdiSource.Domain.Exceptions;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Separator;
-using EdiSource.Domain.Structure;
-
 namespace EdiSource.Domain.IO.EdiReader;
 
 public sealed class EdiReader : IEdiReader
@@ -92,10 +84,7 @@ public sealed class EdiReader : IEdiReader
 
                     if (c == separators.SegmentSeparator)
                     {
-                        if (segmentBuffer.Elements.Count == 0)
-                        {
-                            throw new EmptySegmentException(separators.SegmentSeparator, segmentsCreated);
-                        }
+                        if (segmentBuffer.Elements.Count == 0) throw new EmptySegmentException(separators.SegmentSeparator, segmentsCreated);
 
                         segmentBuffer
                             .Elements

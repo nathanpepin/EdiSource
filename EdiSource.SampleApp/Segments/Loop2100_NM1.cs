@@ -1,10 +1,6 @@
-using EdiSource.Domain.SourceGeneration;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops.Loop2100>("NM1")]
+[SegmentGenerator<Loop2100>("NM1")]
 public partial class Loop2100_NM1 : IValidatable
 {
     public string EntityIdentifierCode

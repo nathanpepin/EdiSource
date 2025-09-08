@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace EdiSource.Domain.Elements;
 
 public partial class Element
@@ -63,4 +61,3 @@ public partial class Element
         set => _compositeElements[index] = value;
     }
 }
-

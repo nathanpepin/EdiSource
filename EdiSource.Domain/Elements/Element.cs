@@ -1,5 +1,3 @@
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.Elements;
 
 /// <summary>

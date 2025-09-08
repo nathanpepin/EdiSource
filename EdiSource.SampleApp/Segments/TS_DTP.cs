@@ -1,11 +1,6 @@
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.SourceGeneration;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops._834>("DTP")]
+[SegmentGenerator<_834>("DTP")]
 public partial class TS_DTP : IValidatable
 {
     public string DateQualifier
@@ -22,7 +17,7 @@ public partial class TS_DTP : IValidatable
 
     public DateTime Date
     {
-        get => SegmentExtensions.GetDateRequired(this, 3);
+        get => this.GetDateRequired(3);
         set => this.SetDate(value, 3);
     }
 
@@ -31,11 +26,9 @@ public partial class TS_DTP : IValidatable
         // Validate date format qualifier matches actual format
         if (DateFormatQualifier == "D8" &&
             GetCompositeElement(3).Length != 8)
-        {
             yield return ValidationFactory.Create(
                 this,
                 ValidationSeverity.Error,
                 "Date format qualifier D8 requires an 8-digit date");
-        }
     }
 }

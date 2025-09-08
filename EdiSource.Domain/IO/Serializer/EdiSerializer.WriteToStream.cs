@@ -1,8 +1,3 @@
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Loop.Extensions;
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.IO.Serializer;
 
 public sealed partial class EdiSerializer

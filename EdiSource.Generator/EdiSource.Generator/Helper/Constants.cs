@@ -1,5 +1,3 @@
-using System.Collections.Immutable;
-
 namespace EdiSource.Generator.Helper;
 
 public static class Constants

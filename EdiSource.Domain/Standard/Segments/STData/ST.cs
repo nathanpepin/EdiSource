@@ -1,17 +1,8 @@
-using EdiSource.Domain.Helper;
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.SourceGeneration;
-
 namespace EdiSource.Domain.Standard.Segments.STData;
 
 public abstract class ST<T> : Segment, IEdi<T>, ISourceGeneratorValidatable
     where T : IEdi
 {
-    public abstract T? Parent { get; set; }
-
     public TransactionSetIdentifierCode TransactionSetIdentifierCode
     {
         get => this.GetEnumRequired<TransactionSetIdentifierCode>(1);
@@ -29,6 +20,8 @@ public abstract class ST<T> : Segment, IEdi<T>, ISourceGeneratorValidatable
         get => GetCompositeElementOrNull(3);
         set => value.DoIfNotNull(x => SetCompositeElement(x, 3));
     }
+
+    public abstract T? Parent { get; set; }
 
     public List<IIndirectValidatable> SourceGenValidations { get; } =
     [

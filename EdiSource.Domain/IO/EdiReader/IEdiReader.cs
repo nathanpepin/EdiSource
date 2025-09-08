@@ -1,8 +1,3 @@
-using System.Threading.Channels;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Separator;
-using EdiSource.Domain.Structure;
-
 namespace EdiSource.Domain.IO.EdiReader;
 
 public interface IEdiReader

@@ -1,9 +1,3 @@
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
-using EdiSource.Domain.Validation.SourceGeneration;
-
 namespace EdiSource.Domain.Standard.Segments.DTPData;
 
 public class DTP : Segment, IValidatable, ISourceGeneratorValidatable

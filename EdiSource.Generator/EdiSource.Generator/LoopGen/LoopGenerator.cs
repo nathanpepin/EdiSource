@@ -1,9 +1,3 @@
-using System.Collections.Immutable;
-using System.Text;
-using EdiSource.Generator.LoopGen.Data;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-
 namespace EdiSource.Generator.LoopGen;
 
 public readonly record struct S(string Name, string Value);

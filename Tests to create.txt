@@ -1,11 +1,3 @@
-Validation Tests
-5. EDI Validation Tests
-
-Test validation rules for standard segments
-Test custom validation rules
-Test validation reporting and severity levels
-Test validation message CSV output
-
 Source Generator Tests
 6. Loop Generator Tests
 

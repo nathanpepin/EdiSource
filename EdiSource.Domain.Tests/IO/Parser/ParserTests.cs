@@ -294,6 +294,7 @@ public sealed class ParserTests
         // Act & Assert
         await Assert.ThrowsAsync<InvalidISAException>(() => parser.ParseEdi(invalidInput));
     }
+
     #endregion
 
     #region Async and Cancellation Tests

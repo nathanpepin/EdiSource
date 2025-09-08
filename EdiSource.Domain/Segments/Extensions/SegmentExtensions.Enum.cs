@@ -1,5 +1,3 @@
-using EdiSource.Domain.Exceptions;
-
 namespace EdiSource.Domain.Segments.Extensions;
 
 public static partial class SegmentExtensions

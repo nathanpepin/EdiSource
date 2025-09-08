@@ -208,7 +208,7 @@ public sealed class SerializationTests
     public async Task SerializeWithCustomSeparators_ShouldPreserveSeparators()
     {
         // Arrange - Parse EDI with custom separators
-        var customSeparators = new Domain.Separator.Separators('|', '+', '/');
+        var customSeparators = new Separators('|', '+', '/');
         var customEdi = _sampleEdiInput.Replace('~', '|').Replace('*', '+').Replace(':', '/');
 
         var envelope = await EdiCommon.ParseEdi<InterchangeEnvelope>(customEdi, customSeparators);

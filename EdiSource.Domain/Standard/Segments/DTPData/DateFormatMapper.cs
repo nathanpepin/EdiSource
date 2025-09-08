@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace EdiSource.Domain.Standard.Segments.DTPData;
 
 public static class DateFormatMapper

@@ -1,9 +1,3 @@
-using System;
-using EdiSource.Domain.Identifiers;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using VerifyTests;
-
 namespace EdiSource.Generator.Tests.Utils;
 
 public static class TestHelperFunctions

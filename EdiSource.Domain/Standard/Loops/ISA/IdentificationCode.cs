@@ -1,6 +1,3 @@
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.SourceGeneration;
-
 namespace EdiSource.Domain.Standard.Loops.ISA;
 
 public enum IdentificationCode

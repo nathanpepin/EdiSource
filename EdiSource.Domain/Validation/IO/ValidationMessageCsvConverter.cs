@@ -1,6 +1,3 @@
-using System.Text;
-using EdiSource.Domain.Validation.Data;
-
 namespace EdiSource.Domain.Validation.IO;
 
 public sealed class ValidationMessageCsvConverter : IValidationMessageCsvConverter

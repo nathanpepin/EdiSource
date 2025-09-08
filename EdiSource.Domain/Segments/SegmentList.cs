@@ -1,5 +1,3 @@
-using EdiSource.Domain.Identifiers;
-
 namespace EdiSource.Domain.Segments;
 
 /// <summary>

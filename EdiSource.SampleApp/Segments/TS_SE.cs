@@ -1,16 +1,11 @@
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.SourceGeneration;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Factory;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops._834>("SE")]
+[SegmentGenerator<_834>("SE")]
 public partial class TS_SE : IValidatable
 {
     public int SegmentCount
     {
-        get => SegmentExtensions.GetIntRequired(this, 1);
+        get => this.GetIntRequired(1);
         set => this.SetInt(value, 1);
     }
 
@@ -23,13 +18,11 @@ public partial class TS_SE : IValidatable
     public IEnumerable<ValidationMessage> Validate()
     {
         // SE segment 2nd element must match ST segment
-        if (Parent is Loops._834 transaction &&
+        if (Parent is _834 transaction &&
             TransactionSetControlNumber != transaction.ST.TransactionSetControlNumber)
-        {
             yield return ValidationFactory.Create(
                 this,
                 ValidationSeverity.Critical,
                 "SE segment control number must match ST segment control number");
-        }
     }
 }

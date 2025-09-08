@@ -1,7 +1,3 @@
-using System.Threading.Channels;
-using EdiSource.Domain.Loop;
-using EdiSource.Domain.Segments;
-
 namespace EdiSource.Domain.Identifiers;
 
 /// <summary>
@@ -31,10 +27,10 @@ public static class SegmentLoopFactory<T, TLoop>
         var segment = await segmentReader.ReadAsync();
 
         var t = new T { Elements = segment.Elements, Separators = segment.Separators };
-        
+
         if (t is IEdi<TLoop> e)
             e.Parent = parent;
-        
+
         return t;
     }
 }

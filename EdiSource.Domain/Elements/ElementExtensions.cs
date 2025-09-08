@@ -1,5 +1,3 @@
-using System.Globalization;
-
 namespace EdiSource.Domain.Elements;
 
 public static class ElementExtensions
@@ -109,11 +107,8 @@ public static class ElementExtensions
             : null;
 
         if (element is null) return null;
-        
-        if (Enum.TryParse<TEnum>(element, out var value))
-        {
-            return value;
-        }
+
+        if (Enum.TryParse<TEnum>(element, out var value)) return value;
 
         if (!tryAddUnderscore) return null;
 

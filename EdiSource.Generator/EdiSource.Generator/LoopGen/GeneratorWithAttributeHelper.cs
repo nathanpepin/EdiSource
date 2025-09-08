@@ -1,6 +1,3 @@
-using System.Collections.Immutable;
-using Microsoft.CodeAnalysis;
-
 namespace EdiSource.Generator.LoopGen;
 
 public static class GeneratorWithAttributeHelper<T> where T : struct

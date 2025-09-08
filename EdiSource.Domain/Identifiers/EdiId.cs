@@ -1,7 +1,3 @@
-using System.Text;
-using EdiSource.Domain.Elements;
-using EdiSource.Domain.Segments;
-
 namespace EdiSource.Domain.Identifiers;
 
 /// <summary>
@@ -11,6 +7,8 @@ namespace EdiSource.Domain.Identifiers;
 /// <param name="ids"></param>
 public readonly struct EdiId(params Element?[] ids)
 {
+    public const string S = "|";
+
     private Element?[] Ids { get; } = ids;
 
     public bool MatchesSegment(Segment segment)
@@ -23,8 +21,9 @@ public readonly struct EdiId(params Element?[] ids)
             for (var ceI = 0; ceI < de.Count; ceI++)
             {
                 var ce = de[ceI];
+                var values = ce.Split(S);
 
-                if (segment.GetCompositeElementOrNull(deI, ceI) is not { } value || value != ce)
+                if (segment.GetCompositeElementOrNull(deI, ceI) is not { } value || !values.Contains(value))
                     return false;
             }
         }
@@ -60,8 +59,8 @@ public readonly struct EdiId(params Element?[] ids)
     }
 
     /// <summary>
-    /// Copies elements from an EdiId to a segment.
-    /// Useful in cases where you want to create a segment subtype without having to specify the element values. 
+    ///     Copies elements from an EdiId to a segment.
+    ///     Useful in cases where you want to create a segment subtype without having to specify the element values.
     /// </summary>
     /// <param name="segment"></param>
     public void CopyIdElementsToSegment(Segment segment)

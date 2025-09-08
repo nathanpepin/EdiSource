@@ -1,8 +1,6 @@
-using EdiSource.Domain.SourceGeneration;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops.Loop2100>("N4")]
+[SegmentGenerator<Loop2100>("N4")]
 public partial class Loop2100_N4
 {
     public string City

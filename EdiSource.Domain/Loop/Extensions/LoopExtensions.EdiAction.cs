@@ -1,5 +1,3 @@
-using EdiSource.Domain.Segments;
-
 namespace EdiSource.Domain.Loop.Extensions;
 
 public static partial class LoopExtensions

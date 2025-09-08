@@ -1,10 +1,3 @@
-using EdiSource.Domain;
-using EdiSource.Domain.IO.Serializer;
-using EdiSource.Domain.Standard.Loops.ISA;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.Validator;
-using FluentAssertions;
-
 namespace EdiSource.IntergrationTests;
 
 public class EdiProcessingIntegrationTests

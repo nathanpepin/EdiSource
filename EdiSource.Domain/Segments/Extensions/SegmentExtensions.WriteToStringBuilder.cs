@@ -1,6 +1,3 @@
-using System.Text;
-using EdiSource.Domain.Separator;
-
 namespace EdiSource.Domain.Segments.Extensions;
 
 public static partial class SegmentExtensions

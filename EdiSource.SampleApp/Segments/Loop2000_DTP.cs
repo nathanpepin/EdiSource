@@ -1,11 +1,6 @@
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.SourceGeneration;
-using EdiSource.Domain.Validation.Data;
-using EdiSource.Domain.Validation.SourceGeneration;
+namespace EdiSource.SampleApp.Segments;
 
-namespace EdiSource.Segments;
-
-[SegmentGenerator<Loops.Loop2000>("DTP")]
+[SegmentGenerator<Loop2000>("DTP")]
 [BeDate(ValidationSeverity.Critical, 3, 0)]
 public partial class Loop2000_DTP
 {
@@ -23,7 +18,7 @@ public partial class Loop2000_DTP
 
     public DateTime Date
     {
-        get => SegmentExtensions.GetDateRequired(this, 3);
+        get => this.GetDateRequired(3);
         set => this.SetDate(value, 3);
     }
 }

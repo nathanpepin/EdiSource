@@ -1,11 +1,3 @@
-using System.Collections.Immutable;
-using System.Text;
-using EdiSource.Generator.Helper;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
-
 namespace EdiSource.Generator.ValidationGen;
 
 [Generator(LanguageNames.CSharp)]
@@ -39,7 +31,7 @@ public class ValidationGenerator : IIncrementalGenerator
         var target = classDeclarationSyntax
             .AttributeLists
             .SelectMany(attributeList => attributeList.Attributes,
-                (_, attribute) => CSharpExtensions.GetTypeInfo(context.SemanticModel, attribute))
+                (_, attribute) => context.SemanticModel.GetTypeInfo(attribute))
             .Select(attributeSymbol => new
             {
                 TypeSymbol = attributeSymbol, Definition = attributeSymbol.Type?.OriginalDefinition.ToDisplayString()

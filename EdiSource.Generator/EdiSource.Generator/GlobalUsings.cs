@@ -1,2 +1,11 @@
 global using static EdiSource.Generator.Helper.Constants;
 global using static EdiSource.Generator.Helper.HelperFunctions;
+global using System.Collections.Immutable;
+global using System.Text;
+global using EdiSource.Generator.Helper;
+global using Microsoft.CodeAnalysis;
+global using Microsoft.CodeAnalysis.CSharp.Syntax;
+global using Microsoft.CodeAnalysis.Text;
+global using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
+global using EdiSource.Generator.LoopGen.Data;
+global using Microsoft.CodeAnalysis.CSharp;

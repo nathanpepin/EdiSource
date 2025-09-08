@@ -1,6 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Standard.Segments;
-
 namespace EdiSource.Domain.Structure.GenericTransactionSetData;
 
 public sealed class GenericSE : SE<GenericTransactionSet>, ISegmentIdentifier<GenericSE>

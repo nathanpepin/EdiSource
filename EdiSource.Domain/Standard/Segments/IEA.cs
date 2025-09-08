@@ -1,8 +1,3 @@
-using EdiSource.Domain.Identifiers;
-using EdiSource.Domain.Segments;
-using EdiSource.Domain.Segments.Extensions;
-using EdiSource.Domain.Standard.Loops.ISA;
-
 namespace EdiSource.Domain.Standard.Segments;
 
 public sealed class IEA : Segment, IEdi<InterchangeEnvelope>, ISegmentIdentifier<IEA>, IRefresh
@@ -26,10 +21,12 @@ public sealed class IEA : Segment, IEdi<InterchangeEnvelope>, ISegmentIdentifier
     }
 
     public InterchangeEnvelope? Parent { get; set; }
-    public static EdiId EdiId { get; } = new("IEA");
+
     public void Refresh()
     {
         _ = E01NumberOfFunctionalGroups;
         _ = E02InterchangeControlNumber;
     }
+
+    public static EdiId EdiId { get; } = new("IEA");
 }
