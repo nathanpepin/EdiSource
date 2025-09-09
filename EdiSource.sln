@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.SampleApp", "EdiSource.SampleApp\EdiSource.SampleApp.csproj", "{66440C03-89CD-4E3F-B4C8-5DA339270924}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.SampleApp", "Source\EdiSource.SampleApp\EdiSource.SampleApp.csproj", "{66440C03-89CD-4E3F-B4C8-5DA339270924}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Domain", "EdiSource.Domain\EdiSource.Domain.csproj", "{32968A93-4806-4596-9115-804CA34D0598}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Domain", "Source\EdiSource.Domain\EdiSource.Domain.csproj", "{32968A93-4806-4596-9115-804CA34D0598}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Generator", "EdiSource.Generator\EdiSource.Generator\EdiSource.Generator.csproj", "{F3C797A1-563B-4CE4-93AC-69468FBBFE35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Generator", "Source\EdiSource.Generator\EdiSource.Generator\EdiSource.Generator.csproj", "{F3C797A1-563B-4CE4-93AC-69468FBBFE35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Generator.Tests", "SourceGenerators1\EdiSource.Generator.Tests\EdiSource.Generator.Tests.csproj", "{C2C91417-CBC3-4EB8-BE60-EA680437263A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Generator.Tests", "Tests\EdiSource.Generator.Tests\EdiSource.Generator.Tests.csproj", "{C2C91417-CBC3-4EB8-BE60-EA680437263A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Domain.Tests", "EdiSource.Domain.Tests\EdiSource.Domain.Tests.csproj", "{B9714AB2-33F4-4E2E-8ED4-F500018B5184}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Domain.Tests", "Tests\EdiSource.Domain.Tests\EdiSource.Domain.Tests.csproj", "{B9714AB2-33F4-4E2E-8ED4-F500018B5184}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{BA975AEA-2B12-4956-BD34-FB15EAAB34E8}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{32698B02
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{93449E41-6287-4B70-998C-62CD97C4B01D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.IntergrationTests", "EdiSource.IntergrationTests\EdiSource.IntergrationTests.csproj", "{9C56692A-A68D-4FC6-BC87-D2A7C9CAE909}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.IntergrationTests", "Tests\EdiSource.IntergrationTests\EdiSource.IntergrationTests.csproj", "{9C56692A-A68D-4FC6-BC87-D2A7C9CAE909}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{CE17F7EA-9092-4C01-9591-019386B873A2}"
 EndProject

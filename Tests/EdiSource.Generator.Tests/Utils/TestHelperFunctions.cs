@@ -1,3 +1,5 @@
+using EdiSource.Domain.Identifiers;
+
 namespace EdiSource.Generator.Tests.Utils;
 
 public static class TestHelperFunctions
