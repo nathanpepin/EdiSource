@@ -12,8 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdiSource.Domain.Tests", "T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{BA975AEA-2B12-4956-BD34-FB15EAAB34E8}"
 	ProjectSection(SolutionItems) = preProject
-		EdiSource.sln.DotSettings.user = EdiSource.sln.DotSettings.user
 		Tests to create.txt = Tests to create.txt
+		.aiassistant\rules\Instructions.md = .aiassistant\rules\Instructions.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{32698B02-40A1-4D06-9BDF-14054D10A985}"
