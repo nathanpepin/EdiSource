@@ -1,7 +1,5 @@
 namespace EdiSource.Generator.LoopGen;
 
-public readonly record struct S(string Name, string Value);
-
 [Generator]
 public partial class LoopGenerator : IIncrementalGenerator
 {

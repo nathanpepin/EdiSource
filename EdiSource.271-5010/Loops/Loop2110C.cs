@@ -27,7 +27,7 @@ public partial class Loop2110C : IValidatable
 
         // Validate eligibility/benefit indicator
         var validIndicators = new[] { "1", "2", "3", "4", "5", "6", "7", "8", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y" };
-        if (!string.IsNullOrEmpty(EB.EligibilityOrBenefitInformation) && !validIndicators.Contains(EB.EligibilityOrBenefitInformation))
+        if (!string.IsNullOrEmpty(EB?.EligibilityOrBenefitInformation) && !validIndicators.Contains(EB.EligibilityOrBenefitInformation))
             yield return ValidationFactory.Create(
                 this,
                 ValidationSeverity.Warning,
