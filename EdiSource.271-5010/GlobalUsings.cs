@@ -10,6 +10,4 @@ global using EdiSource.Domain.Validation.Factory;
 global using EdiSource.Domain.Loop;
 global using EdiSource.Domain.Segments;
 global using EdiSource.Domain.Helper;
-global using EdiSource._271_5010.Segments;
-global using EdiSource._271_5010.Loops;
 global using static EdiSource.Domain.Identifiers.EdiId;

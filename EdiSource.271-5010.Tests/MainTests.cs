@@ -1,5 +1,9 @@
-﻿using EdiSource._271_5010.Loops;
+﻿using System.Text.Json;
+using Dumpify;
+using EdiSource._271_5010.Loop2000A_InformationSourceLevel;
+using EdiSource._271_5010.TransactionSet;
 using EdiSource.Domain;
+using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Standard.Loops.ISA;
 using Xunit.Abstractions;
 
@@ -42,15 +46,18 @@ public sealed class MainTests(ITestOutputHelper testOutputHelper)
 
         // 1. Register 271 transaction set definition
         testOutputHelper.WriteLine("Registering 271 transaction set definition...");
-        InterchangeEnvelope.TransactionSetDefinitions.Add(_271.Definition);
+        InterchangeEnvelope.TransactionSetDefinitions.Add(_271_5010_EligibilityBenefitResponse.Definition);
 
         // 2. Parse the EDI content into an interchange envelope
         testOutputHelper.WriteLine("Parsing 271 EDI content...");
         var (envelope, separators) = await EdiCommon.ParseEdiEnvelope(ediContent);
 
+        var item = envelope.FindEdiElement<_271_5010_Loop2000A_InformationSourceLevel>()
+            [0];
+
         // 3. Write the interchange envelope to a string
         testOutputHelper.WriteLine("Writing 271 EDI content to string...");
-        var ediString = EdiCommon.WriteEdiToString(envelope, separators);
+        var ediString = EdiCommon.PrettyPrint(envelope);
 
         testOutputHelper.WriteLine("--------------------");
         testOutputHelper.WriteLine(ediString);

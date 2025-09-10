@@ -144,7 +144,7 @@ public partial class Segment : IEdi
         return true;
     }
 
-    public bool SetCompositeElement(string value, int dataElementIndex, int compositeElementIndex = 0,
+    public bool SetCompositeElement(string? value, int dataElementIndex, int compositeElementIndex = 0,
         bool create = true)
     {
         if (create && !ElementExists(dataElementIndex))
@@ -157,7 +157,7 @@ public partial class Segment : IEdi
                 Elements[dataElementIndex].Add(string.Empty);
         else if (!CompositeElementExists(dataElementIndex, compositeElementIndex)) return false;
 
-        Elements[dataElementIndex][compositeElementIndex] = value;
+        Elements[dataElementIndex][compositeElementIndex] = value ?? string.Empty;
         return true;
     }
 
