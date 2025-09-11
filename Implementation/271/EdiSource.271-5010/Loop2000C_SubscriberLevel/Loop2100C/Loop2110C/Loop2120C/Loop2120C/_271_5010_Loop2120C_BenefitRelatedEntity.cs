@@ -15,6 +15,6 @@ public sealed partial class _271_5010_Loop2120C_BenefitRelatedEntity : IValidata
     public IEnumerable<ValidationMessage> Validate()
     {
         if (NM1_BenefitRelatedEntityName == null)
-            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, "NM1 segment is required");
+            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, "NM1 segment is required");
     }
 }

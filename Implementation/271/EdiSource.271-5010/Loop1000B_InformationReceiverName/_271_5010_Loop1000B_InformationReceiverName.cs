@@ -8,7 +8,7 @@ public sealed partial class _271_5010_Loop1000B_InformationReceiverName : IValid
 {
     [SegmentHeader] public _271_5010_Loop1000B_NM1_InformationReceiverName NM1_InformationReceiverName { get; set; } = null!;
 
-    [Segment]  public _271_5010_Loop1000B_N3_InformationReceiverAddress? N3_InformationReceiverAddress { get; set; }
+    [Segment] public _271_5010_Loop1000B_N3_InformationReceiverAddress? N3_InformationReceiverAddress { get; set; }
     [Segment] public _271_5010_Loop1000B_N4_InformationReceiverGeographicLocation? N4_InformationReceiverGeographicLocation { get; set; }
 
     public IEnumerable<ValidationMessage> Validate()

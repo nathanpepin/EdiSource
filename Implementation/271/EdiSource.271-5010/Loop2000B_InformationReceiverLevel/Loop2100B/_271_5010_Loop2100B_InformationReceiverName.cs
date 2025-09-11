@@ -15,6 +15,6 @@ public sealed partial class _271_5010_Loop2100B_InformationReceiverName : IValid
     public IEnumerable<ValidationMessage> Validate()
     {
         if (NM1_InformationReceiverName == null)
-            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, "NM1 segment is required");
+            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, "NM1 segment is required");
     }
 }

@@ -8,13 +8,13 @@ public sealed partial class _270_5010_Loop2100C_PRV_ProviderInfo
         get => GetCompositeElement(1);
         set => SetCompositeElement(value, 1);
     }
-    
+
     public string? ReferenceIdentificationQualifier
     {
         get => GetCompositeElement(2);
         set => SetCompositeElement(value, 2);
     }
-    
+
     public string? ProviderTaxonomyCode
     {
         get => GetCompositeElement(3);

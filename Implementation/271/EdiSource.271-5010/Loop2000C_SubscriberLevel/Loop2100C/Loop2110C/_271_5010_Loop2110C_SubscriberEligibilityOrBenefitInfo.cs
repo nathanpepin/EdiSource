@@ -1,4 +1,3 @@
-using EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName;
 using EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C.Loop2110C.Loop2120C;
 using EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C.Loop2110C.Segments;
 
@@ -26,6 +25,6 @@ public partial class _271_5010_Loop2110C_SubscriberEligibilityOrBenefitInfo : IV
     public IEnumerable<ValidationMessage> Validate()
     {
         if (EB_EligibilityOrBenefitInfo == null)
-            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, "EB segment is required");
+            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, "EB segment is required");
     }
 }

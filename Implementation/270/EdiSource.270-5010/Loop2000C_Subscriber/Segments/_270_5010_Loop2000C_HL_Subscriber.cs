@@ -1,6 +1,8 @@
+using EdiSource._270_5010.Loop2000C_Subscriber;
+
 namespace EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Segments;
 
-[SegmentGenerator<_270_5010.Loop2000C_Subscriber._270_5010_Loop2000C_Subscriber>("HL", null, null, "22")]
+[SegmentGenerator<_270_5010_Loop2000C_Subscriber>("HL", null, null, "22")]
 public sealed partial class _270_5010_Loop2000C_HL_Subscriber
 {
     public int? HierarchicalIdNumber
@@ -8,19 +10,19 @@ public sealed partial class _270_5010_Loop2000C_HL_Subscriber
         get => this.GetInt(1);
         set => this.SetInt(value, 1);
     }
-    
+
     public int? HierarchicalParentIdNumber
     {
         get => this.GetInt(2);
         set => this.SetInt(value, 2);
     }
-    
+
     public string? HierarchicalLevelCode
     {
         get => GetCompositeElement(3);
         set => SetCompositeElement(value, 3);
     }
-    
+
     public bool? HierarchicalChildCode
     {
         get => this.GetBool(4, "1", falseValue: "0");

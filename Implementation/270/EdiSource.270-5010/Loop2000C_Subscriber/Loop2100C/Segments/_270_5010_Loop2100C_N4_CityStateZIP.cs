@@ -8,19 +8,19 @@ public sealed partial class _270_5010_Loop2100C_N4_CityStateZIP
         get => GetCompositeElement(1);
         set => SetCompositeElement(value, 1);
     }
-    
+
     public string? StateOrProvinceCode
     {
         get => GetCompositeElement(2);
         set => SetCompositeElement(value, 2);
     }
-    
+
     public string? PostalCode
     {
         get => GetCompositeElement(3);
         set => SetCompositeElement(value, 3);
     }
-    
+
     public string? CountryCode
     {
         get => GetCompositeElement(4);
