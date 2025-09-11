@@ -1,6 +1,6 @@
 namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Segments;
 
-[SegmentGenerator<_271_5010_Loop2100C_SubscriberName>("N4")]
+[SegmentGenerator<Loop2100C._271_5010_Loop2100C_SubscriberName>("N4")]
 public partial class _271_5010_Loop2100C_N4_SubscriberGeographicLocation
 {
     public string? CityName { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }

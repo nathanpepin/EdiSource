@@ -1,7 +1,8 @@
-using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Loop2110D_DependentEligibilityOrBenefitInfo.Loop2120D_BenefitRelatedEntityGrouping;
-using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Loop2110D_DependentEligibilityOrBenefitInfo.Segments;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Loop2110D.Loop2120D;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Loop2110D.Segments;
 
-namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Loop2110D_DependentEligibilityOrBenefitInfo;
+namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Loop2110D;
 
 [LoopGenerator<_271_5010_Loop2100D_DependentName, _271_5010_Loop2110D_DependentEligibilityOrBenefitInfo, _271_5010_Loop2110D_EB_EligibilityOrBenefitInfo>]
 public partial class _271_5010_Loop2110D_DependentEligibilityOrBenefitInfo : IValidatable
@@ -25,6 +26,6 @@ public partial class _271_5010_Loop2110D_DependentEligibilityOrBenefitInfo : IVa
     public IEnumerable<ValidationMessage> Validate()
     {
         if (EB_EligibilityOrBenefitInfo == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, "EB segment is required");
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, "EB segment is required");
     }
 }

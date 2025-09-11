@@ -1,9 +1,9 @@
-using EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Loop2100B_InformationReceiverName.Segments;
+using EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Loop2100B.Segments;
 
-namespace EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Loop2100B_InformationReceiverName;
+namespace EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Loop2100B;
 
 [LoopGenerator<_271_5010_Loop2000B_InformationReceiverLevel, _271_5010_Loop2100B_InformationReceiverName, _271_5010_Loop2100B_NM1_InformationReceiverName>]
-public partial class _271_5010_Loop2100B_InformationReceiverName : IValidatable
+public sealed partial class _271_5010_Loop2100B_InformationReceiverName : IValidatable
 {
     [SegmentHeader] public _271_5010_Loop2100B_NM1_InformationReceiverName NM1_InformationReceiverName { get; set; } = null!;
 
@@ -15,6 +15,6 @@ public partial class _271_5010_Loop2100B_InformationReceiverName : IValidatable
     public IEnumerable<ValidationMessage> Validate()
     {
         if (NM1_InformationReceiverName == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, "NM1 segment is required");
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, "NM1 segment is required");
     }
 }

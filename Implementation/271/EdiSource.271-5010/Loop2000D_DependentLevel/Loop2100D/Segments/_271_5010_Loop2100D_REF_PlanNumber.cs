@@ -1,7 +1,9 @@
-namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Segments;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName;
+
+namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Segments;
 
 [SegmentGenerator<_271_5010_Loop2100D_DependentName>("REF", "18")]
-public partial class _271_5010_Loop2100D_REF_PlanNumber
+public sealed partial class _271_5010_Loop2100D_REF_PlanNumber
 {
     public string? ReferenceIdentificationQualifier { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }
     public string? PlanNumber { get => GetCompositeElement(2); set => SetCompositeElement(value, 2); }

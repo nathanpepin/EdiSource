@@ -1,6 +1,6 @@
 namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Segments;
 
-[SegmentGenerator<_271_5010_Loop2100C_SubscriberName>("HI")]
+[SegmentGenerator<Loop2100C._271_5010_Loop2100C_SubscriberName>("HI")]
 public partial class _271_5010_Loop2100C_HI_SubscriberHealthCareCodeInfo
 {
     public string? HealthCareCodeInformation1_CodeListQualifierCode { get => GetCompositeElement(1, 1); set => SetCompositeElement(value, 1, 1); }

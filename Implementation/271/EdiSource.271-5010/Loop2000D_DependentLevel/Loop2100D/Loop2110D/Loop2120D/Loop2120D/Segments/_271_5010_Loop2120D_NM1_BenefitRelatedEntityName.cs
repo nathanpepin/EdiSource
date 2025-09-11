@@ -1,7 +1,8 @@
-namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Loop2110D_DependentEligibilityOrBenefitInfo.Loop2120D_BenefitRelatedEntityGrouping.Loop2120D_BenefitRelatedEntity.Segments;
+
+namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Loop2110D.Loop2120D.Loop2120D.Segments;
 
 [SegmentGenerator<_271_5010_Loop2120D_BenefitRelatedEntity>("NM1", $"1P{S}2B{S}36{S}77{S}82{S}PE{S}SJ")]
-public partial class _271_5010_Loop2120D_NM1_BenefitRelatedEntityName
+public sealed partial class _271_5010_Loop2120D_NM1_BenefitRelatedEntityName
 {
     public string? EntityIdentifierCode { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }
     public string? EntityTypeQualifier { get => GetCompositeElement(2); set => SetCompositeElement(value, 2); }

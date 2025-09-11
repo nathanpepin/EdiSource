@@ -1,6 +1,6 @@
-namespace EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Loop2100B_InformationReceiverName.Segments;
+namespace EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Loop2100B.Segments;
 
-[SegmentGenerator<_271_5010_Loop2100B_InformationReceiverName>("PER")]
+[SegmentGenerator<Loop2100B._271_5010_Loop2100B_InformationReceiverName>("PER")]
 public partial class _271_5010_Loop2100B_PER_InformationReceiverContactInfo
 {
     public string? ContactFunctionCode { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }

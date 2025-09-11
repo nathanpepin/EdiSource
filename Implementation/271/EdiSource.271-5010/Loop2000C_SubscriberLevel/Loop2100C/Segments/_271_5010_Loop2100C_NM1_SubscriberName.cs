@@ -1,6 +1,6 @@
 namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Segments;
 
-[SegmentGenerator<_271_5010_Loop2100C_SubscriberName>("NM1", "IL")]
+[SegmentGenerator<Loop2100C._271_5010_Loop2100C_SubscriberName>("NM1", "IL")]
 public partial class _271_5010_Loop2100C_NM1_SubscriberName
 {
     public string? EntityIdentifierCode { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }

@@ -1,5 +1,6 @@
+
 using EdiSource._271_5010.Loop2000A_InformationSourceLevel;
-using EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Loop2100B_InformationReceiverName;
+using EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Loop2100B;
 using EdiSource._271_5010.Loop2000B_InformationReceiverLevel.Segments;
 using EdiSource._271_5010.Loop2000C_SubscriberLevel;
 

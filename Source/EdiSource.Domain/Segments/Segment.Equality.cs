@@ -20,7 +20,7 @@ public partial class Segment
         return true;
     }
 
-    public static bool operator ==(Segment left, Segment right)
+    public static bool operator ==(Segment left, Segment? right)
     {
         return Equals(left, right);
     }

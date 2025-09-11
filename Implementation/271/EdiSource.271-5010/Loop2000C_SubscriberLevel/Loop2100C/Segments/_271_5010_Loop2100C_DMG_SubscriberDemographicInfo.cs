@@ -1,6 +1,6 @@
 namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Segments;
 
-[SegmentGenerator<_271_5010_Loop2100C_SubscriberName>("DMG")]
+[SegmentGenerator<Loop2100C._271_5010_Loop2100C_SubscriberName>("DMG")]
 public partial class _271_5010_Loop2100C_DMG_SubscriberDemographicInfo
 {
     public string? DateTimePeriodFormatQualifier { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }

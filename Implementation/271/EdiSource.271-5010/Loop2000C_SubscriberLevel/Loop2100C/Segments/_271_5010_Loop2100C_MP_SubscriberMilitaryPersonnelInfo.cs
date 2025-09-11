@@ -1,6 +1,6 @@
 namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Segments;
 
-[SegmentGenerator<_271_5010_Loop2100C_SubscriberName>("MP")]
+[SegmentGenerator<Loop2100C._271_5010_Loop2100C_SubscriberName>("MP")]
 public partial class _271_5010_Loop2100C_MP_SubscriberMilitaryPersonnelInfo
 {
     public string? MilitaryServiceRankCode { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }

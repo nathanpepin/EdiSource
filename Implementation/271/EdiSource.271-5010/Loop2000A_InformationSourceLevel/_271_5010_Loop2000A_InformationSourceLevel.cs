@@ -1,4 +1,4 @@
-using EdiSource._271_5010.Loop2000A_InformationSourceLevel.Loop2100A_InformationSourceName;
+using EdiSource._271_5010.Loop2000A_InformationSourceLevel.Loop2100A;
 using EdiSource._271_5010.Loop2000A_InformationSourceLevel.Segments;
 using EdiSource._271_5010.Loop2000B_InformationReceiverLevel;
 using EdiSource._271_5010.TransactionSet;
@@ -6,7 +6,7 @@ using EdiSource._271_5010.TransactionSet;
 namespace EdiSource._271_5010.Loop2000A_InformationSourceLevel;
 
 [LoopGenerator<_271_5010_EligibilityBenefitResponse, _271_5010_Loop2000A_InformationSourceLevel, _271_5010_Loop2000A_HL_InformationSourceLevel>]
-public partial class _271_5010_Loop2000A_InformationSourceLevel : IValidatable
+public sealed partial class _271_5010_Loop2000A_InformationSourceLevel : IValidatable
 {
     [SegmentHeader] public _271_5010_Loop2000A_HL_InformationSourceLevel HL_InformationSourceLevel { get; set; } = null!;
 

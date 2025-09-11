@@ -1,4 +1,6 @@
-namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Segments;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName;
+
+namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Segments;
 
 [SegmentGenerator<_271_5010_Loop2100D_DependentName>("INS")]
 public partial class _271_5010_Loop2100D_INS_DependentRelationship
@@ -12,7 +14,7 @@ public partial class _271_5010_Loop2100D_INS_DependentRelationship
     public string? ConsolidatedOmnibusBudgetReconciliationActCOBRAQualifyingEventCode { get => GetCompositeElement(7); set => SetCompositeElement(value, 7); }
     public string? EmploymentStatusCode { get => GetCompositeElement(8); set => SetCompositeElement(value, 8); }
     public string? StudentStatusCode { get => GetCompositeElement(9); set => SetCompositeElement(value, 9); }
-    public bool? HandicapIndicator { get => this.GetBool(10, "Y", falseValue: "N"); set => this.SetBool(value, "Y", "N", 10); }
+    public bool? HandicapIndicator { get => SegmentExtensions.GetBool(this, 10, "Y", falseValue: "N"); set => this.SetBool(value, "Y", "N", 10); }
     public string? DateTimePeriodFormatQualifier { get => GetCompositeElement(11); set => SetCompositeElement(value, 11); }
     public string? DateTimePeriod { get => GetCompositeElement(12); set => SetCompositeElement(value, 12); }
 }

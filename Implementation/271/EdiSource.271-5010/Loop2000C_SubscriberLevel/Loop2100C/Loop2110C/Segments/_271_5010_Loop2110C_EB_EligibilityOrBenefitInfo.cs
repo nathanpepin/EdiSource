@@ -1,7 +1,7 @@
-namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Loop2110C_SubscriberEligibilityOrBenefitInfo.Segments;
+namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C.Loop2110C.Segments;
 
-[SegmentGenerator<_271_5010_Loop2110C_SubscriberEligibilityOrBenefitInfo>("EB")]
-public partial class _271_5010_Loop2110C_EB_EligibilityOrBenefitInfo
+[SegmentGenerator<Loop2100C.Loop2110C._271_5010_Loop2110C_SubscriberEligibilityOrBenefitInfo>("EB")]
+public sealed partial class _271_5010_Loop2110C_EB_EligibilityOrBenefitInfo
 {
     public string? EligibilityOrBenefitInformationCode { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }
     public string? CoverageLevelCode { get => GetCompositeElement(2); set => SetCompositeElement(value, 2); }
@@ -14,10 +14,10 @@ public partial class _271_5010_Loop2110C_EB_EligibilityOrBenefitInfo
     public string? InsuranceTypeCode { get => GetCompositeElement(4); set => SetCompositeElement(value, 4); }
     public string? PlanCoverageDescription { get => GetCompositeElement(5); set => SetCompositeElement(value, 5); }
     public string? TimePeriodQualifier { get => GetCompositeElement(6); set => SetCompositeElement(value, 6); }
-    public decimal? MonetaryAmount { get => this.GetDecimal(7); set => this.SetDecimal(value, 7); }
-    public decimal? PercentageAsDecimal { get => this.GetDecimal(8); set => this.SetDecimal(value, 8); }
+    public decimal? MonetaryAmount { get => SegmentExtensions.GetDecimal(this, 7); set => this.SetDecimal(value, 7); }
+    public decimal? PercentageAsDecimal { get => SegmentExtensions.GetDecimal(this, 8); set => this.SetDecimal(value, 8); }
     public string? QuantityQualifier { get => GetCompositeElement(9); set => SetCompositeElement(value, 9); }
-    public decimal? Quantity { get => this.GetDecimal(10); set => this.SetDecimal(value, 10); }
+    public decimal? Quantity { get => SegmentExtensions.GetDecimal(this, 10); set => this.SetDecimal(value, 10); }
     public string? AuthorizationOrCertificationIndicator { get => this.GetCompositeElement(11); set => SetCompositeElement(value, 11); }
     public string? InPlanNetworkIndicator { get => GetCompositeElement(12); set => SetCompositeElement(value, 12); }
 

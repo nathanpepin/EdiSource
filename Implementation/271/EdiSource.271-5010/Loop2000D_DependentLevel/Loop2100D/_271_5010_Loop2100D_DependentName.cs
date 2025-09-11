@@ -1,7 +1,7 @@
-using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Loop2110D_DependentEligibilityOrBenefitInfo;
-using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Segments;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Loop2110D;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Segments;
 
-namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName;
+namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D;
 
 [LoopGenerator<_271_5010_Loop2000D_DependentLevel, _271_5010_Loop2100D_DependentName, _271_5010_Loop2100D_NM1_DependentName>]
 public partial class _271_5010_Loop2100D_DependentName : IValidatable
@@ -24,6 +24,6 @@ public partial class _271_5010_Loop2100D_DependentName : IValidatable
     public IEnumerable<ValidationMessage> Validate()
     {
         if (NM1_DependentName == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, "NM1 segment is required");
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, "NM1 segment is required");
     }
 }

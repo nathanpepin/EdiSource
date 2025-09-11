@@ -1,7 +1,7 @@
 namespace EdiSource._271_5010.Loop1000B_InformationReceiverName.Segments;
 
 [SegmentGenerator<_271_5010_Loop1000B_InformationReceiverName>("N4")]
-public partial class _271_5010_Loop1000B_N4_InformationReceiverGeographicLocation
+public sealed partial class _271_5010_Loop1000B_N4_InformationReceiverGeographicLocation
 {
     public string? CityName { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }
     public string? StateOrProvinceCode { get => GetCompositeElement(2); set => SetCompositeElement(value, 2); }

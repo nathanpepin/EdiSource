@@ -1,7 +1,7 @@
 namespace EdiSource._271_5010.Loop2000D_DependentLevel.Segments;
 
 [SegmentGenerator<_271_5010_Loop2000D_DependentLevel>("HL", null, null, "23")]
-public partial class _271_5010_Loop2000D_HL_DependentLevel
+public sealed partial class _271_5010_Loop2000D_HL_DependentLevel
 {
     public int? HierarchicalIdNumber { get => this.GetInt(1); set => this.SetInt(value, 1); }
     public int? HierarchicalParentIdNumber { get => this.GetInt(2); set => this.SetInt(value, 2); }

@@ -1,11 +1,9 @@
-using EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Loop2110C_SubscriberEligibilityOrBenefitInfo.Loop2120C_BenefitRelatedEntityGrouping
-    .Loop2120C_BenefitRelatedEntity.Segments;
+using EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C.Loop2110C.Loop2120C.Loop2120C.Segments;
 
-namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Loop2110C_SubscriberEligibilityOrBenefitInfo.
-    Loop2120C_BenefitRelatedEntityGrouping.Loop2120C_BenefitRelatedEntity;
+namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C.Loop2110C.Loop2120C.Loop2120C;
 
 [LoopGenerator<_271_5010_Loop2120C_BenefitRelatedEntityGrouping, _271_5010_Loop2120C_BenefitRelatedEntity, _271_5010_Loop2120C_NM1_BenefitRelatedEntityName>]
-public partial class _271_5010_Loop2120C_BenefitRelatedEntity : IValidatable
+public sealed partial class _271_5010_Loop2120C_BenefitRelatedEntity : IValidatable
 {
     [SegmentHeader] public _271_5010_Loop2120C_NM1_BenefitRelatedEntityName NM1_BenefitRelatedEntityName { get; set; } = null!;
 
@@ -17,6 +15,6 @@ public partial class _271_5010_Loop2120C_BenefitRelatedEntity : IValidatable
     public IEnumerable<ValidationMessage> Validate()
     {
         if (NM1_BenefitRelatedEntityName == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, "NM1 segment is required");
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, "NM1 segment is required");
     }
 }

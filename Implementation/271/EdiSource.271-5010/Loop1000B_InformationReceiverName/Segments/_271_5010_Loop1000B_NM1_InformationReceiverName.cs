@@ -1,7 +1,7 @@
 namespace EdiSource._271_5010.Loop1000B_InformationReceiverName.Segments;
 
 [SegmentGenerator<_271_5010_Loop1000B_InformationReceiverName>("NM1", $"1P{S}2B{S}36{S}80{S}FA{S}GP{S}P5{S}PR")]
-public partial class _271_5010_Loop1000B_NM1_InformationReceiverName
+public sealed partial class _271_5010_Loop1000B_NM1_InformationReceiverName
 {
     public string? EntityIdentifierCode { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }
     public string? EntityTypeQualifier { get => GetCompositeElement(2); set => SetCompositeElement(value, 2); }

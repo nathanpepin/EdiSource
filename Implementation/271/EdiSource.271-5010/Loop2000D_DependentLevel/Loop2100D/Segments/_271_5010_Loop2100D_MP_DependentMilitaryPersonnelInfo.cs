@@ -1,7 +1,9 @@
-namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Segments;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName;
+
+namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Segments;
 
 [SegmentGenerator<_271_5010_Loop2100D_DependentName>("MP")]
-public partial class _271_5010_Loop2100D_MP_DependentMilitaryPersonnelInfo
+public sealed partial class _271_5010_Loop2100D_MP_DependentMilitaryPersonnelInfo
 {
     public string? MilitaryServiceRankCode { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }
     public string? MilitaryServiceBranchCode { get => GetCompositeElement(2); set => SetCompositeElement(value, 2); }

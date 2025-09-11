@@ -1,10 +1,12 @@
-namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Segments;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName;
+
+namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Segments;
 
 [SegmentGenerator<_271_5010_Loop2100D_DependentName>("DMG")]
-public partial class _271_5010_Loop2100D_DMG_DependentDemographicInfo
+public sealed partial class _271_5010_Loop2100D_DMG_DependentDemographicInfo
 {
     public string? DateTimePeriodFormatQualifier { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }
-    public DateOnly? DateOfBirth { get => this.GetDateOnly(2); set => this.SetDateOnly(value, 2); }
+    public DateOnly? DateOfBirth { get => SegmentExtensions.GetDateOnly(this, 2); set => this.SetDateOnly(value, 2); }
     public string? GenderCode { get => GetCompositeElement(3); set => SetCompositeElement(value, 3); }
     public string? MaritalStatusCode { get => GetCompositeElement(4); set => SetCompositeElement(value, 4); }
 
@@ -15,7 +17,7 @@ public partial class _271_5010_Loop2100D_DMG_DependentDemographicInfo
     public string? CitizenshipStatusCode { get => GetCompositeElement(6); set => SetCompositeElement(value, 6); }
     public string? CountryCode { get => GetCompositeElement(7); set => SetCompositeElement(value, 7); }
     public string? BasisOfVerificationCode { get => GetCompositeElement(8); set => SetCompositeElement(value, 8); }
-    public decimal? Quantity { get => this.GetDecimal(9); set => this.SetDecimal(value, 9); }
+    public decimal? Quantity { get => SegmentExtensions.GetDecimal(this, 9); set => this.SetDecimal(value, 9); }
     public string? CodeListQualifierCode { get => GetCompositeElement(10); set => SetCompositeElement(value, 10); }
     public string? IndustryCode { get => GetCompositeElement(11); set => SetCompositeElement(value, 11); }
 }

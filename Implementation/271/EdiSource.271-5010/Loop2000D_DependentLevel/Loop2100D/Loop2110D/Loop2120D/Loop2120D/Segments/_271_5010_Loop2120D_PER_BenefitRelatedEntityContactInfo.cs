@@ -1,7 +1,8 @@
-namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName.Loop2110D_DependentEligibilityOrBenefitInfo.Loop2120D_BenefitRelatedEntityGrouping.Loop2120D_BenefitRelatedEntity.Segments;
+
+namespace EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D.Loop2110D.Loop2120D.Loop2120D.Segments;
 
 [SegmentGenerator<_271_5010_Loop2120D_BenefitRelatedEntity>("PER")]
-public partial class _271_5010_Loop2120D_PER_BenefitRelatedEntityContactInfo
+public sealed partial class _271_5010_Loop2120D_PER_BenefitRelatedEntityContactInfo
 {
     public string? ContactFunctionCode { get => GetCompositeElement(1); set => SetCompositeElement(value, 1); }
     public string? BenefitRelatedEntityContactName { get => GetCompositeElement(2); set => SetCompositeElement(value, 2); }

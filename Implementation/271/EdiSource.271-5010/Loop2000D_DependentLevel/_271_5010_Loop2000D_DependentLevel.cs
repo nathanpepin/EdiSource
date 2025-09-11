@@ -1,11 +1,11 @@
 using EdiSource._271_5010.Loop2000C_SubscriberLevel;
-using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D_DependentName;
+using EdiSource._271_5010.Loop2000D_DependentLevel.Loop2100D;
 using EdiSource._271_5010.Loop2000D_DependentLevel.Segments;
 
 namespace EdiSource._271_5010.Loop2000D_DependentLevel;
 
 [LoopGenerator<_271_5010_Loop2000C_SubscriberLevel, _271_5010_Loop2000D_DependentLevel, _271_5010_Loop2000D_HL_DependentLevel>]
-public partial class _271_5010_Loop2000D_DependentLevel : IValidatable
+public sealed partial class _271_5010_Loop2000D_DependentLevel : IValidatable
 {
     [SegmentHeader] public _271_5010_Loop2000D_HL_DependentLevel HL_DependentLevel { get; set; } = null!;
 

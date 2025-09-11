@@ -1,10 +1,10 @@
-using EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Loop2110C_SubscriberEligibilityOrBenefitInfo;
 using EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName.Segments;
+using EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C.Loop2110C;
 
-namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C_SubscriberName;
+namespace EdiSource._271_5010.Loop2000C_SubscriberLevel.Loop2100C;
 
 [LoopGenerator<_271_5010_Loop2000C_SubscriberLevel, _271_5010_Loop2100C_SubscriberName, _271_5010_Loop2100C_NM1_SubscriberName>]
-public partial class _271_5010_Loop2100C_SubscriberName : IValidatable
+public sealed partial class _271_5010_Loop2100C_SubscriberName : IValidatable
 {
     [SegmentHeader] public _271_5010_Loop2100C_NM1_SubscriberName NM1_SubscriberName { get; set; } = null!;
 
@@ -24,6 +24,6 @@ public partial class _271_5010_Loop2100C_SubscriberName : IValidatable
     public IEnumerable<ValidationMessage> Validate()
     {
         if (NM1_SubscriberName == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, "NM1 segment is required");
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, "NM1 segment is required");
     }
 }
