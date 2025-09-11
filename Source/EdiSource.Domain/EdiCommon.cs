@@ -15,9 +15,16 @@ public static class EdiCommon
     /// <returns>A task that represents the asynchronous parse operation. The task result contains the parsed object.</returns>
     public static async Task<(InterchangeEnvelope interchangeEnvelope, Separators separators)> ParseEdiEnvelope(StreamReader stream, CancellationToken cancellationToken = default)
     {
+        ValidateIsa(stream);
+
         var separators = await Separators.CreateFromISA(stream);
         var envelope = await new EdiParser<InterchangeEnvelope>().ParseEdi(stream, separators, cancellationToken);
         return (envelope, separators);
+    }
+
+    private static void ValidateIsa(StreamReader stream)
+    {
+
     }
 
     /// <summary>

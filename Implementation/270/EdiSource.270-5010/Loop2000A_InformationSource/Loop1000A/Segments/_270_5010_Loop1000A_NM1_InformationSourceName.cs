@@ -1,6 +1,6 @@
 namespace EdiSource._270_5010.Loop2000A_InformationSource.Loop1000A.Segments;
 
-[SegmentGenerator<_270_5010_Loop1000A_InformationSourceName>("NM1", "PR")]
+[SegmentGenerator<_270_5010_Loop1000A_InformationSourceName>("NM1", $"2B{S}36{S}GP{S}P5{S}PR")]
 public sealed partial class _270_5010_Loop1000A_NM1_InformationSourceName
 {
     public string? EntityIdentifierCode

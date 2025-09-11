@@ -27,18 +27,25 @@ public partial class Separators
     /// <returns></returns>
     public static Task<Separators> CreateFromISA(StreamReader streamReader)
     {
-        streamReader.BaseStream.Position = 3;
-        var dataElementSeparator = (char)streamReader.Peek();
-        streamReader.DiscardBufferedData();
+        if (streamReader.BaseStream.Length < 106)
+        {
+            throw new InvalidISAException("ISA is too short, must be at least 106 characters long.");
+        }
+        
+        streamReader.BaseStream.Position = 0;
+        Span<char> chars = stackalloc char[106];
+        streamReader.Read(chars);
 
-        streamReader.BaseStream.Position = 104;
-        var compositeElementSeparator = (char)streamReader.Peek();
+        if (chars[0] != 'I' || chars[1] != 'S' || chars[2] != 'A')
+        {
+            throw new InvalidISAException("Expected ISA segment, but none found.");
+        }
+        
+        var dataElementSeparator = chars[3];
+        var compositeElementSeparator = chars[104];
+        var segmentSeparator = chars[105];
+        
         streamReader.DiscardBufferedData();
-
-        streamReader.BaseStream.Position = 105;
-        var segmentSeparator = (char)streamReader.Peek();
-        streamReader.DiscardBufferedData();
-
         streamReader.BaseStream.Position = 0;
 
         return Task.FromResult(new Separators(segmentSeparator, dataElementSeparator, compositeElementSeparator));
