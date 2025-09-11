@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
-        <AssemblyName>EdiSource._271_5010</AssemblyName>
-        <RootNamespace>EdiSource._271_5010</RootNamespace>
+        <AssemblyName>EdiSource._270_5010</AssemblyName>
+        <RootNamespace>EdiSource._270_5010</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
