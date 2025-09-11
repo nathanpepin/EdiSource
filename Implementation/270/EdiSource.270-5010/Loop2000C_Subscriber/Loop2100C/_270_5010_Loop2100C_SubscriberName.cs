@@ -1,8 +1,9 @@
-using EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Loop2100C.Segments;
 
-namespace EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Loop2100C;
+using EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C.Segments;
 
-[LoopGenerator<_270_5010_Loop2000C_Subscriber, _270_5010_Loop2100C_SubscriberName, _270_5010_Loop2100C_NM1_SubscriberName>]
+namespace EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C;
+
+[LoopGenerator<_270_5010.Loop2000C_Subscriber._270_5010_Loop2000C_Subscriber, _270_5010_Loop2100C_SubscriberName, _270_5010_Loop2100C_NM1_SubscriberName>]
 public sealed partial class _270_5010_Loop2100C_SubscriberName : IValidatable
 {
     [SegmentHeader] public _270_5010_Loop2100C_NM1_SubscriberName NM1_SubscriberName { get; set; } = null!;
@@ -26,27 +27,27 @@ public sealed partial class _270_5010_Loop2100C_SubscriberName : IValidatable
     public IEnumerable<ValidationMessage> Validate()
     {
         if (NM1_SubscriberName == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, 
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, 
                 "NM1 Subscriber Name segment is required");
                 
         // Business validation: Subscriber must have entity identifier IL
         if (NM1_SubscriberName?.EntityIdentifierCode != "IL")
-            yield return ValidationFactory.Create(this, ValidationSeverity.Error,
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Error,
                 "Subscriber must have Entity Identifier Code 'IL' (Insured/Subscriber)");
                 
         // Business rule: N4 should be present when N3 is present
         if (N3_Address != null && N4_CityStateZIP == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Warning,
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Warning,
                 "N4 City/State/ZIP segment is recommended when N3 Address segment is present");
                 
         // Business validation: REF segment limit (max 9)
         if (REF_AdditionalIDs.Count > 9)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Error,
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Error,
                 "Maximum of 9 REF Additional ID segments allowed");
                 
         // Business validation: DTP segment limit (max 2)
         if (DTP_Dates.Count > 2)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Error,
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Error,
                 "Maximum of 2 DTP Date segments allowed");
     }
 }

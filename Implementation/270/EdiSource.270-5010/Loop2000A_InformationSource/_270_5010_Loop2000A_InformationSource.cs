@@ -1,7 +1,8 @@
-using EdiSource._270_5010.TransactionSet.Loop2000A_InformationSource.Loop1000A;
-using EdiSource._270_5010.TransactionSet.Loop2000A_InformationSource.Segments;
 
-namespace EdiSource._270_5010.TransactionSet.Loop2000A_InformationSource;
+using EdiSource._270_5010.Loop2000A_InformationSource.Loop1000A;
+using EdiSource._270_5010.Loop2000A_InformationSource.Segments;
+
+namespace EdiSource._270_5010.Loop2000A_InformationSource;
 
 [LoopGenerator<_270_5010_EligibilityBenefitInquiry, _270_5010_Loop2000A_InformationSource, _270_5010_Loop2000A_HL_InformationSource>]
 public sealed partial class _270_5010_Loop2000A_InformationSource : IValidatable

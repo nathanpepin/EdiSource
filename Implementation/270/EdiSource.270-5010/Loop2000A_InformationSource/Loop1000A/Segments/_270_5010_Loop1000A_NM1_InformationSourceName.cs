@@ -1,4 +1,5 @@
-namespace EdiSource._270_5010.TransactionSet.Loop2000A_InformationSource.Loop1000A.Segments;
+
+namespace EdiSource._270_5010.Loop2000A_InformationSource.Loop1000A.Segments;
 
 [SegmentGenerator<_270_5010_Loop1000A_InformationSourceName>("NM1", "PR")]
 public sealed partial class _270_5010_Loop1000A_NM1_InformationSourceName

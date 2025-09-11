@@ -1,6 +1,6 @@
 namespace EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Segments;
 
-[SegmentGenerator<_270_5010_Loop2000C_Subscriber>("HL", null, null, "22")]
+[SegmentGenerator<_270_5010.Loop2000C_Subscriber._270_5010_Loop2000C_Subscriber>("HL", null, null, "22")]
 public sealed partial class _270_5010_Loop2000C_HL_Subscriber
 {
     public int? HierarchicalIdNumber

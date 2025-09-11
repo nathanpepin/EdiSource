@@ -1,4 +1,5 @@
-namespace EdiSource._270_5010.TransactionSet.Loop2000B_InformationReceiver.Loop1000B.Segments;
+
+namespace EdiSource._270_5010.Loop2000B_InformationReceiver.Loop1000B.Segments;
 
 [SegmentGenerator<_270_5010_Loop1000B_InformationReceiverName>("NM1", $"1P{S}2B{S}36{S}80{S}FA{S}GP{S}P5{S}PR")]
 public sealed partial class _270_5010_Loop1000B_NM1_InformationReceiverName

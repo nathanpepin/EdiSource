@@ -1,4 +1,4 @@
-namespace EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Loop2100C.Segments;
+namespace EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C.Segments;
 
 [SegmentGenerator<_270_5010_Loop2100C_SubscriberName>("DMG")]
 public sealed partial class _270_5010_Loop2100C_DMG_Demographics
@@ -11,7 +11,7 @@ public sealed partial class _270_5010_Loop2100C_DMG_Demographics
     
     public DateOnly? DateOfBirth
     {
-        get => this.GetDateOnly(2);
+        get => SegmentExtensions.GetDateOnly(this, 2);
         set => this.SetDateOnly(value, 2);
     }
     

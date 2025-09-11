@@ -1,7 +1,8 @@
-using EdiSource._270_5010.TransactionSet.Loop2000B_InformationReceiver.Loop1000B;
-using EdiSource._270_5010.TransactionSet.Loop2000B_InformationReceiver.Segments;
 
-namespace EdiSource._270_5010.TransactionSet.Loop2000B_InformationReceiver;
+using EdiSource._270_5010.Loop2000B_InformationReceiver.Loop1000B;
+using EdiSource._270_5010.Loop2000B_InformationReceiver.Segments;
+
+namespace EdiSource._270_5010.Loop2000B_InformationReceiver;
 
 [LoopGenerator<_270_5010_EligibilityBenefitInquiry, _270_5010_Loop2000B_InformationReceiver, _270_5010_Loop2000B_HL_InformationReceiver>]
 public sealed partial class _270_5010_Loop2000B_InformationReceiver : IValidatable
@@ -13,12 +14,12 @@ public sealed partial class _270_5010_Loop2000B_InformationReceiver : IValidatab
     public IEnumerable<ValidationMessage> Validate()
     {
         if (HL_InformationReceiver == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, 
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, 
                 "HL Information Receiver segment is required");
                 
         // Business validation: Must have Information Receiver Name loop
         if (Loop1000B_InformationReceiverName == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical,
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical,
                 "Information Receiver Name loop (1000B) is required");
     }
 }

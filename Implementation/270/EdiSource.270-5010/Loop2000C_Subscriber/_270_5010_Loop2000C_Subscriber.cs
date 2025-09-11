@@ -1,7 +1,7 @@
-using EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Loop2100C;
+using EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C;
 using EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Segments;
 
-namespace EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber;
+namespace EdiSource._270_5010.Loop2000C_Subscriber;
 
 [LoopGenerator<_270_5010_EligibilityBenefitInquiry, _270_5010_Loop2000C_Subscriber, _270_5010_Loop2000C_HL_Subscriber>]
 public sealed partial class _270_5010_Loop2000C_Subscriber : IValidatable
@@ -19,17 +19,17 @@ public sealed partial class _270_5010_Loop2000C_Subscriber : IValidatable
     public IEnumerable<ValidationMessage> Validate()
     {
         if (HL_Subscriber == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical, 
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical, 
                 "HL Subscriber segment is required");
                 
         // Business validation: Must have subscriber name loop
         if (Loop2100C_SubscriberName == null)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Critical,
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Critical,
                 "Subscriber Name loop (2100C) is required");
                 
         // Business validation: TRN segment limit
         if (TRN_TraceNumbers.Count > 2)
-            yield return ValidationFactory.Create(this, ValidationSeverity.Error,
+            yield return ValidationFactory.Create((ILoop)this, ValidationSeverity.Error,
                 "Maximum of 2 TRN Trace Number segments allowed");
     }
 }

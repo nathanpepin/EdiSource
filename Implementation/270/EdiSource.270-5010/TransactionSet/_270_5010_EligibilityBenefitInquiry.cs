@@ -1,6 +1,7 @@
-using EdiSource._270_5010.TransactionSet.Loop2000A_InformationSource;
-using EdiSource._270_5010.TransactionSet.Loop2000B_InformationReceiver;
-using EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber;
+
+using EdiSource._270_5010.Loop2000A_InformationSource;
+using EdiSource._270_5010.Loop2000B_InformationReceiver;
+using EdiSource._270_5010.Loop2000C_Subscriber;
 
 namespace EdiSource._270_5010.TransactionSet;
 

@@ -1,4 +1,4 @@
-namespace EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Loop2100C.Segments;
+namespace EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C.Segments;
 
 [SegmentGenerator<_270_5010_Loop2100C_SubscriberName>("REF")]
 public sealed partial class _270_5010_Loop2100C_REF_AdditionalID

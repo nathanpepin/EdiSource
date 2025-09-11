@@ -1,4 +1,4 @@
-namespace EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Loop2100C.Segments;
+namespace EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C.Segments;
 
 [SegmentGenerator<_270_5010_Loop2100C_SubscriberName>("INS")]
 public sealed partial class _270_5010_Loop2100C_INS_MultipleBirthSequence
@@ -65,7 +65,7 @@ public sealed partial class _270_5010_Loop2100C_INS_MultipleBirthSequence
     
     public DateOnly? DateOfDeath
     {
-        get => this.GetDateOnly(11);
+        get => SegmentExtensions.GetDateOnly(this, 11);
         set => this.SetDateOnly(value, 11);
     }
     
@@ -77,7 +77,7 @@ public sealed partial class _270_5010_Loop2100C_INS_MultipleBirthSequence
     
     public int? BirthSequenceNumber
     {
-        get => this.GetInt(17);
+        get => SegmentExtensions.GetInt(this, 17);
         set => this.SetInt(value, 17);
     }
 }
