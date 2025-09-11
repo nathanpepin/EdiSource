@@ -11,7 +11,7 @@ public sealed partial class _270_5010_Loop2110C_EligibilityBenefitInquiry : IVal
 
     [Segment] public _270_5010_Loop2110C_AMT_SpendDownTotalBilled? AMT_SpendDownTotalBilled { get; set; }
 
-    [Segment] public _270_5010_Loop2110C_VEH_AdditionalInquiry? VEH_AdditionalInquiry { get; set; }
+    [Segment] public _270_5010_Loop2110C_III_AdditionalInquiry? III_AdditionalInquiry { get; set; }
 
     [Segment] public _270_5010_Loop2110C_REF_AdditionalInfo? REF_AdditionalInfo { get; set; }
 
