@@ -6,8 +6,9 @@ global using EdiSource.Domain.Loop;
 global using EdiSource.Domain.Segments;
 global using System.Collections.Generic;
 global using static EdiSource.Domain.Identifiers.EdiId;
+global using EdiSource.Domain.Segments.Extensions;
+
 
 // Import the transaction set for cross-references
 global using EdiSource._270_5010.TransactionSet;
 global using EdiSource._270_5010.TransactionSet.Segments;
-global using EdiSource.Domain.Segments.Extensions;
