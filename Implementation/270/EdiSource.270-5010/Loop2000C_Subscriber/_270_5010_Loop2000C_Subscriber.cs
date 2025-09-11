@@ -1,4 +1,3 @@
-
 using EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C;
 using EdiSource._270_5010.Loop2000C_Subscriber.Segments;
 

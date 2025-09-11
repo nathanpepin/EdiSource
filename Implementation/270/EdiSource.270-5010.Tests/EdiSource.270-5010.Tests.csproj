@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EdiSource.270-5010\EdiSource.270-5010.csproj" />
+        <ProjectReference Include="..\EdiSource.270-5010\EdiSource.270-5010.csproj"/>
     </ItemGroup>
 
 </Project>

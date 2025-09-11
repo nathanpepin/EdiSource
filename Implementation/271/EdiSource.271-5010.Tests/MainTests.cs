@@ -1,7 +1,5 @@
-﻿using EdiSource._271_5010.Loop2000A_InformationSourceLevel;
-using EdiSource._271_5010.TransactionSet;
+﻿using EdiSource._271_5010.TransactionSet;
 using EdiSource.Domain;
-using EdiSource.Domain.Loop.Extensions;
 using EdiSource.Domain.Standard.Loops.ISA;
 using Xunit.Abstractions;
 
@@ -48,10 +46,7 @@ public sealed class MainTests(ITestOutputHelper testOutputHelper)
 
         // 2. Parse the EDI content into an interchange envelope
         testOutputHelper.WriteLine("Parsing 271 EDI content...");
-        var (envelope, separators) = await EdiCommon.ParseEdiEnvelope(ediContent);
-
-        var item = envelope.FindEdiElement<_271_5010_Loop2000A_InformationSourceLevel>()
-            [0];
+        var (envelope, _) = await EdiCommon.ParseEdiEnvelope(ediContent);
 
         // 3. Write the interchange envelope to a string
         testOutputHelper.WriteLine("Writing 271 EDI content to string...");
