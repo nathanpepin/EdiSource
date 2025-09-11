@@ -1,6 +1,4 @@
-using EdiSource._270_5010.Loop2000C_Subscriber;
-
-namespace EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Segments;
+namespace EdiSource._270_5010.Loop2000C_Subscriber.Segments;
 
 [SegmentGenerator<_270_5010_Loop2000C_Subscriber>("TRN")]
 public sealed partial class _270_5010_Loop2000C_TRN_TraceNumber

@@ -1,5 +1,6 @@
+
 using EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C;
-using EdiSource._270_5010.TransactionSet.Loop2000C_Subscriber.Segments;
+using EdiSource._270_5010.Loop2000C_Subscriber.Segments;
 
 namespace EdiSource._270_5010.Loop2000C_Subscriber;
 
