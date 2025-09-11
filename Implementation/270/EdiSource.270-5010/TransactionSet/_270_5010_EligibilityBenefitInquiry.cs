@@ -1,3 +1,4 @@
+using EdiSource._270_5010.TransactionSet.Loop2000A_InformationSource;
 
 namespace EdiSource._270_5010.TransactionSet;
 
@@ -6,10 +7,9 @@ public sealed partial class _270_5010_EligibilityBenefitInquiry : IValidatable, 
 {
     [SegmentHeader] public _270_5010_ST_TransactionSetHeader ST_TransactionSetHeader { get; set; } = null!;
     
-    public _270_5010_BHT_BeginningHierarchicalTransaction? BHT_BeginningHierarchicalTransaction { get; set; }
+    [Segment] public _270_5010_BHT_BeginningHierarchicalTransaction? BHT_BeginningHierarchicalTransaction { get; set; }
     
-    // Note: Loop properties will be added in subsequent phases
-    // [LoopList] public LoopList<_270_5010_Loop2000A_InformationSource> Loop2000A_InformationSources { get; set; } = [];
+    [LoopList] public LoopList<_270_5010_Loop2000A_InformationSource> Loop2000A_InformationSources { get; set; } = [];
     // [LoopList] public LoopList<_270_5010_Loop2000B_InformationReceiver> Loop2000B_InformationReceivers { get; set; } = [];
     // [LoopList] public LoopList<_270_5010_Loop2000C_Subscriber> Loop2000C_Subscribers { get; set; } = [];
     

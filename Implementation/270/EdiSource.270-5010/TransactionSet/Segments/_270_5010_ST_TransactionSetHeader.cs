@@ -1,5 +1,3 @@
-
-
 namespace EdiSource._270_5010.TransactionSet.Segments;
 
 [SegmentGenerator<_270_5010_EligibilityBenefitInquiry>("ST", "270", null, "005010X279A1")]
