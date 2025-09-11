@@ -1,7 +1,7 @@
-namespace EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C.Loop2110C.Segments;
+namespace EdiSource._270_5010.Loop2000D_Dependent.Loop2100D.Loop2110D.Segments;
 
-[SegmentGenerator<_270_5010_Loop2110C_EligibilityBenefitInquiry>("REF")]
-public sealed partial class _270_5010_Loop2110C_REF_AdditionalInfo
+[SegmentGenerator<_270_5010_Loop2110D_DependentEligibilityBenefitInquiry>("REF")]
+public sealed partial class _270_5010_Loop2110D_REF_DependentAdditionalInfo
 {
     public string? ReferenceIdentificationQualifier
     {

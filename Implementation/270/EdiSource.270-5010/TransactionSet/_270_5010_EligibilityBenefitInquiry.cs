@@ -1,6 +1,7 @@
 using EdiSource._270_5010.Loop2000A_InformationSource;
 using EdiSource._270_5010.Loop2000B_InformationReceiver;
 using EdiSource._270_5010.Loop2000C_Subscriber;
+using EdiSource._270_5010.Loop2000D_Dependent;
 
 namespace EdiSource._270_5010.TransactionSet;
 
@@ -19,6 +20,9 @@ public sealed partial class _270_5010_EligibilityBenefitInquiry : IValidatable, 
 
     // Subscriber levels (patients/members)
     [LoopList] public LoopList<_270_5010_Loop2000C_Subscriber> Loop2000C_Subscribers { get; set; } = [];
+
+    // Subscriber levels (dependents)
+    [LoopList] public LoopList<_270_5010_Loop2000D_Dependent> Loop2000D_Dependents { get; set; } = [];
 
     [SegmentFooter] public _270_5010_SE_TransactionSetTrailer SE_TransactionSetTrailer { get; set; } = null!;
 

@@ -8,7 +8,7 @@ public sealed partial class _270_5010_Loop2110C_III_AdditionalInquiry
         get => GetCompositeElement(1);
         set => SetCompositeElement(value, 1);
     }
-    
+
     public string? IndustryCode
     {
         get => GetCompositeElement(2);

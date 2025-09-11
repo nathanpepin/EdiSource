@@ -8,13 +8,13 @@ public sealed partial class _270_5010_Loop2110C_DTP_EligibilityBenefitDate
         get => GetCompositeElement(1);
         set => SetCompositeElement(value, 1);
     }
-    
+
     public string? DateTimePeriodFormatQualifier
     {
         get => GetCompositeElement(2);
         set => SetCompositeElement(value, 2);
     }
-    
+
     public DateOnly? DateTimePeriod
     {
         get => this.GetDateOnly(3);

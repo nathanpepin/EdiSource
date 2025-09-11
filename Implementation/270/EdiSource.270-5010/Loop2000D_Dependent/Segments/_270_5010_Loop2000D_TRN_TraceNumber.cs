@@ -1,27 +1,27 @@
-namespace EdiSource._270_5010.Loop2000C_Subscriber.Loop2100C.Loop2110C.Segments;
+namespace EdiSource._270_5010.Loop2000D_Dependent.Segments;
 
-[SegmentGenerator<_270_5010_Loop2110C_EligibilityBenefitInquiry>("REF")]
-public sealed partial class _270_5010_Loop2110C_REF_AdditionalInfo
+[SegmentGenerator<_270_5010_Loop2000D_Dependent>("TRN")]
+public sealed partial class _270_5010_Loop2000D_TRN_TraceNumber
 {
-    public string? ReferenceIdentificationQualifier
+    public string? TraceTypeCode
     {
         get => GetCompositeElement(1);
         set => SetCompositeElement(value, 1);
     }
 
-    public string? ReferenceIdentification
+    public string? DependentTraceNumber
     {
         get => GetCompositeElement(2);
         set => SetCompositeElement(value, 2);
     }
 
-    public string? Description
+    public string? TraceAssigningEntityIdentifier
     {
         get => GetCompositeElement(3);
         set => SetCompositeElement(value, 3);
     }
 
-    public string? ReferenceIdentifier
+    public string? TraceAssigningEntityAdditionalIdentifier
     {
         get => GetCompositeElement(4);
         set => SetCompositeElement(value, 4);
