@@ -3,7 +3,7 @@ namespace EdiSource.Domain.Segments;
 /// <summary>
 ///     A basic implementation of Segment
 /// </summary>
-public partial class Segment : IEdi
+public partial class Segment : IEdi, ISegment
 {
     private static readonly ConcurrentDictionary<Type, Func<EdiId?>> EdiIdGetters = new();
 
