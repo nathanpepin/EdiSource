@@ -56,7 +56,7 @@ public class LoopGeneratorTests
     }
 
     [Fact]
-    public Task IsTranscationSet()
+    public Task IsTransactionSet()
     {
         var driver = TestHelperFunctions.Verify<LoopGen.LoopGenerator>(Source2);
         return Verifier.Verify(driver, TestHelperFunctions.Settings.Value);

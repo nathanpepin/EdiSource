@@ -5,7 +5,11 @@ public partial class Separators
     /// <summary>
     ///     The minimum length of an ISA segment (106 characters: ISA + 16 data elements + separators).
     /// </summary>
-    private const int IsaSegmentLength = 106;
+    /// <remarks>
+    ///     Exposed internally so that other classes (e.g., EdiCommon) can reuse
+    ///     the same constant instead of duplicating the magic number.
+    /// </remarks>
+    internal const int IsaSegmentLength = 106;
 
     /// <summary>
     ///     Position of the data element separator within the ISA segment (immediately after "ISA").

@@ -12,8 +12,8 @@ public class REF : Segment, IValidatable, ISourceGeneratorValidatable
 
     public string? E02Identification
     {
-        get => GetCompositeElementOrNull(2, 2);
-        set => value?.Do(x => SetCompositeElement(x, 1));
+        get => GetCompositeElementOrNull(2);
+        set => value?.Do(x => SetCompositeElement(x, 2));
     }
 
     public Element? E03Description
@@ -27,7 +27,6 @@ public class REF : Segment, IValidatable, ISourceGeneratorValidatable
         new RequiredDataElementsAttribute(ValidationSeverity.Critical, [0, 1]),
         new IsOneOfValuesAttribute(ValidationSeverity.Critical, 0, 0, "REF"),
         new ElementLengthAttribute(ValidationSeverity.Critical, 1, 80),
-        new ElementLengthAttribute(ValidationSeverity.Critical, 2, 80),
         new ElementLengthAttribute(ValidationSeverity.Critical, 2, 80),
         new ElementLengthAttribute(ValidationSeverity.Critical, 3, 80)
     ];

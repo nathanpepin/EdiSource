@@ -43,6 +43,6 @@ public class DTP : Segment, IValidatable, ISourceGeneratorValidatable
 
     public IEnumerable<ValidationMessage> Validate()
     {
-        return [ValidationFactory.CreateCritical(this, "Fuck")];
+        return [];
     }
 }

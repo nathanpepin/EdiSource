@@ -30,7 +30,7 @@ public interface IEdiReader
     /// <param name="ediString"></param>
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
     /// <returns></returns>
-    IEnumerable<Segment> ReadEdSegments(string ediString, Separators? separators = null);
+    IEnumerable<Segment> ReadEdiSegments(string ediString, Separators? separators = null);
 
     /// <summary>
     ///     Converts a stream into a list of segments.
@@ -38,7 +38,7 @@ public interface IEdiReader
     /// <param name="streamReader"></param>
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
     /// <returns></returns>
-    IEnumerable<Segment> ReadEdSegments(StreamReader streamReader, Separators? separators = null);
+    IEnumerable<Segment> ReadEdiSegments(StreamReader streamReader, Separators? separators = null);
 
     /// <summary>
     ///     Converts a stream into a list of segments.
@@ -47,7 +47,7 @@ public interface IEdiReader
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<List<Segment>> ReadEdSegmentsAsync(StreamReader streamReader, Separators? separators = null,
+    Task<List<Segment>> ReadEdiSegmentsAsync(StreamReader streamReader, Separators? separators = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -58,7 +58,7 @@ public interface IEdiReader
     /// <param name="separators">If null, Separators.DefaultSeparators will be used</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task ReadEdSegmentsIntoChannelAsync(StreamReader streamReader,
+    Task ReadEdiSegmentsIntoChannelAsync(StreamReader streamReader,
         ChannelWriter<Segment> channelWriter,
         Separators? separators = null,
         CancellationToken cancellationToken = default);

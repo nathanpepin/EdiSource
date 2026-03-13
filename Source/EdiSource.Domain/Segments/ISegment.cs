@@ -47,8 +47,8 @@ public interface ISegment
     bool CompositeElementNotNullOrEmpty(int dataElementIndex, int compositeElementIndex = 0);
 
     /// <summary>Copies all elements from another segment into this one.</summary>
-    void Assign(Segment other, Separators? separators = null, ILoop? parent = null);
+    void Assign(Segment other, Separators? separators = null);
 
     /// <summary>Creates a deep copy of this segment.</summary>
-    Segment Copy(Separators? separators = null, ILoop? parent = null);
+    Segment Copy(Separators? separators = null);
 }

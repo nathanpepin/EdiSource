@@ -117,9 +117,10 @@ public static class SegmentLoopFactory<T, TLoop>
                             segmentTag == receivedTag));
                     }
                 }
-                catch
+                catch (Exception)
                 {
-                    // Skip segments we can't analyze
+                    // Skip segments whose EdiId cannot be resolved via reflection
+                    // (e.g., types with unsatisfied static dependencies).
                 }
             }
 

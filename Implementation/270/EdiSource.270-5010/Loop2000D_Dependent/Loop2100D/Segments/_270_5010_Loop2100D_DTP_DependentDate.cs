@@ -15,9 +15,9 @@ public sealed partial class _270_5010_Loop2100D_DTP_DependentDate
         set => SetCompositeElement(value, 2);
     }
 
-    public string? DateTimePeriod
+    public DateOnly? DateTimePeriod
     {
-        get => GetCompositeElement(3);
-        set => SetCompositeElement(value, 3);
+        get => this.GetDateOnly(3);
+        set => this.SetDateOnly(value, 3);
     }
 }

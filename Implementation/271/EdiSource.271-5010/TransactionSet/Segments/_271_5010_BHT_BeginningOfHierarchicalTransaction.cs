@@ -21,10 +21,10 @@ public sealed partial class _271_5010_BHT_BeginningOfHierarchicalTransaction
         set => SetCompositeElement(value, 3);
     }
 
-    public DateTime? TransactionSetCreationDate
+    public DateOnly? TransactionSetCreationDate
     {
-        get => this.GetDate(4);
-        set => this.SetDate(value, 4);
+        get => this.GetDateOnly(4);
+        set => this.SetDateOnly(value, 4);
     }
 
     public TimeOnly? TransactionSetCreationTime

@@ -20,7 +20,7 @@ public sealed class EdiParser<T> : IEdiParser<T> where T : class, ILoopInitializ
 
         await Task.WhenAll(
             new EdiReader.EdiReader()
-                .ReadEdSegmentsIntoChannelAsync(streamReader, channel.Writer, separators, cancellationToken),
+                .ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer, separators, cancellationToken),
             loopInitializer);
 
         return await loopInitializer;

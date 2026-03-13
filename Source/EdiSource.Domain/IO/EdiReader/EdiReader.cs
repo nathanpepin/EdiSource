@@ -11,11 +11,11 @@ public sealed class EdiReader : IEdiReader
         return ReadBasicEdi(streamReader);
     }
 
-    public IEnumerable<Segment> ReadEdSegments(string ediString, Separators? separators = null)
+    public IEnumerable<Segment> ReadEdiSegments(string ediString, Separators? separators = null)
     {
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(ediString));
         using var streamReader = new StreamReader(memoryStream);
-        return ReadEdSegments(streamReader, separators ?? Separators.DefaultSeparators);
+        return ReadEdiSegments(streamReader, separators ?? Separators.DefaultSeparators);
     }
 
     public BasicEdi ReadBasicEdi(StreamReader streamReader)
@@ -23,20 +23,20 @@ public sealed class EdiReader : IEdiReader
         return ReadBasicEdiAsync(streamReader).GetAwaiter().GetResult();
     }
 
-    public IEnumerable<Segment> ReadEdSegments(StreamReader streamReader, Separators? separators = null)
+    public IEnumerable<Segment> ReadEdiSegments(StreamReader streamReader, Separators? separators = null)
     {
-        return ReadEdSegmentsAsync(streamReader, separators ?? Separators.DefaultSeparators).GetAwaiter().GetResult();
+        return ReadEdiSegmentsAsync(streamReader, separators ?? Separators.DefaultSeparators).GetAwaiter().GetResult();
     }
 
     public async Task<BasicEdi> ReadBasicEdiAsync(StreamReader streamReader,
         CancellationToken cancellationToken = default)
     {
         var separators = await Separators.CreateFromISA(streamReader);
-        var segments = await ReadEdSegmentsAsync(streamReader, separators, cancellationToken);
+        var segments = await ReadEdiSegmentsAsync(streamReader, separators, cancellationToken);
         return new BasicEdi(segments.ToArray(), separators);
     }
 
-    public async Task<List<Segment>> ReadEdSegmentsAsync(StreamReader streamReader,
+    public async Task<List<Segment>> ReadEdiSegmentsAsync(StreamReader streamReader,
         Separators? separators = null,
         CancellationToken cancellationToken = default)
     {
@@ -45,7 +45,7 @@ public sealed class EdiReader : IEdiReader
         List<Segment> segments = [];
 
         var producerTask = Task.Run(
-            async () => await ReadEdSegmentsIntoChannelAsync(streamReader, channel.Writer, separators,
+            async () => await ReadEdiSegmentsIntoChannelAsync(streamReader, channel.Writer, separators,
                 cancellationToken), cancellationToken);
 
         await foreach (var segment in channel.Reader.ReadAllAsync(cancellationToken)) segments.Add(segment);
@@ -55,7 +55,7 @@ public sealed class EdiReader : IEdiReader
         return segments;
     }
 
-    public async Task ReadEdSegmentsIntoChannelAsync(StreamReader streamReader,
+    public async Task ReadEdiSegmentsIntoChannelAsync(StreamReader streamReader,
         ChannelWriter<Segment> channelWriter,
         Separators? separators = null,
         CancellationToken cancellationToken = default)
@@ -77,9 +77,9 @@ public sealed class EdiReader : IEdiReader
 
             while (streamReader.Peek() > 0)
             {
-                await streamReader.ReadAsync(buffer, 0, BufferSize);
+                var charsRead = await streamReader.ReadAsync(buffer, 0, BufferSize);
 
-                for (var i = 0; i < BufferSize; i++)
+                for (var i = 0; i < charsRead; i++)
                 {
                     var c = buffer[i];
                     if (c is '\r' or '\n' or '\0') continue;

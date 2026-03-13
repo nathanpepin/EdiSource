@@ -33,7 +33,7 @@ public sealed partial class Separators
     /// <value>
     ///     The character used to separate segments from other segments. Default value is '~'.
     /// </value>
-    public char SegmentSeparator { get; set; } = '~';
+    public char SegmentSeparator { get; init; } = '~';
 
     /// <summary>
     ///     Gets or sets the character used to separate individual data elements within a segment.
@@ -41,7 +41,7 @@ public sealed partial class Separators
     /// <value>
     ///     The character used to separate data elements within a segment element. Default value is '*'.
     /// </value>
-    public char DataElementSeparator { get; set; } = '*';
+    public char DataElementSeparator { get; init; } = '*';
 
     /// <summary>
     ///     Gets or sets the character used to separate composite elements within a data element.
@@ -49,5 +49,5 @@ public sealed partial class Separators
     /// <value>
     ///     The character used to separate composite elements within a data element. Default value is ':'.
     /// </value>
-    public char CompositeElementSeparator { get; set; } = ':';
+    public char CompositeElementSeparator { get; init; } = ':';
 }

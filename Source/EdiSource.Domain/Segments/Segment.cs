@@ -55,21 +55,21 @@ public partial class Segment : IEdi, ISegment
         }
     }
 
-    public Segment(Segment segment, ILoop? parent = null)
+    public Segment(Segment segment)
     {
         Separators = segment.Separators;
 
-        var copy = segment.Copy(Separators, parent);
+        var copy = segment.Copy(Separators);
         Elements = copy.Elements;
     }
 
-    public Segment(IEnumerable<Element>? elements = null, Separators? separators = null, ILoop? parent = null)
+    public Segment(IEnumerable<Element>? elements = null, Separators? separators = null)
     {
         Elements = elements?.ToList() ?? [];
         Separators = separators ?? Separators.DefaultSeparators;
     }
 
-    public Segment(string segmentText, Separators? separators = null, ILoop? parent = null)
+    public Segment(string segmentText, Separators? separators = null)
     {
         Elements = ReadElements(segmentText, separators).ToList();
         Separators = separators ?? Separators.DefaultSeparators;
@@ -211,7 +211,7 @@ public partial class Segment : IEdi, ISegment
         return this.WriteToStringBuilder(separators: separators).ToString();
     }
 
-    public void Assign(Segment other, Separators? separators = null, ILoop? parent = null)
+    public void Assign(Segment other, Separators? separators = null)
     {
         Elements = other.Elements.Select(e => new Element(e)).ToList();
 
@@ -219,7 +219,7 @@ public partial class Segment : IEdi, ISegment
             Separators = separators;
     }
 
-    public Segment Copy(Separators? separators = null, ILoop? parent = null)
+    public Segment Copy(Separators? separators = null)
     {
         var elements = Elements.Select(e => new Element(e)).ToList();
         return new Segment(elements, separators ?? Separators);

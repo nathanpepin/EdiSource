@@ -20,7 +20,7 @@ internal static class GeneralExtensions
 
     public static T DoIf<T>(this T it, Action<T> action, bool condition)
     {
-        if (condition) return it;
+        if (!condition) return it;
 
         action(it);
         return it;

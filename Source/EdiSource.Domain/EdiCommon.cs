@@ -29,8 +29,8 @@ public static class EdiCommon
         if (!stream.BaseStream.CanSeek)
             throw new InvalidISAException("Stream must be seekable to read ISA segment.");
 
-        if (stream.BaseStream.Length < 106)
-            throw new InvalidISAException("ISA is too short, must be at least 106 characters long.");
+        if (stream.BaseStream.Length < Separators.IsaSegmentLength)
+            throw new InvalidISAException($"ISA is too short, must be at least {Separators.IsaSegmentLength} characters long.");
 
         stream.BaseStream.Position = 0;
         stream.DiscardBufferedData();
@@ -115,7 +115,7 @@ public static class EdiCommon
     {
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(text));
         using var streamReader = new StreamReader(memoryStream);
-        return await new EdiReader().ReadEdSegmentsAsync(streamReader, separators, cancellationToken);
+        return await new EdiReader().ReadEdiSegmentsAsync(streamReader, separators, cancellationToken);
     }
 
     /// <summary>
